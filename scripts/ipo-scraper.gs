@@ -46,8 +46,61 @@ function fetchIPOData() {
     }
   }
 
+  // 신규상장 페이지에서 시초가 데이터 가져오기 (o=nw)
+  const listingData = fetchListingData();
+  for (const ipo of ipos) {
+    const match = listingData[ipo.name];
+    if (match) {
+      ipo.openPrice = match.openPrice || '';
+      ipo.openPriceRatio = match.openPriceRatio || '';
+    }
+  }
+
   writeToSheet(sheet, ipos);
   Logger.log(`${ipos.length}건의 공모주 데이터를 업데이트했습니다.`);
+}
+
+// ─── 신규상장 페이지에서 시초가 데이터 수집 ───
+function fetchListingData() {
+  const result = {};
+  const NW_URL = 'http://www.38.co.kr/html/fund/index.htm?o=nw';
+
+  for (let page = 1; page <= MAX_PAGES; page++) {
+    try {
+      const url = `${NW_URL}&page=${page}`;
+      const html = fetchAsEucKr(url);
+
+      // 테이블에서 데이터 행 추출
+      const rows = html.match(/<tr[^>]*bgColor[^>]*>([\s\S]*?)<\/tr>/gi);
+      if (!rows) continue;
+
+      for (const row of rows) {
+        const cells = row.match(/<td[^>]*>([\s\S]*?)<\/td>/gi);
+        if (!cells || cells.length < 9) continue;
+
+        const cleanCell = (i) => cells[i].replace(/<[^>]+>/g, '').replace(/&nbsp;/g, '').trim();
+
+        const name = cleanCell(0);
+        if (!name) continue;
+
+        // 컬럼: 0기업명, 1상장일, 2현재가, 3전일비, 4공모가, 5공모가대비%, 6시초가, 7시초/공모%, 8첫날종가
+        const openPrice = cleanCell(6).replace(/,/g, '');
+        const openRatio = cleanCell(7);
+
+        if (openPrice && openPrice !== '-') {
+          result[name] = {
+            openPrice: openPrice,
+            openPriceRatio: openRatio,
+          };
+        }
+      }
+      Utilities.sleep(300);
+    } catch (e) {
+      Logger.log(`신규상장 페이지 오류 (page ${page}): ${e.message}`);
+    }
+  }
+
+  return result;
 }
 
 // ─── EUC-KR 페이지 가져오기 ───
@@ -123,6 +176,8 @@ function parseListPage(html) {
       lockup: '',
       shares: '',
       floatRatio: '',
+      openPrice: '',
+      openPriceRatio: '',
     };
 
     if (ipo.name) {
@@ -263,7 +318,7 @@ function getOrCreateSheet() {
   const headers = [
     '종목명', '시장구분', '상태', '확정공모가', '희망공모가',
     '청약시작일', '청약종료일', '환불일', '상장일',
-    '주관사', '경쟁률', '확약비율', '공모주식수', '유통비율', '업데이트'
+    '주관사', '경쟁률', '확약비율', '공모주식수', '유통비율', '시초가', '시초가수익률', '업데이트'
   ];
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
@@ -275,7 +330,7 @@ function writeToSheet(sheet, ipos) {
   // 기존 데이터 삭제 (헤더 제외)
   const lastRow = sheet.getLastRow();
   if (lastRow > 1) {
-    sheet.getRange(2, 1, lastRow - 1, 15).clear();
+    sheet.getRange(2, 1, lastRow - 1, 17).clear();
   }
 
   if (ipos.length === 0) return;
@@ -296,10 +351,12 @@ function writeToSheet(sheet, ipos) {
     ipo.lockup,
     ipo.shares,
     ipo.floatRatio,
+    ipo.openPrice || '',
+    ipo.openPriceRatio || '',
     now,
   ]);
 
-  sheet.getRange(2, 1, data.length, 15).setValues(data);
+  sheet.getRange(2, 1, data.length, 17).setValues(data);
 }
 
 // ─── 트리거 설정 (최초 1회 실행) ───

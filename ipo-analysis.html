@@ -32,13 +32,31 @@
       -webkit-font-smoothing: antialiased;
       min-height: 100vh;
     }
-    nav { background: var(--espresso); padding: 16px; text-align: center; }
+    nav { background: var(--espresso); padding: 12px 16px; display: flex; justify-content: center; align-items: center; gap: 0; flex-wrap: wrap; }
     nav a {
-      color: var(--cream); margin: 0 12px; text-decoration: none;
+      color: var(--cream); padding: 4px 12px; text-decoration: none;
       font-size: 14px; font-weight: 500; letter-spacing: 0.3px;
       transition: color 0.15s;
     }
     nav a:hover { color: var(--caramel); }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown > span {
+      color: var(--cream); padding: 4px 12px; font-size: 14px; font-weight: 500;
+      letter-spacing: 0.3px; cursor: pointer; transition: color 0.15s; user-select: none;
+    }
+    .nav-dropdown > span::after { content: ' ▾'; font-size: 10px; }
+    .nav-dropdown:hover > span { color: var(--caramel); }
+    .nav-dropdown-menu {
+      display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+      background: var(--dark-roast); border-radius: 10px; padding: 6px 0;
+      min-width: 140px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); z-index: 100; margin-top: 8px;
+    }
+    .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+    .nav-dropdown-menu a {
+      display: block; padding: 8px 20px; margin: 0; font-size: 13px;
+      white-space: nowrap; color: var(--cream);
+    }
+    .nav-dropdown-menu a:hover { background: rgba(196,133,60,0.15); color: var(--caramel); }
     .container { max-width: 720px; margin: 0 auto; padding: 48px 28px 64px; }
     .header { text-align: center; margin-bottom: 32px; }
     .badge {
@@ -275,11 +293,16 @@
 </head>
 <body>
   <nav>
-    <a href="/">홈(게이트)</a>
+    <a href="/">홈</a>
     <a href="/portfolio.html">포트폴리오</a>
     <a href="/asset.html">자산관리101</a>
-    <a href="/ipo.html">공모주 캘린더</a>
-    <a href="/ipo-analysis.html">공모주 분석</a>
+    <div class="nav-dropdown">
+      <span>공모주</span>
+      <div class="nav-dropdown-menu">
+        <a href="/ipo.html">캘린더</a>
+        <a href="/ipo-analysis.html">종목 분석</a>
+      </div>
+    </div>
   </nav>
 
   <div class="container">
@@ -391,7 +414,8 @@
         lockupNum: 52.3, lockup: '52.3%',
         floatRatioNum: 18.2, floatRatio: '18.2%',
         shares: '2,500,000주', lead: '한국투자증권',
-        subscribe: ['2026-04-01','2026-04-02'], refund: '2026-04-04', listing: '2026-04-10'
+        subscribe: ['2026-04-01','2026-04-02'], refund: '2026-04-04', listing: '2026-04-10',
+        openPrice: '22500', openPriceRatio: '+50.00%'
       },
       {
         name: '퓨처로보틱스', market: 'kosdaq', status: 'completed', grade: 'A',
@@ -400,7 +424,8 @@
         lockupNum: 71.5, lockup: '71.5%',
         floatRatioNum: 28.4, floatRatio: '28.4%',
         shares: '1,800,000주', lead: 'NH투자증권',
-        subscribe: ['2026-04-02','2026-04-03'], refund: '2026-04-07', listing: '2026-04-14'
+        subscribe: ['2026-04-02','2026-04-03'], refund: '2026-04-07', listing: '2026-04-14',
+        openPrice: '41600', openPriceRatio: '+30.00%'
       },
       {
         name: '그린에너지솔루션', market: 'kospi', status: 'active', grade: 'A',
@@ -509,7 +534,7 @@
             return isNaN(n) ? 0 : n;
           };
 
-          // 컬럼: 0종목명, 1시장, 2상태, 3확정공모가, 4희망공모가, 5청약시작, 6청약종료, 7환불, 8상장, 9주관사, 10경쟁률, 11확약비율, 12공모주식수, 13유통비율, 14업데이트
+          // 컬럼: 0종목명, 1시장, 2상태, 3확정공모가, 4희망공모가, 5청약시작, 6청약종료, 7환불, 8상장, 9주관사, 10경쟁률, 11확약비율, 12공모주식수, 13유통비율, 14시초가, 15시초가수익률, 16업데이트
           const confirmedPrice = val(3);
           const expectedPrice = val(4);
           const competitionStr = val(10);
@@ -553,6 +578,8 @@
             subscribe: [dateVal(5), dateVal(6)],
             refund: dateVal(7),
             listing: dateVal(8),
+            openPrice: val(14) || '-',
+            openPriceRatio: val(15) || '-',
           };
           return ipo;
         }).filter(ipo => ipo.name && ipo.subscribe[0]);
@@ -624,6 +651,45 @@
     }
 
     const GRADE_ORDER = ['S', 'A', 'B', 'C', 'D'];
+
+    // ── 균등배정 추정 ──
+    // 일반 공모 물량의 약 50%가 균등배정, 평균 청약 건수 기반 추정
+    function getUniformAlloc(ipo) {
+      if (ipo.shares === '-' || !ipo.shares) return '-';
+      const totalShares = parseInt(ipo.shares.replace(/[^0-9]/g, '')) || 0;
+      if (totalShares === 0) return '-';
+      // 일반청약 배정비율 약 25%, 그 중 균등 50% = 전체의 12.5%
+      const uniformPool = Math.floor(totalShares * 0.125);
+      return `~${uniformPool.toLocaleString()}주 (배정풀)`;
+    }
+
+    // ── 상장 결과 (시초가 수익률) ──
+    function getListingResult(ipo) {
+      if (ipo.status !== 'completed') return '';
+      if (!ipo.openPrice || ipo.openPrice === '-') return '';
+
+      const openNum = parseInt(ipo.openPrice.replace(/[^0-9]/g, '')) || 0;
+      if (openNum === 0 || ipo.priceFixed === 0) return '';
+
+      const profit = openNum - ipo.priceFixed;
+      const profitPct = ((profit / ipo.priceFixed) * 100).toFixed(1);
+      const isPositive = profit >= 0;
+      const color = isPositive ? 'var(--green)' : 'var(--red-soft)';
+      const sign = isPositive ? '+' : '';
+
+      return `
+        <div style="margin-top:12px;padding:14px;background:${isPositive ? 'var(--green-light)' : 'var(--red-light)'};border-radius:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div>
+            <span style="font-size:11px;font-weight:500;color:var(--medium-roast);">상장일 시초가</span>
+            <span style="font-size:15px;font-weight:700;color:${color};margin-left:8px;">${parseInt(ipo.openPrice).toLocaleString()}원</span>
+          </div>
+          <div style="text-align:right;">
+            <span style="font-size:11px;font-weight:500;color:var(--medium-roast);">공모가 대비</span>
+            <span style="font-size:15px;font-weight:700;color:${color};margin-left:8px;">${sign}${profitPct}%</span>
+            <span style="font-size:12px;font-weight:400;color:${color};margin-left:4px;">(${sign}${profit.toLocaleString()}원)</span>
+          </div>
+        </div>`;
+    }
 
     // ── Filtering ──
     function getFilteredIPOs() {
@@ -721,7 +787,12 @@
                   <span class="info-label">공모주식수</span>
                   <span class="info-value">${ipo.shares}</span>
                 </div>
+                <div class="info-item">
+                  <span class="info-label">균등배정(추정)</span>
+                  <span class="info-value">${getUniformAlloc(ipo)}</span>
+                </div>
               </div>
+              ${getListingResult(ipo)}
             </div>`;
         });
 

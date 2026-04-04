@@ -28,12 +28,20 @@
       -webkit-font-smoothing: antialiased;
       min-height: 100vh;
     }
-    nav { background: var(--espresso); padding: 16px; text-align: center; margin-bottom: 0; }
+    nav { background: var(--espresso); padding: 12px 16px; display: flex; justify-content: center; align-items: center; gap: 0; flex-wrap: wrap; margin-bottom: 0; }
     nav a {
-      color: var(--cream); margin: 0 16px; text-decoration: none;
+      color: var(--cream); padding: 4px 12px; text-decoration: none;
       font-size: 14px; font-weight: 500; letter-spacing: 0.3px;
       transition: color 0.15s;
     }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown > span { color: var(--cream); padding: 4px 12px; font-size: 14px; font-weight: 500; letter-spacing: 0.3px; cursor: pointer; transition: color 0.15s; user-select: none; }
+    .nav-dropdown > span::after { content: ' ▾'; font-size: 10px; }
+    .nav-dropdown:hover > span { color: var(--caramel); }
+    .nav-dropdown-menu { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background: var(--dark-roast); border-radius: 10px; padding: 6px 0; min-width: 140px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); z-index: 100; margin-top: 8px; }
+    .nav-dropdown:hover .nav-dropdown-menu { display: block; }
+    .nav-dropdown-menu a { display: block; padding: 8px 20px; margin: 0; font-size: 13px; white-space: nowrap; color: var(--cream); }
+    .nav-dropdown-menu a:hover { background: rgba(196,133,60,0.15); color: var(--caramel); }
     nav a:hover { color: var(--caramel); }
     .container { max-width: 560px; margin: 0 auto; padding: 48px 28px 64px; }
     .header { text-align: center; margin-bottom: 40px; }
@@ -180,11 +188,16 @@
 </head>
 <body>
   <nav>
-    <a href="/">홈(게이트)</a>
+    <a href="/">홈</a>
     <a href="/portfolio.html">포트폴리오</a>
     <a href="/asset.html">자산관리101</a>
-    <a href="/ipo.html">공모주 캘린더</a>
-    <a href="/ipo-analysis.html">공모주 분석</a>
+    <div class="nav-dropdown">
+      <span>공모주</span>
+      <div class="nav-dropdown-menu">
+        <a href="/ipo.html">캘린더</a>
+        <a href="/ipo-analysis.html">종목 분석</a>
+      </div>
+    </div>
   </nav>
 
   <div class="container">
