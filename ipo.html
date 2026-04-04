@@ -214,7 +214,12 @@
     .ipo-card.hidden { display: none; }
     .ipo-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
     .ipo-name-group { flex: 1; min-width: 0; }
-    .ipo-name { font-size: 16px; font-weight: 700; color: var(--espresso); margin-bottom: 4px; }
+    .ipo-name { font-size: 16px; font-weight: 700; color: var(--espresso); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+    .grade-mini {
+      font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 6px;
+      letter-spacing: 0.5px; flex-shrink: 0;
+    }
+    .grade-mini.none { background: rgba(44,24,16,0.06); color: var(--medium-roast); font-weight: 500; }
     .ipo-badges { display: flex; gap: 6px; flex-wrap: wrap; }
     .ipo-badge {
       font-size: 10.5px; font-weight: 600; padding: 3px 10px; border-radius: 12px;
@@ -428,6 +433,21 @@
           const confirmedPrice = val(3);
           const expectedPrice = val(4);
 
+          // 등급 계산용 숫자 파싱
+          const compStr = val(10);
+          const compMatch = compStr.match(/([\d,.]+)\s*:/);
+          const competitionNum = compMatch ? parseFloat(compMatch[1].replace(/,/g, '')) : 0;
+
+          let lockupNum = parseFloat(val(11).replace(/[^0-9.]/g, '')) || 0;
+          if (lockupNum > 0 && lockupNum < 1) lockupNum = Math.round(lockupNum * 10000) / 100;
+
+          let floatNum = parseFloat((val(13) || '').replace(/[^0-9.]/g, '')) || 0;
+          if (floatNum > 0 && floatNum < 1) floatNum = Math.round(floatNum * 10000) / 100;
+
+          const priceFixed = confirmedPrice ? parseInt(confirmedPrice.replace(/,/g, '')) || 0 : 0;
+          const priceNums = expectedPrice.replace(/[^0-9~,]/g, '').split('~');
+          const priceBandTop = priceNums.length >= 2 ? parseInt(priceNums[priceNums.length - 1].replace(/,/g, '')) || 0 : 0;
+
           return {
             name: val(0),
             market: val(1) || 'kosdaq',
@@ -436,13 +456,18 @@
             priceRange: expectedPrice ? `${expectedPrice}원` : '-',
             shares: val(12) || '-',
             lead: val(9),
-            competition: val(10) || '-',
+            competition: compStr || '-',
             lockup: val(11) || '-',
             subscribe: [dateVal(5), dateVal(6)],
             refund: dateVal(7),
             listing: dateVal(8),
+            // 등급 계산용
+            competitionNum, lockupNum, floatNum, priceFixed, priceBandTop,
           };
         }).filter(ipo => ipo.name && ipo.subscribe[0]);
+
+        // 등급 계산
+        IPO_DATA.forEach(ipo => { ipo.grade = calcGrade(ipo); });
 
         console.log(`Google Sheets에서 ${IPO_DATA.length}건 로드 완료`);
         showDataSource('live');
@@ -505,6 +530,29 @@
       if (!isValidDate(dateStr) || !isValidDate(rangeStart) || !isValidDate(rangeEnd)) return false;
       const d = parseDate(dateStr);
       return d >= parseDate(rangeStart) && d <= parseDate(rangeEnd);
+    }
+
+    function getGradeBadge(grade) {
+      if (!grade) return '<span class="grade-mini none">미확정</span>';
+      const colors = { S: 'var(--green)', A: 'var(--blue)', B: 'var(--caramel)', C: 'var(--red-soft)', D: 'var(--red-soft)' };
+      const bg = { S: 'var(--green-light)', A: 'var(--blue-light)', B: 'var(--caramel-light)', C: 'var(--red-light)', D: 'var(--red-light)' };
+      return `<span class="grade-mini" style="background:${bg[grade]};color:${colors[grade]}">${grade}</span>`;
+    }
+
+    // ── 등급 계산 ──
+    function calcGrade(ipo) {
+      let pass = 0;
+      if (ipo.competitionNum >= 800) pass++;
+      if (ipo.priceFixed > 0 && ipo.priceFixed >= ipo.priceBandTop) pass++;
+      if (ipo.lockupNum >= 15) pass++;
+      if (ipo.floatNum > 0 && ipo.floatNum <= 25) pass++;
+      // 데이터가 하나도 없으면 미확정
+      if (ipo.competitionNum === 0 && ipo.priceFixed === 0 && ipo.lockupNum === 0 && ipo.floatNum === 0) return '';
+      if (pass === 4 && ipo.lockupNum >= 50) return 'S';
+      if (pass >= 3) return 'A';
+      if (pass >= 2) return 'B';
+      if (pass >= 1) return 'C';
+      return 'D';
     }
 
     function getCalendarBtn(ipo) {
@@ -718,7 +766,7 @@
         <div class="ipo-card">
           <div class="ipo-top">
             <div class="ipo-name-group">
-              <div class="ipo-name">${ipo.name}</div>
+              <div class="ipo-name">${ipo.name} ${getGradeBadge(ipo.grade)}</div>
               <div class="ipo-badges">
                 <span class="ipo-badge ${ipo.market}">${ipo.market === 'kospi' ? '코스피' : '코스닥'}</span>
                 <span class="ipo-badge ${ipo.status}">${getStatusLabel(ipo.status)}</span>
