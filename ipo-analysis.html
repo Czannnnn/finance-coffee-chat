@@ -279,6 +279,20 @@
     .disclaimer .icon { margin-right: 4px; }
 
     /* Empty state */
+    .name-filter-banner {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--caramel-light); border: 1px solid rgba(196,133,60,0.25);
+      border-radius: 12px; padding: 12px 18px; margin-bottom: 24px;
+      font-size: 14px; color: var(--espresso);
+    }
+    .name-filter-banner button {
+      background: var(--white); border: 1px solid rgba(44,24,16,0.1);
+      border-radius: 8px; padding: 6px 14px; font-size: 12.5px; font-weight: 500;
+      color: var(--medium-roast); cursor: pointer; font-family: inherit;
+      transition: all 0.15s;
+    }
+    .name-filter-banner button:hover { border-color: var(--caramel); color: var(--caramel); }
+
     .empty-state {
       text-align: center; padding: 48px 24px;
       background: var(--white); border-radius: 16px;
@@ -768,12 +782,15 @@
     // ── Filtering ──
     function getFilteredIPOs() {
       return IPO_DATA.filter(ipo => {
-        if (activeStatus !== 'all' && ipo.status !== activeStatus) return false;
-        if (activeGrade !== 'all') {
-          if (activeGrade === 'CD') {
-            if (ipo.grade !== 'C' && ipo.grade !== 'D') return false;
-          } else {
-            if (ipo.grade !== activeGrade) return false;
+        if (filterName && !ipo.name.includes(filterName)) return false;
+        if (!filterName) {
+          if (activeStatus !== 'all' && ipo.status !== activeStatus) return false;
+          if (activeGrade !== 'all') {
+            if (activeGrade === 'CD') {
+              if (ipo.grade !== 'C' && ipo.grade !== 'D') return false;
+            } else {
+              if (ipo.grade !== activeGrade) return false;
+            }
           }
         }
         return true;
@@ -819,6 +836,23 @@
 
     function render() {
       updateGradeStats();
+      // 종목명 필터 배너
+      const filterBar = document.querySelector('.filter-bar');
+      let banner = document.getElementById('nameBanner');
+      if (filterName) {
+        if (!banner) {
+          banner = document.createElement('div');
+          banner.id = 'nameBanner';
+          banner.className = 'name-filter-banner';
+          filterBar.parentNode.insertBefore(banner, filterBar);
+        }
+        banner.innerHTML = `<span>&#128270; <strong>${filterName}</strong> 검색 결과</span><button onclick="clearNameFilter()">&#10005; 전체 보기</button>`;
+        filterBar.style.display = 'none';
+      } else {
+        if (banner) banner.remove();
+        filterBar.style.display = '';
+      }
+
       const container = document.getElementById('analysisContainer');
       const filtered = getFilteredIPOs();
 
@@ -905,6 +939,7 @@
                 ${getProportionalDeposit(ipo)}
               </div>
               ${getListingResult(ipo)}
+              ${getAnalysisCalBtn(ipo)}
             </div>`;
         });
 
@@ -933,7 +968,9 @@
       render();
     });
 
-    // ── URL 파라미터로 등급 필터 초기화 ──
+    // ── URL 파라미터 처리 ──
+    let filterName = '';
+
     function initFromURL() {
       const params = new URLSearchParams(window.location.search);
       const grade = params.get('grade');
@@ -943,6 +980,31 @@
           b.classList.toggle('active', b.dataset.grade === activeGrade);
         });
       }
+      const name = params.get('name');
+      if (name) {
+        filterName = decodeURIComponent(name);
+      }
+    }
+
+    function getAnalysisCalBtn(ipo) {
+      if (ipo.status === 'completed') return '';
+      if (!ipo.subscribe || !ipo.subscribe[0] || !ipo.subscribe[1]) return '';
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(ipo.subscribe[0])) return '';
+      const start = ipo.subscribe[0].replace(/-/g, '');
+      const endDate = new Date(ipo.subscribe[1]);
+      endDate.setDate(endDate.getDate() + 1);
+      const end = `${endDate.getFullYear()}${String(endDate.getMonth()+1).padStart(2,'0')}${String(endDate.getDate()).padStart(2,'0')}`;
+      const title = encodeURIComponent(`[공모주 청약] ${ipo.name}`);
+      const price = ipo.price !== '-' ? ipo.price : ipo.priceRange;
+      const details = encodeURIComponent(`종목: ${ipo.name}\n공모가: ${price}\n주관사: ${ipo.lead}\n등급: ${ipo.grade || '미확정'}\n\n☕ Finance Coffee Chat`);
+      const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}`;
+      return `<a href="${url}" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:12px;padding:9px 16px;background:var(--oat-milk);border:1px solid rgba(61,90,128,0.2);border-radius:10px;color:var(--blue);font-size:13px;font-weight:500;text-decoration:none;transition:all 0.15s;">&#128197; 구글 캘린더에 청약일정 추가</a>`;
+    }
+
+    function clearNameFilter() {
+      filterName = '';
+      history.replaceState(null, '', '/ipo-analysis.html');
+      render();
     }
 
     // ── Init ──

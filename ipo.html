@@ -824,7 +824,7 @@
             </div>
           </div>
           ${ipo.status === 'upcoming' ? getCalendarBtn(ipo) : ''}
-          <a href="/ipo-analysis.html${ipo.grade ? '?grade=' + ipo.grade : ''}" class="detail-btn">&#128270; 세부 분석 보러가기</a>
+          <a href="/ipo-analysis.html?name=${encodeURIComponent(ipo.name)}" class="detail-btn">&#128270; 세부 분석 보러가기</a>
         </div>`;
       }).join('');
     }
