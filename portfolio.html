@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>나의 Portfolio - Finance Coffee Chat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --espresso: #2C1810;
+      --dark-roast: #3D2317;
+      --medium-roast: #6B3A2A;
+      --caramel: #C4853C;
+      --caramel-light: rgba(196,133,60,0.12);
+      --latte: #E8D5B7;
+      --cream: #F5EDE0;
+      --oat-milk: #FAF6F0;
+      --white: #FFFDF9;
+      --red-soft: #C0564B;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--oat-milk);
+      color: var(--espresso);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    nav { background: #333; padding: 15px; text-align: center; margin-bottom: 0; }
+    nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    .container { max-width: 560px; margin: 0 auto; padding: 48px 28px 64px; }
+    .header { text-align: center; margin-bottom: 40px; }
+    .badge {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase; color: var(--caramel);
+      background: var(--caramel-light); padding: 5px 16px; border-radius: 20px;
+      margin-bottom: 16px; border: 1px solid rgba(196,133,60,0.2);
+    }
+    .header h1 {
+      font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 700;
+      color: var(--espresso); letter-spacing: -0.5px;
+    }
+    .header h1 em { font-style: italic; color: var(--medium-roast); }
+    .header .sub { font-size: 14px; color: var(--medium-roast); font-weight: 300; margin-top: 8px; }
+    .divider { width: 40px; height: 2px; background: var(--caramel); margin: 20px auto 0; border-radius: 1px; }
+    .view { display: none; }
+    .view.active { display: block; }
+    .input-intro { font-size: 14px; color: var(--medium-roast); font-weight: 300; text-align: center; margin-bottom: 32px; }
+    .input-intro strong { font-weight: 500; color: var(--espresso); }
+    .form-card {
+      background: var(--white); border-radius: 16px; padding: 28px 24px;
+      border: 1px solid rgba(44,24,16,0.05); box-shadow: 0 2px 20px rgba(44,24,16,0.04);
+      margin-bottom: 20px;
+    }
+    .input-row {
+      display: flex; align-items: center; gap: 12px; padding: 12px 0;
+      border-bottom: 1px solid rgba(44,24,16,0.05);
+    }
+    .input-row:last-child { border-bottom: none; }
+    .input-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .input-label { font-size: 14px; font-weight: 500; color: var(--espresso); flex: 1; min-width: 0; }
+    .input-field {
+      width: 140px; padding: 8px 12px; border: 1px solid rgba(44,24,16,0.12);
+      border-radius: 8px; font-family: 'Noto Sans KR', sans-serif; font-size: 14px;
+      font-weight: 400; color: var(--espresso); background: var(--oat-milk);
+      text-align: right; outline: none; transition: border-color 0.15s;
+    }
+    .input-field:focus { border-color: var(--caramel); background: var(--white); }
+    .input-field::placeholder { color: rgba(107,58,42,0.3); font-weight: 300; }
+    .input-unit { font-size: 13px; color: var(--medium-roast); font-weight: 400; flex-shrink: 0; }
+    .custom-section { margin-top: 4px; padding-top: 16px; }
+    .custom-row {
+      display: flex; align-items: center; gap: 10px; padding: 10px 0;
+      border-bottom: 1px solid rgba(44,24,16,0.05);
+    }
+    .custom-row:last-child { border-bottom: none; }
+    .custom-name-input {
+      flex: 1; min-width: 0; padding: 8px 12px;
+      border: 1px dashed rgba(44,24,16,0.15); border-radius: 8px;
+      font-family: 'Noto Sans KR', sans-serif; font-size: 14px; font-weight: 500;
+      color: var(--espresso); background: transparent; outline: none; transition: border-color 0.15s;
+    }
+    .custom-name-input:focus { border-color: var(--caramel); }
+    .custom-name-input::placeholder { color: rgba(107,58,42,0.3); font-weight: 300; }
+    .btn-remove {
+      width: 28px; height: 28px; border: none; background: rgba(192,86,75,0.08);
+      color: var(--red-soft); border-radius: 6px; font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .btn-remove:hover { background: rgba(192,86,75,0.15); }
+    .btn-add {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      width: 100%; padding: 12px; border: 1px dashed rgba(44,24,16,0.12);
+      border-radius: 10px; background: transparent; font-family: 'Noto Sans KR', sans-serif;
+      font-size: 13px; font-weight: 500; color: var(--medium-roast); cursor: pointer;
+      transition: all 0.15s; margin-top: 4px;
+    }
+    .btn-add:hover { border-color: var(--caramel); color: var(--caramel); background: rgba(196,133,60,0.04); }
+    .privacy-note {
+      display: flex; align-items: flex-start; gap: 8px; padding: 14px 16px;
+      background: var(--caramel-light); border-radius: 10px; margin-bottom: 28px;
+    }
+    .privacy-note .icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+    .privacy-note p { font-size: 12.5px; color: var(--dark-roast); font-weight: 400; line-height: 1.6; }
+    .btn-generate {
+      display: block; width: 100%; padding: 16px; border: none; border-radius: 12px;
+      background: var(--espresso); color: var(--cream); font-family: 'Noto Sans KR', sans-serif;
+      font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; letter-spacing: 0.5px;
+    }
+    .btn-generate:hover { background: var(--dark-roast); transform: translateY(-1px); }
+    .btn-generate:active { transform: translateY(0); }
+    .btn-generate:disabled { background: rgba(44,24,16,0.15); color: var(--medium-roast); cursor: not-allowed; transform: none; }
+    .chart-container {
+      background: var(--white); border-radius: 20px; padding: 36px 28px 32px;
+      border: 1px solid rgba(44,24,16,0.05); box-shadow: 0 4px 30px rgba(44,24,16,0.06);
+      margin-bottom: 24px;
+    }
+    .chart-title {
+      text-align: center; font-size: 13px; font-weight: 600; color: var(--medium-roast);
+      letter-spacing: 1px; text-transform: uppercase; margin-bottom: 24px;
+    }
+    .chart-wrap { max-width: 320px; margin: 0 auto 28px; }
+    .legend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; }
+    .legend-item { display: flex; align-items: center; gap: 10px; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .legend-label { font-size: 14px; font-weight: 400; color: var(--espresso); flex: 1; }
+    .legend-pct { font-size: 14px; font-weight: 600; color: var(--espresso); }
+    .chart-actions { display: flex; gap: 12px; }
+    .btn-back {
+      flex: 1; padding: 14px; border: 1px solid rgba(44,24,16,0.12); border-radius: 10px;
+      background: var(--white); color: var(--espresso); font-family: 'Noto Sans KR', sans-serif;
+      font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.15s;
+    }
+    .btn-back:hover { border-color: var(--caramel); }
+    .btn-save {
+      flex: 2; padding: 14px; border: none; border-radius: 10px; background: var(--espresso);
+      color: var(--cream); font-family: 'Noto Sans KR', sans-serif; font-size: 14px;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-save:hover { background: var(--dark-roast); }
+    .talk-section {
+      background: var(--white); border-radius: 16px; padding: 28px 24px;
+      border: 1px solid rgba(44,24,16,0.05); box-shadow: 0 2px 20px rgba(44,24,16,0.04);
+      margin-bottom: 24px;
+    }
+    .talk-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .talk-icon { font-size: 16px; }
+    .talk-title { font-size: 15px; font-weight: 700; color: var(--espresso); }
+    .talk-desc { font-size: 13px; color: var(--medium-roast); font-weight: 300; margin-bottom: 18px; }
+    .talk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .talk-card { padding: 16px; background: var(--oat-milk); border-radius: 10px; border: 1px solid rgba(44,24,16,0.04); }
+    .talk-emoji { font-size: 16px; display: block; margin-bottom: 8px; }
+    .talk-q { font-size: 13.5px; font-weight: 600; color: var(--espresso); line-height: 1.5; margin-bottom: 4px; }
+    .talk-hint { font-size: 11.5px; color: var(--medium-roast); font-weight: 300; line-height: 1.5; }
+    .save-toast {
+      position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--espresso); color: var(--cream); padding: 12px 24px; border-radius: 10px;
+      font-size: 14px; font-weight: 500; opacity: 0; transition: all 0.3s ease;
+      pointer-events: none; z-index: 100;
+    }
+    .save-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    @media (max-width: 480px) {
+      .container { padding: 32px 16px 48px; }
+      .header h1 { font-size: 26px; }
+      .input-field { width: 110px; }
+      .legend-grid { grid-template-columns: 1fr; }
+      .chart-actions { flex-direction: column; }
+      .btn-back, .btn-save { flex: none; }
+      .talk-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/">홈(게이트)</a>
+    <a href="/portfolio.html">포트폴리오</a>
+    <a href="/asset.html">자산관리101</a>
+  </nav>
+
+  <div class="container">
+    <div class="header">
+      <div class="badge">Portfolio Builder</div>
+      <h1>나의 <em>Portfolio</em></h1>
+      <p class="sub">자산 유형별 금액을 입력하고 나만의 포트폴리오를 만들어 보세요</p>
+      <div class="divider"></div>
+    </div>
+
+    <!-- Input View -->
+    <div class="view active" id="inputView">
+      <p class="input-intro">각 유형의 <strong>현재 금액</strong>을 입력해 주세요</p>
+      <div class="form-card">
+        <div id="defaultRows"></div>
+        <div class="custom-section" id="customSection"></div>
+        <button class="btn-add" onclick="addCustomRow()">+ 나만의 유형 추가</button>
+      </div>
+      <div class="privacy-note">
+        <span class="icon">🔒</span>
+        <p>입력한 금액은 이 화면에서만 보여요.<br>차트에는 <strong>비율(%)</strong>만 표시됩니다.</p>
+      </div>
+      <button class="btn-generate" onclick="generateChart()">파이차트 만들기</button>
+    </div>
+
+    <!-- Chart View -->
+    <div class="view" id="chartView">
+      <div class="chart-container">
+        <div class="chart-title">My Portfolio</div>
+        <div class="chart-wrap">
+          <canvas id="pieChart"></canvas>
+        </div>
+        <div class="legend-grid" id="legendGrid"></div>
+      </div>
+
+      <div class="talk-section">
+        <div class="talk-header">
+          <span class="talk-icon">☕</span>
+          <span class="talk-title">커피챗 대화 소재</span>
+        </div>
+        <p class="talk-desc">포트폴리오를 보며 이런 이야기를 나눠 보세요</p>
+        <div class="talk-grid">
+          <div class="talk-card">
+            <span class="talk-emoji">🎯</span>
+            <p class="talk-q">투자 스타일이 어떻게 되세요?</p>
+            <p class="talk-hint">공격적 vs 안정적, 단기 vs 장기</p>
+          </div>
+          <div class="talk-card">
+            <span class="talk-emoji">💡</span>
+            <p class="talk-q">가장 잘한 투자 결정은?</p>
+            <p class="talk-hint">타이밍, 종목, 자산배분 등</p>
+          </div>
+          <div class="talk-card">
+            <span class="talk-emoji">🤔</span>
+            <p class="talk-q">아쉬웠던 투자 경험은?</p>
+            <p class="talk-hint">놓친 기회, 손실 경험 등</p>
+          </div>
+          <div class="talk-card">
+            <span class="talk-emoji">🔮</span>
+            <p class="talk-q">앞으로 관심 있는 분야는?</p>
+            <p class="talk-hint">새로운 자산군, 해외투자 등</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-actions">
+        <button class="btn-back" onclick="goBack()">← 수정하기</button>
+        <button class="btn-save" onclick="saveChart()">이미지로 저장</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="save-toast" id="toast">차트가 저장되었습니다 ☕</div>
+
+  <script>
+    const DEFAULT_TYPES = [
+      { name: '주식 / ETF', color: '#3D5A80' },
+      { name: '예·적금 / 채권', color: '#C4853C' },
+      { name: '연금 (연금저축/IRP)', color: '#4A7C59' },
+      { name: '거주 / 청약', color: '#A68B7B' },
+      { name: '대안투자 (코인 등)', color: '#7B6B8D' },
+      { name: '현금성 (CMA/파킹)', color: '#8BA89A' },
+    ];
+
+    const CUSTOM_COLORS = ['#6A8EAE', '#D4806B', '#5B8C72', '#A67B9B', '#8C7B5E', '#6B9BAD'];
+    let customCount = 0;
+    let chartInstance = null;
+
+    function init() {
+      const container = document.getElementById('defaultRows');
+      DEFAULT_TYPES.forEach((type, i) => {
+        container.innerHTML += `
+          <div class="input-row">
+            <span class="input-dot" style="background:${type.color}"></span>
+            <span class="input-label">${type.name}</span>
+            <input class="input-field" type="text" inputmode="numeric" placeholder="0"
+              data-type="default" data-index="${i}" oninput="formatNumber(this)">
+            <span class="input-unit">원</span>
+          </div>`;
+      });
+    }
+
+    function formatNumber(el) {
+      let v = el.value.replace(/[^0-9]/g, '');
+      if (v) el.value = Number(v).toLocaleString('ko-KR');
+      else el.value = '';
+    }
+
+    function parseValue(str) {
+      return parseInt((str || '0').replace(/[^0-9]/g, ''), 10) || 0;
+    }
+
+    function addCustomRow() {
+      const section = document.getElementById('customSection');
+      const idx = customCount++;
+      const color = CUSTOM_COLORS[idx % CUSTOM_COLORS.length];
+      const row = document.createElement('div');
+      row.className = 'custom-row';
+      row.id = `custom-${idx}`;
+      row.innerHTML = `
+        <span class="input-dot" style="background:${color}"></span>
+        <input class="custom-name-input" type="text" placeholder="유형 이름 입력" data-cidx="${idx}">
+        <input class="input-field" type="text" inputmode="numeric" placeholder="0"
+          data-type="custom" data-index="${idx}" oninput="formatNumber(this)">
+        <span class="input-unit">원</span>
+        <button class="btn-remove" onclick="removeCustom(${idx})">×</button>`;
+      section.appendChild(row);
+    }
+
+    function removeCustom(idx) {
+      const row = document.getElementById(`custom-${idx}`);
+      if (row) row.remove();
+    }
+
+    function gatherData() {
+      const items = [];
+      document.querySelectorAll('[data-type="default"]').forEach(input => {
+        const val = parseValue(input.value);
+        if (val > 0) {
+          const i = parseInt(input.dataset.index);
+          items.push({ name: DEFAULT_TYPES[i].name, value: val, color: DEFAULT_TYPES[i].color });
+        }
+      });
+      document.querySelectorAll('[data-type="custom"]').forEach(input => {
+        const val = parseValue(input.value);
+        const row = input.closest('.custom-row');
+        if (!row) return;
+        const nameInput = row.querySelector('.custom-name-input');
+        const name = nameInput ? nameInput.value.trim() : '';
+        if (val > 0 && name) {
+          const cidx = parseInt(input.dataset.index);
+          items.push({ name, value: val, color: CUSTOM_COLORS[cidx % CUSTOM_COLORS.length] });
+        }
+      });
+      return items;
+    }
+
+    function generateChart() {
+      const data = gatherData();
+      if (data.length === 0) return;
+      const total = data.reduce((s, d) => s + d.value, 0);
+
+      document.getElementById('inputView').classList.remove('active');
+      document.getElementById('chartView').classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      const ctx = document.getElementById('pieChart').getContext('2d');
+      if (chartInstance) chartInstance.destroy();
+
+      chartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: data.map(d => d.name),
+          datasets: [{
+            data: data.map(d => d.value),
+            backgroundColor: data.map(d => d.color),
+            borderColor: '#FFFDF9',
+            borderWidth: 3,
+            borderRadius: 4,
+            hoverBorderWidth: 0,
+          }]
+        },
+        options: {
+          responsive: true,
+          cutout: '52%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => {
+                  const pct = ((ctx.parsed / total) * 100).toFixed(1);
+                  return ` ${ctx.label} ${pct}%`;
+                }
+              },
+              backgroundColor: '#2C1810',
+              titleColor: '#F5EDE0',
+              bodyColor: '#F5EDE0',
+              padding: 12,
+              cornerRadius: 8,
+              bodyFont: { family: 'Noto Sans KR', size: 13, weight: '500' },
+              displayColors: false,
+            }
+          },
+          animation: { animateRotate: true, duration: 800, easing: 'easeOutQuart' }
+        }
+      });
+
+      const grid = document.getElementById('legendGrid');
+      grid.innerHTML = '';
+      data.sort((a, b) => b.value - a.value).forEach(d => {
+        const pct = ((d.value / total) * 100).toFixed(1);
+        grid.innerHTML += `
+          <div class="legend-item">
+            <span class="legend-dot" style="background:${d.color}"></span>
+            <span class="legend-label">${d.name}</span>
+            <span class="legend-pct">${pct}%</span>
+          </div>`;
+      });
+    }
+
+    function goBack() {
+      document.getElementById('chartView').classList.remove('active');
+      document.getElementById('inputView').classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function saveChart() {
+      const canvas = document.getElementById('pieChart');
+      const exp = document.createElement('canvas');
+      const ratio = 2;
+      const w = 560;
+      const h = 680;
+      exp.width = w * ratio;
+      exp.height = h * ratio;
+      const ectx = exp.getContext('2d');
+      ectx.scale(ratio, ratio);
+
+      ectx.fillStyle = '#FAF6F0';
+      ectx.beginPath();
+      ectx.roundRect(0, 0, w, h, 20);
+      ectx.fill();
+
+      ectx.fillStyle = '#FFFDF9';
+      ectx.beginPath();
+      ectx.roundRect(24, 24, w - 48, h - 48, 16);
+      ectx.fill();
+
+      ectx.fillStyle = '#6B3A2A';
+      ectx.font = '600 12px "Noto Sans KR"';
+      ectx.textAlign = 'center';
+      ectx.letterSpacing = '1px';
+      ectx.fillText('MY PORTFOLIO', w / 2, 64);
+
+      const chartImg = canvas.toDataURL('image/png');
+      const img = new Image();
+      img.onload = () => {
+        const chartSize = 240;
+        ectx.drawImage(img, (w - chartSize) / 2, 84, chartSize, chartSize);
+
+        const data = gatherData();
+        const total = data.reduce((s, d) => s + d.value, 0);
+        data.sort((a, b) => b.value - a.value);
+
+        let y = 348;
+        data.forEach(d => {
+          const pct = ((d.value / total) * 100).toFixed(1);
+          ectx.fillStyle = d.color;
+          ectx.beginPath();
+          ectx.arc(60, y, 5, 0, Math.PI * 2);
+          ectx.fill();
+
+          ectx.fillStyle = '#2C1810';
+          ectx.font = '400 14px "Noto Sans KR"';
+          ectx.textAlign = 'left';
+          ectx.fillText(d.name, 78, y + 5);
+
+          ectx.font = '600 14px "Noto Sans KR"';
+          ectx.textAlign = 'right';
+          ectx.fillText(`${pct}%`, w - 60, y + 5);
+          y += 32;
+        });
+
+        ectx.fillStyle = '#C4853C';
+        ectx.font = '400 11px "Noto Sans KR"';
+        ectx.textAlign = 'center';
+        ectx.fillText('투자 커피챗 ☕', w / 2, h - 40);
+
+        const link = document.createElement('a');
+        link.download = 'my_portfolio.png';
+        link.href = exp.toDataURL('image/png');
+        link.click();
+
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+      };
+      img.src = chartImg;
+    }
+
+    init();
+  </script>
+</body>
+</html>
