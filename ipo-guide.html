@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>공모주 청약 가이드 - Finance Coffee Chat</title>
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZEG7YQ80S"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -202,16 +205,16 @@
 </head>
 <body>
   <nav>
-    <a href="/">홈</a>
-    <a href="/portfolio.html">포트폴리오</a>
-    <a href="/asset.html">자산관리101</a>
-    <a href="/ipo.html">공모주</a>
+    <a href="/" data-ga="click_gnb" data-ga-text="홈" data-ga-loc="gnb">홈</a>
+    <a href="/portfolio.html" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
+    <a href="/asset.html" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
+    <a href="/ipo.html" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
   </nav>
   <div class="subnav">
     <span class="subnav-label">공모주</span>
-    <a href="/ipo-guide.html" class="active">청약 가이드</a>
-    <a href="/ipo.html">캘린더</a>
-    <a href="/ipo-analysis.html">종목 분석</a>
+    <a href="/ipo-guide.html" class="active" data-ga="click_subnav" data-ga-text="청약 가이드" data-ga-loc="subnav">청약 가이드</a>
+    <a href="/ipo.html" data-ga="click_subnav" data-ga-text="캘린더" data-ga-loc="subnav">캘린더</a>
+    <a href="/ipo-analysis.html" data-ga="click_subnav" data-ga-text="종목 분석" data-ga-loc="subnav">종목 분석</a>
   </div>
 
   <div class="container">
@@ -225,9 +228,9 @@
     <!-- 목차 -->
     <div class="toc">
       <div class="toc-title">목차</div>
-      <a href="#what"><span class="num">01</span> 공모주 청약이란?</a>
-      <a href="#terms"><span class="num">02</span> 핵심 용어 사전</a>
-      <a href="#steps"><span class="num">03</span> 청약 절차 7단계</a>
+      <a href="#what" data-ga="click_toc" data-ga-loc="guide_toc"><span class="num">01</span> 공모주 청약이란?</a>
+      <a href="#terms" data-ga="click_toc" data-ga-loc="guide_toc"><span class="num">02</span> 핵심 용어 사전</a>
+      <a href="#steps" data-ga="click_toc" data-ga-loc="guide_toc"><span class="num">03</span> 청약 절차 7단계</a>
     </div>
 
     <!-- 1. 공모주 청약이란 -->
@@ -319,7 +322,7 @@
           <div class="step-num">2</div>
           <div class="step-content">
             <div class="step-title">청약 일정 확인</div>
-            <div class="step-desc"><a href="/ipo.html" style="color:var(--caramel);font-weight:600;">공모주 캘린더</a>에서 수요예측일, 청약일(보통 2일간), 환불일, 상장 예정일을 확인합니다. 일정이 겹치는 종목이 있으면 자금 배분 계획을 세워야 합니다.</div>
+            <div class="step-desc"><a href="/ipo.html" style="color:var(--caramel);font-weight:600;" data-ga="click_inline_link" data-ga-loc="guide_content">공모주 캘린더</a>에서 수요예측일, 청약일(보통 2일간), 환불일, 상장 예정일을 확인합니다. 일정이 겹치는 종목이 있으면 자금 배분 계획을 세워야 합니다.</div>
           </div>
         </div>
 
@@ -327,7 +330,7 @@
           <div class="step-num">3</div>
           <div class="step-content">
             <div class="step-title">종목 분석 (4대 조건 확인)</div>
-            <div class="step-desc"><a href="/ipo-analysis.html" style="color:var(--caramel);font-weight:600;">종목 분석 페이지</a>에서 4대 조건(기관 경쟁률, 확정 공모가, 의무확약, 유통물량)과 분석 등급(S~D)을 확인합니다. 등급이 높을수록 상장 후 수익 가능성이 높은 경향이 있습니다.</div>
+            <div class="step-desc"><a href="/ipo-analysis.html" style="color:var(--caramel);font-weight:600;" data-ga="click_inline_link" data-ga-loc="guide_content">종목 분석 페이지</a>에서 4대 조건(기관 경쟁률, 확정 공모가, 의무확약, 유통물량)과 분석 등급(S~D)을 확인합니다. 등급이 높을수록 상장 후 수익 가능성이 높은 경향이 있습니다.</div>
           </div>
         </div>
 
@@ -381,8 +384,8 @@
     <div class="cta-area">
       <p>공모주 청약을 시작해 볼까요?</p>
       <div class="cta-btns">
-        <a href="/ipo.html" class="cta-btn primary">&#128197; 청약 일정 확인</a>
-        <a href="/ipo-analysis.html" class="cta-btn secondary">&#128270; 종목 분석 보기</a>
+        <a href="/ipo.html" class="cta-btn primary" data-ga="click_cta" data-ga-text="청약 일정 확인" data-ga-loc="guide_cta">&#128197; 청약 일정 확인</a>
+        <a href="/ipo-analysis.html" class="cta-btn secondary" data-ga="click_cta" data-ga-text="종목 분석 보기" data-ga-loc="guide_cta">&#128270; 종목 분석 보기</a>
       </div>
     </div>
 
@@ -391,5 +394,15 @@
       <p>본 페이지는 공모주 청약에 대한 일반적인 안내 자료이며, 특정 종목에 대한 투자 권유가 아닙니다. 개별 종목의 세부 조건(증거금률, 최소 청약 단위 등)은 해당 투자설명서를 확인하시기 바랍니다. 투자 판단의 책임은 본인에게 있습니다.</p>
     </div>
   </div>
+<script>
+document.addEventListener('click', function(e) {
+  var el = e.target.closest('[data-ga]');
+  if (!el) return;
+  gtag('event', el.dataset.ga, {
+    click_text: el.dataset.gaText || el.textContent.trim().substring(0, 50),
+    click_location: el.dataset.gaLoc || 'unknown'
+  });
+});
+</script>
 </body>
 </html>

@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>공모주 분석 - Finance Coffee Chat</title>
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZEG7YQ80S"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -324,16 +327,16 @@
 </head>
 <body>
   <nav>
-    <a href="/">홈</a>
-    <a href="/portfolio.html">포트폴리오</a>
-    <a href="/asset.html">자산관리101</a>
-    <a href="/ipo.html">공모주</a>
+    <a href="/" data-ga="click_gnb" data-ga-text="홈" data-ga-loc="gnb">홈</a>
+    <a href="/portfolio.html" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
+    <a href="/asset.html" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
+    <a href="/ipo.html" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
   </nav>
   <div class="subnav">
     <span class="subnav-label">공모주</span>
-    <a href="/ipo-guide.html">청약 가이드</a>
-    <a href="/ipo.html">캘린더</a>
-    <a href="/ipo-analysis.html" class="active">종목 분석</a>
+    <a href="/ipo-guide.html" data-ga="click_subnav" data-ga-text="청약 가이드" data-ga-loc="subnav">청약 가이드</a>
+    <a href="/ipo.html" data-ga="click_subnav" data-ga-text="캘린더" data-ga-loc="subnav">캘린더</a>
+    <a href="/ipo-analysis.html" class="active" data-ga="click_subnav" data-ga-text="종목 분석" data-ga-loc="subnav">종목 분석</a>
   </div>
 
   <div class="container">
@@ -424,18 +427,18 @@
     <!-- Filters -->
     <div class="filter-bar">
       <div class="filter-group" id="gradeFilters">
-        <button class="filter-btn active" data-grade="all">전체</button>
-        <button class="filter-btn" data-grade="S">S</button>
-        <button class="filter-btn" data-grade="A">A</button>
-        <button class="filter-btn" data-grade="B">B</button>
-        <button class="filter-btn" data-grade="CD">C/D</button>
+        <button class="filter-btn active" data-grade="all" data-ga="click_filter" data-ga-loc="analysis_filter_grade">전체</button>
+        <button class="filter-btn" data-grade="S" data-ga="click_filter" data-ga-loc="analysis_filter_grade">S</button>
+        <button class="filter-btn" data-grade="A" data-ga="click_filter" data-ga-loc="analysis_filter_grade">A</button>
+        <button class="filter-btn" data-grade="B" data-ga="click_filter" data-ga-loc="analysis_filter_grade">B</button>
+        <button class="filter-btn" data-grade="CD" data-ga="click_filter" data-ga-loc="analysis_filter_grade">C/D</button>
       </div>
       <div class="filter-sep"></div>
       <div class="filter-group" id="statusFilters">
-        <button class="filter-btn active" data-status="all">전체</button>
-        <button class="filter-btn" data-status="upcoming">청약예정</button>
-        <button class="filter-btn" data-status="active">청약중</button>
-        <button class="filter-btn" data-status="completed">상장완료</button>
+        <button class="filter-btn active" data-status="all" data-ga="click_filter" data-ga-loc="analysis_filter_status">전체</button>
+        <button class="filter-btn" data-status="upcoming" data-ga="click_filter" data-ga-loc="analysis_filter_status">청약예정</button>
+        <button class="filter-btn" data-status="active" data-ga="click_filter" data-ga-loc="analysis_filter_status">청약중</button>
+        <button class="filter-btn" data-status="completed" data-ga="click_filter" data-ga-loc="analysis_filter_status">상장완료</button>
       </div>
     </div>
 
@@ -444,7 +447,7 @@
 
     <!-- Calendar Link -->
     <div style="text-align:center;margin-top:24px;">
-      <a href="/ipo.html" class="calendar-link">&#128197; 공모주 캘린더에서 일정 확인하기 &rarr;</a>
+      <a href="/ipo.html" class="calendar-link" data-ga="click_calendar_link" data-ga-text="캘린더에서 일정 확인" data-ga-loc="analysis_bottom">&#128197; 공모주 캘린더에서 일정 확인하기 &rarr;</a>
     </div>
 
     <!-- Disclaimer -->
@@ -846,7 +849,7 @@
           banner.className = 'name-filter-banner';
           filterBar.parentNode.insertBefore(banner, filterBar);
         }
-        banner.innerHTML = `<span>&#128270; <strong>${filterName}</strong> 검색 결과</span><button onclick="clearNameFilter()">&#10005; 전체 보기</button>`;
+        banner.innerHTML = `<span>&#128270; <strong>${filterName}</strong> 검색 결과</span><button onclick="clearNameFilter()" data-ga="click_clear_filter" data-ga-text="전체보기" data-ga-loc="analysis_filter">&#10005; 전체 보기</button>`;
         filterBar.style.display = 'none';
       } else {
         if (banner) banner.remove();
@@ -998,7 +1001,7 @@
       const price = ipo.price !== '-' ? ipo.price : ipo.priceRange;
       const details = encodeURIComponent(`종목: ${ipo.name}\n공모가: ${price}\n주관사: ${ipo.lead}\n등급: ${ipo.grade || '미확정'}\n\n☕ Finance Coffee Chat`);
       const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}`;
-      return `<a href="${url}" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:12px;padding:9px 16px;background:var(--oat-milk);border:1px solid rgba(61,90,128,0.2);border-radius:10px;color:var(--blue);font-size:13px;font-weight:500;text-decoration:none;transition:all 0.15s;">&#128197; 구글 캘린더에 청약일정 추가</a>`;
+      return `<a href="${url}" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:12px;padding:9px 16px;background:var(--oat-milk);border:1px solid rgba(61,90,128,0.2);border-radius:10px;color:var(--blue);font-size:13px;font-weight:500;text-decoration:none;transition:all 0.15s;" data-ga="click_google_calendar" data-ga-text="${ipo.name}" data-ga-loc="analysis_card">&#128197; 구글 캘린더에 청약일정 추가</a>`;
     }
 
     function clearNameFilter() {
@@ -1011,5 +1014,15 @@
     initFromURL();
     loadFromSheets();
   </script>
+<script>
+document.addEventListener('click', function(e) {
+  var el = e.target.closest('[data-ga]');
+  if (!el) return;
+  gtag('event', el.dataset.ga, {
+    click_text: el.dataset.gaText || el.textContent.trim().substring(0, 50),
+    click_location: el.dataset.gaLoc || 'unknown'
+  });
+});
+</script>
 </body>
 </html>

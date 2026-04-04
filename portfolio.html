@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>나의 Portfolio - Finance Coffee Chat</title>
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZEG7YQ80S"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
@@ -180,10 +183,10 @@
 </head>
 <body>
   <nav>
-    <a href="/">홈</a>
-    <a href="/portfolio.html">포트폴리오</a>
-    <a href="/asset.html">자산관리101</a>
-    <a href="/ipo.html">공모주</a>
+    <a href="/" data-ga="click_gnb" data-ga-text="홈" data-ga-loc="gnb">홈</a>
+    <a href="/portfolio.html" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
+    <a href="/asset.html" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
+    <a href="/ipo.html" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
   </nav>
 
   <div class="container">
@@ -200,13 +203,13 @@
       <div class="form-card">
         <div id="defaultRows"></div>
         <div class="custom-section" id="customSection"></div>
-        <button class="btn-add" onclick="addCustomRow()">+ 나만의 유형 추가</button>
+        <button class="btn-add" onclick="addCustomRow()" data-ga="click_add_asset" data-ga-text="나만의 유형 추가" data-ga-loc="portfolio_form">+ 나만의 유형 추가</button>
       </div>
       <div class="privacy-note">
         <span class="icon">🔒</span>
         <p>입력한 금액은 이 화면에서만 보여요.<br>차트에는 <strong>비율(%)</strong>만 표시됩니다.</p>
       </div>
-      <button class="btn-generate" onclick="generateChart()">파이차트 만들기</button>
+      <button class="btn-generate" onclick="generateChart()" data-ga="click_generate_chart" data-ga-text="파이차트 만들기" data-ga-loc="portfolio_form">파이차트 만들기</button>
     </div>
 
     <!-- Chart View -->
@@ -250,8 +253,8 @@
       </div>
 
       <div class="chart-actions">
-        <button class="btn-back" onclick="goBack()">← 수정하기</button>
-        <button class="btn-save" onclick="saveChart()">이미지로 저장</button>
+        <button class="btn-back" onclick="goBack()" data-ga="click_edit_chart" data-ga-text="수정하기" data-ga-loc="portfolio_chart">← 수정하기</button>
+        <button class="btn-save" onclick="saveChart()" data-ga="click_save_chart" data-ga-text="이미지로 저장" data-ga-loc="portfolio_chart">이미지로 저장</button>
       </div>
     </div>
   </div>
@@ -485,5 +488,15 @@
 
     init();
   </script>
+<script>
+document.addEventListener('click', function(e) {
+  var el = e.target.closest('[data-ga]');
+  if (!el) return;
+  gtag('event', el.dataset.ga, {
+    click_text: el.dataset.gaText || el.textContent.trim().substring(0, 50),
+    click_location: el.dataset.gaLoc || 'unknown'
+  });
+});
+</script>
 </body>
 </html>

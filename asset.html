@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>자산관리101 - Finance Coffee Chat</title>
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZEG7YQ80S"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -89,10 +92,10 @@
 </head>
 <body>
   <nav>
-    <a href="/">홈</a>
-    <a href="/portfolio.html">포트폴리오</a>
-    <a href="/asset.html">자산관리101</a>
-    <a href="/ipo.html">공모주</a>
+    <a href="/" data-ga="click_gnb" data-ga-text="홈" data-ga-loc="gnb">홈</a>
+    <a href="/portfolio.html" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
+    <a href="/asset.html" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
+    <a href="/ipo.html" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
   </nav>
   <div class="container">
     <div class="header">
@@ -113,9 +116,19 @@
     </div>
 
     <a href="https://docs.google.com/presentation/d/19liYwcM5jOAQY7MutjLK4RQQkGk8o3ok/edit?usp=sharing"
-      target="_blank" class="drive-link">
+      target="_blank" class="drive-link" data-ga="click_external_link" data-ga-text="Google 드라이브에서 크게 보기" data-ga-loc="asset_content">
       📂 Google 드라이브에서 크게 보기
     </a>
   </div>
+<script>
+document.addEventListener('click', function(e) {
+  var el = e.target.closest('[data-ga]');
+  if (!el) return;
+  gtag('event', el.dataset.ga, {
+    click_text: el.dataset.gaText || el.textContent.trim().substring(0, 50),
+    click_location: el.dataset.gaLoc || 'unknown'
+  });
+});
+</script>
 </body>
 </html>
