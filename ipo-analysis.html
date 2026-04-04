@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>공모주 분석 - Finance Coffee Chat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --espresso: #2C1810;
+      --dark-roast: #3D2317;
+      --medium-roast: #6B3A2A;
+      --caramel: #C4853C;
+      --caramel-light: rgba(196,133,60,0.12);
+      --latte: #E8D5B7;
+      --cream: #F5EDE0;
+      --oat-milk: #FAF6F0;
+      --white: #FFFDF9;
+      --green: #4A7C59;
+      --green-light: rgba(74,124,89,0.12);
+      --blue: #3D5A80;
+      --blue-light: rgba(61,90,128,0.12);
+      --red-soft: #C0564B;
+      --red-light: rgba(192,86,75,0.10);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--oat-milk);
+      color: var(--espresso);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    nav { background: var(--espresso); padding: 16px; text-align: center; }
+    nav a {
+      color: var(--cream); margin: 0 12px; text-decoration: none;
+      font-size: 14px; font-weight: 500; letter-spacing: 0.3px;
+      transition: color 0.15s;
+    }
+    nav a:hover { color: var(--caramel); }
+    .container { max-width: 720px; margin: 0 auto; padding: 48px 28px 64px; }
+    .header { text-align: center; margin-bottom: 32px; }
+    .badge {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase; color: var(--caramel);
+      background: var(--caramel-light); padding: 5px 16px; border-radius: 20px;
+      margin-bottom: 16px; border: 1px solid rgba(196,133,60,0.2);
+    }
+    .header h1 {
+      font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 700;
+      color: var(--espresso); letter-spacing: -0.5px;
+    }
+    .header h1 em { font-style: italic; color: var(--medium-roast); }
+    .header .sub { font-size: 14px; color: var(--medium-roast); font-weight: 300; margin-top: 8px; }
+    .divider { width: 40px; height: 2px; background: var(--caramel); margin: 20px auto 0; border-radius: 1px; }
+
+    /* Guide Cards */
+    .guide-card {
+      background: var(--white); border-radius: 16px; padding: 24px;
+      border: 1px solid rgba(44,24,16,0.05); box-shadow: 0 2px 20px rgba(44,24,16,0.04);
+      margin-bottom: 16px;
+    }
+    .guide-title {
+      font-size: 14px; font-weight: 700; color: var(--espresso); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .guide-title .icon { font-size: 18px; }
+
+    /* 4대 조건 그리드 */
+    .conditions-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    }
+    .condition-item {
+      background: var(--oat-milk); border-radius: 10px; padding: 14px;
+      text-align: center;
+    }
+    .condition-num {
+      font-size: 11px; font-weight: 700; color: var(--white);
+      background: var(--caramel); width: 22px; height: 22px;
+      border-radius: 50%; display: inline-flex; align-items: center;
+      justify-content: center; margin-bottom: 6px;
+    }
+    .condition-name { font-size: 13px; font-weight: 600; color: var(--espresso); margin-bottom: 2px; }
+    .condition-threshold { font-size: 11.5px; font-weight: 400; color: var(--medium-roast); }
+
+    /* 등급 가이드 */
+    .grade-list { display: flex; flex-direction: column; gap: 8px; }
+    .grade-row {
+      display: flex; align-items: center; gap: 12px; padding: 8px 12px;
+      background: var(--oat-milk); border-radius: 10px;
+    }
+    .grade-badge {
+      font-size: 13px; font-weight: 800; width: 32px; height: 32px;
+      border-radius: 10px; display: flex; align-items: center;
+      justify-content: center; color: var(--white); flex-shrink: 0;
+      letter-spacing: -0.5px;
+    }
+    .grade-badge.S { background: var(--green); }
+    .grade-badge.A { background: var(--blue); }
+    .grade-badge.B { background: var(--caramel); }
+    .grade-badge.C { background: var(--red-soft); }
+    .grade-badge.D { background: var(--red-soft); opacity: 0.7; }
+    .grade-desc { font-size: 12.5px; color: var(--espresso); flex: 1; }
+    .grade-desc strong { font-weight: 600; }
+
+    /* Filters */
+    .filter-bar {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;
+      justify-content: center;
+    }
+    .filter-group { display: flex; gap: 4px; }
+    .filter-btn {
+      padding: 6px 14px; border: 1px solid rgba(44,24,16,0.12); border-radius: 20px;
+      background: var(--white); font-family: 'Noto Sans KR', sans-serif;
+      font-size: 12.5px; font-weight: 500; color: var(--medium-roast);
+      cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    }
+    .filter-btn:hover { border-color: var(--caramel); color: var(--caramel); }
+    .filter-btn.active {
+      background: var(--espresso); color: var(--cream); border-color: var(--espresso);
+    }
+    .filter-sep {
+      width: 1px; background: rgba(44,24,16,0.1); margin: 4px 8px; flex-shrink: 0;
+    }
+
+    /* Section Header */
+    .section-header {
+      display: flex; align-items: center; gap: 10px;
+      margin: 28px 0 14px; padding-bottom: 8px;
+      border-bottom: 1px solid rgba(44,24,16,0.08);
+    }
+    .section-header .grade-badge { width: 28px; height: 28px; font-size: 12px; border-radius: 8px; }
+    .section-label { font-size: 14px; font-weight: 600; color: var(--espresso); }
+    .section-sublabel { font-size: 12px; font-weight: 300; color: var(--medium-roast); }
+    .section-count {
+      font-size: 12px; font-weight: 400; color: rgba(107,58,42,0.5);
+      margin-left: auto;
+    }
+
+    /* Analysis Cards */
+    .analysis-list { display: flex; flex-direction: column; gap: 16px; }
+    .analysis-card {
+      background: var(--white); border-radius: 16px; padding: 24px;
+      border: 1px solid rgba(44,24,16,0.05); box-shadow: 0 2px 20px rgba(44,24,16,0.04);
+      transition: all 0.2s;
+    }
+    .analysis-card:hover {
+      box-shadow: 0 4px 24px rgba(44,24,16,0.08);
+      border-color: rgba(196,133,60,0.2);
+    }
+    .card-top {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .card-name-group { flex: 1; min-width: 0; }
+    .card-name { font-size: 16px; font-weight: 700; color: var(--espresso); margin-bottom: 4px; }
+    .card-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+    .ipo-badge {
+      font-size: 10.5px; font-weight: 600; padding: 3px 10px; border-radius: 12px;
+      letter-spacing: 0.3px;
+    }
+    .ipo-badge.kospi { background: var(--blue-light); color: var(--blue); }
+    .ipo-badge.kosdaq { background: var(--green-light); color: var(--green); }
+    .ipo-badge.upcoming { background: var(--caramel-light); color: var(--caramel); }
+    .ipo-badge.active { background: var(--green-light); color: var(--green); }
+    .ipo-badge.completed { background: rgba(44,24,16,0.06); color: var(--medium-roast); }
+    .card-grade {
+      font-size: 18px; font-weight: 800; width: 40px; height: 40px;
+      border-radius: 12px; display: flex; align-items: center;
+      justify-content: center; color: var(--white); flex-shrink: 0;
+    }
+    .card-grade.S { background: var(--green); }
+    .card-grade.A { background: var(--blue); }
+    .card-grade.B { background: var(--caramel); }
+    .card-grade.C { background: var(--red-soft); }
+    .card-grade.D { background: var(--red-soft); opacity: 0.7; }
+
+    /* 4대 조건 분석 그리드 */
+    .analysis-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px;
+      margin-bottom: 16px;
+    }
+    .analysis-item {
+      background: var(--oat-milk); border-radius: 10px; padding: 12px 10px;
+      text-align: center;
+    }
+    .analysis-item.pass { background: var(--green-light); }
+    .analysis-item.fail { background: rgba(44,24,16,0.03); }
+    .analysis-label {
+      font-size: 10.5px; font-weight: 500; color: var(--medium-roast);
+      margin-bottom: 6px; display: flex; align-items: center;
+      justify-content: center; gap: 4px;
+    }
+    .analysis-label .num {
+      font-size: 9px; font-weight: 700; color: var(--white);
+      background: var(--medium-roast); width: 16px; height: 16px;
+      border-radius: 50%; display: inline-flex; align-items: center;
+      justify-content: center;
+    }
+    .analysis-item.pass .analysis-label .num { background: var(--green); }
+    .analysis-value {
+      font-size: 15px; font-weight: 700; margin-bottom: 2px;
+    }
+    .analysis-item.pass .analysis-value { color: var(--green); }
+    .analysis-item.fail .analysis-value { color: rgba(107,58,42,0.4); }
+    .analysis-status {
+      font-size: 11px; font-weight: 500;
+    }
+    .analysis-item.pass .analysis-status { color: var(--green); }
+    .analysis-item.fail .analysis-status { color: rgba(107,58,42,0.35); }
+    .analysis-threshold {
+      font-size: 10px; font-weight: 300; color: var(--medium-roast);
+      margin-top: 2px;
+    }
+
+    /* Card Info */
+    .card-info {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px;
+      padding-top: 14px; border-top: 1px solid rgba(44,24,16,0.06);
+    }
+    .info-item { display: flex; justify-content: space-between; align-items: center; }
+    .info-label { font-size: 12.5px; font-weight: 400; color: var(--medium-roast); }
+    .info-value { font-size: 13px; font-weight: 600; color: var(--espresso); }
+
+    /* 캘린더 링크 */
+    .calendar-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 500; color: var(--caramel);
+      text-decoration: none; margin-top: 8px; transition: opacity 0.15s;
+    }
+    .calendar-link:hover { opacity: 0.7; }
+
+    /* Disclaimer */
+    .disclaimer {
+      margin-top: 40px; padding: 20px 24px;
+      background: rgba(44,24,16,0.03); border-radius: 12px;
+      border: 1px solid rgba(44,24,16,0.06);
+    }
+    .disclaimer p {
+      font-size: 12px; font-weight: 400; color: var(--medium-roast);
+      line-height: 1.8;
+    }
+    .disclaimer .icon { margin-right: 4px; }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center; padding: 48px 24px;
+      background: var(--white); border-radius: 16px;
+      border: 1px solid rgba(44,24,16,0.05);
+    }
+    .empty-icon { font-size: 32px; margin-bottom: 12px; }
+    .empty-text { font-size: 14px; color: var(--medium-roast); font-weight: 300; }
+
+    /* Data source badge */
+    .data-source {
+      display: inline-block; font-size: 9px; font-weight: 700;
+      letter-spacing: 1.5px; color: var(--caramel);
+      background: var(--caramel-light); padding: 3px 10px; border-radius: 10px;
+      margin-top: 12px; border: 1px solid rgba(196,133,60,0.2);
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 32px 16px 48px; }
+      .header h1 { font-size: 26px; }
+      nav a { margin: 0 8px; font-size: 12.5px; }
+      .conditions-grid { grid-template-columns: 1fr 1fr; }
+      .analysis-grid { grid-template-columns: 1fr 1fr; }
+      .card-info { grid-template-columns: 1fr; }
+      .analysis-card { padding: 20px 16px; }
+      .filter-bar { gap: 6px; }
+      .grade-row { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/">홈(게이트)</a>
+    <a href="/portfolio.html">포트폴리오</a>
+    <a href="/asset.html">자산관리101</a>
+    <a href="/ipo.html">공모주 캘린더</a>
+    <a href="/ipo-analysis.html">공모주 분석</a>
+  </nav>
+
+  <div class="container">
+    <div class="header">
+      <div class="badge">IPO Analysis</div>
+      <h1>공모주 <em>분석</em></h1>
+      <p class="sub">필승 전략 4대 조건 기반 종목 분석</p>
+      <div class="data-source">SAMPLE DATA</div>
+      <div class="divider"></div>
+    </div>
+
+    <!-- 4대 조건 가이드 -->
+    <div class="guide-card">
+      <div class="guide-title"><span class="icon">&#9881;</span> 필승 전략 4대 조건</div>
+      <div class="conditions-grid">
+        <div class="condition-item">
+          <div class="condition-num">1</div>
+          <div class="condition-name">기관 경쟁률</div>
+          <div class="condition-threshold">800 : 1 이상</div>
+        </div>
+        <div class="condition-item">
+          <div class="condition-num">2</div>
+          <div class="condition-name">확정 공모가</div>
+          <div class="condition-threshold">희망밴드 상단 이상</div>
+        </div>
+        <div class="condition-item">
+          <div class="condition-num">3</div>
+          <div class="condition-name">의무 확약</div>
+          <div class="condition-threshold">15% 이상</div>
+        </div>
+        <div class="condition-item">
+          <div class="condition-num">4</div>
+          <div class="condition-name">유통 물량</div>
+          <div class="condition-threshold">25% 이하</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 등급 가이드 -->
+    <div class="guide-card">
+      <div class="guide-title"><span class="icon">&#127942;</span> 분석 등급 가이드</div>
+      <div class="grade-list">
+        <div class="grade-row">
+          <div class="grade-badge S">S</div>
+          <div class="grade-desc"><strong>4대 조건 충족 + 확약 50% 이상</strong> &mdash; 핵심 관심 종목</div>
+        </div>
+        <div class="grade-row">
+          <div class="grade-badge A">A</div>
+          <div class="grade-desc"><strong>3개 이상 충족 + 섹터 양호</strong> &mdash; 관심 종목</div>
+        </div>
+        <div class="grade-row">
+          <div class="grade-badge B">B</div>
+          <div class="grade-desc"><strong>2개 충족</strong> &mdash; 균등 배정 관점에서 검토</div>
+        </div>
+        <div class="grade-row">
+          <div class="grade-badge C">C</div>
+          <div class="grade-desc"><strong>1개 충족</strong> &mdash; 지표 부진, 신중한 판단 필요</div>
+        </div>
+        <div class="grade-row">
+          <div class="grade-badge D">D</div>
+          <div class="grade-desc"><strong>미충족</strong> &mdash; 하회 리스크 존재</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <div class="filter-group" id="gradeFilters">
+        <button class="filter-btn active" data-grade="all">전체</button>
+        <button class="filter-btn" data-grade="S">S</button>
+        <button class="filter-btn" data-grade="A">A</button>
+        <button class="filter-btn" data-grade="B">B</button>
+        <button class="filter-btn" data-grade="CD">C/D</button>
+      </div>
+      <div class="filter-sep"></div>
+      <div class="filter-group" id="statusFilters">
+        <button class="filter-btn active" data-status="all">전체</button>
+        <button class="filter-btn" data-status="upcoming">청약예정</button>
+        <button class="filter-btn" data-status="active">청약중</button>
+        <button class="filter-btn" data-status="completed">상장완료</button>
+      </div>
+    </div>
+
+    <!-- Analysis Cards -->
+    <div id="analysisContainer"></div>
+
+    <!-- Calendar Link -->
+    <div style="text-align:center;margin-top:24px;">
+      <a href="/ipo.html" class="calendar-link">&#128197; 공모주 캘린더에서 일정 확인하기 &rarr;</a>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="disclaimer">
+      <p><span class="icon">&#9888;&#65039;</span> 본 페이지의 분석 등급 및 데이터는 공개된 공시 정보를 기반으로 한 참고 자료이며, 특정 종목에 대한 투자 권유가 아닙니다. 투자 판단의 책임은 본인에게 있습니다.</p>
+    </div>
+  </div>
+
+  <script>
+    // ── 샘플 데이터 ──
+    const SAMPLE_DATA = [
+      {
+        name: '에이치켐', market: 'kosdaq', status: 'completed', grade: 'S',
+        priceFixed: 15000, priceBandTop: 15000, price: '15,000원', priceRange: '12,000~15,000원',
+        competitionNum: 1247, competition: '1,247:1',
+        lockupNum: 52.3, lockup: '52.3%',
+        floatRatioNum: 18.2, floatRatio: '18.2%',
+        shares: '2,500,000주', lead: '한국투자증권',
+        subscribe: ['2026-04-01','2026-04-02'], refund: '2026-04-04', listing: '2026-04-10'
+      },
+      {
+        name: '퓨처로보틱스', market: 'kosdaq', status: 'completed', grade: 'A',
+        priceFixed: 32000, priceBandTop: 32000, price: '32,000원', priceRange: '25,000~32,000원',
+        competitionNum: 1583, competition: '1,583:1',
+        lockupNum: 71.5, lockup: '71.5%',
+        floatRatioNum: 28.4, floatRatio: '28.4%',
+        shares: '1,800,000주', lead: 'NH투자증권',
+        subscribe: ['2026-04-02','2026-04-03'], refund: '2026-04-07', listing: '2026-04-14'
+      },
+      {
+        name: '그린에너지솔루션', market: 'kospi', status: 'active', grade: 'A',
+        priceFixed: 48000, priceBandTop: 48000, price: '48,000원', priceRange: '40,000~48,000원',
+        competitionNum: 892, competition: '892:1',
+        lockupNum: 58.7, lockup: '58.7%',
+        floatRatioNum: 22.1, floatRatio: '22.1%',
+        shares: '5,000,000주', lead: '미래에셋증권',
+        subscribe: ['2026-04-04','2026-04-07'], refund: '2026-04-09', listing: '2026-04-16'
+      },
+      {
+        name: '바이오시냅스', market: 'kosdaq', status: 'upcoming', grade: 'B',
+        priceFixed: 0, priceBandTop: 25000, price: '-', priceRange: '20,000~25,000원',
+        competitionNum: 0, competition: '-',
+        lockupNum: 0, lockup: '-',
+        floatRatioNum: 30.5, floatRatio: '30.5%',
+        shares: '3,200,000주', lead: '삼성증권',
+        subscribe: ['2026-04-10','2026-04-11'], refund: '2026-04-15', listing: '2026-04-22'
+      },
+      {
+        name: '스마트물류', market: 'kosdaq', status: 'upcoming', grade: 'C',
+        priceFixed: 0, priceBandTop: 10000, price: '-', priceRange: '8,000~10,000원',
+        competitionNum: 0, competition: '-',
+        lockupNum: 0, lockup: '-',
+        floatRatioNum: 35.2, floatRatio: '35.2%',
+        shares: '4,000,000주', lead: 'KB증권',
+        subscribe: ['2026-04-14','2026-04-15'], refund: '2026-04-17', listing: '2026-04-24'
+      },
+      {
+        name: '코리아반도체', market: 'kospi', status: 'upcoming', grade: 'S',
+        priceFixed: 0, priceBandTop: 65000, price: '-', priceRange: '55,000~65,000원',
+        competitionNum: 0, competition: '-',
+        lockupNum: 0, lockup: '-',
+        floatRatioNum: 19.8, floatRatio: '19.8%',
+        shares: '8,000,000주', lead: '한국투자증권',
+        subscribe: ['2026-04-21','2026-04-22'], refund: '2026-04-24', listing: '2026-04-30'
+      },
+      {
+        name: '메디팜헬스', market: 'kosdaq', status: 'upcoming', grade: 'D',
+        priceFixed: 0, priceBandTop: 18000, price: '-', priceRange: '15,000~18,000원',
+        competitionNum: 0, competition: '-',
+        lockupNum: 0, lockup: '-',
+        floatRatioNum: 42.1, floatRatio: '42.1%',
+        shares: '2,000,000주', lead: '대신증권',
+        subscribe: ['2026-04-23','2026-04-24'], refund: '2026-04-28', listing: '2026-05-07'
+      },
+    ];
+
+    let IPO_DATA = SAMPLE_DATA;
+    let activeGrade = 'all';
+    let activeStatus = 'all';
+
+    // ── 4대 조건 판정 ──
+    function evaluate(ipo) {
+      const conditions = [];
+      // ① 기관 경쟁률 800:1 이상
+      const c1 = ipo.competitionNum >= 800;
+      conditions.push({ num: 1, name: '기관 경쟁률', value: ipo.competition, pass: c1, threshold: '800:1↑', available: ipo.competitionNum > 0 });
+      // ② 공모가 밴드 상단 이상
+      const c2 = ipo.priceFixed > 0 && ipo.priceFixed >= ipo.priceBandTop;
+      conditions.push({ num: 2, name: '확정 공모가', value: ipo.price, pass: c2, threshold: '상단↑', available: ipo.priceFixed > 0 });
+      // ③ 의무 확약 15% 이상
+      const c3 = ipo.lockupNum >= 15;
+      conditions.push({ num: 3, name: '의무 확약', value: ipo.lockup, pass: c3, threshold: '15%↑', available: ipo.lockupNum > 0 });
+      // ④ 유통 물량 25% 이하
+      const c4 = ipo.floatRatioNum > 0 && ipo.floatRatioNum <= 25;
+      conditions.push({ num: 4, name: '유통 물량', value: ipo.floatRatio, pass: c4, threshold: '25%↓', available: ipo.floatRatioNum > 0 });
+      return conditions;
+    }
+
+    // ── Helpers ──
+    function getStatusLabel(s) {
+      return { upcoming: '청약예정', active: '청약중', completed: '상장완료' }[s] || s;
+    }
+    function fmtDate(str) {
+      if (!str || !/^\d{4}-\d{2}-\d{2}$/.test(str)) return '-';
+      const [, m, d] = str.split('-');
+      return `${parseInt(m)}/${parseInt(d)}`;
+    }
+    function getGradeInfo(grade) {
+      const map = {
+        S: { label: '4대 조건 충족', color: 'S' },
+        A: { label: '3개 이상 충족', color: 'A' },
+        B: { label: '2개 충족', color: 'B' },
+        C: { label: '1개 충족', color: 'C' },
+        D: { label: '미충족', color: 'D' },
+      };
+      return map[grade] || map['D'];
+    }
+
+    const GRADE_ORDER = ['S', 'A', 'B', 'C', 'D'];
+
+    // ── Filtering ──
+    function getFilteredIPOs() {
+      return IPO_DATA.filter(ipo => {
+        if (activeStatus !== 'all' && ipo.status !== activeStatus) return false;
+        if (activeGrade !== 'all') {
+          if (activeGrade === 'CD') {
+            if (ipo.grade !== 'C' && ipo.grade !== 'D') return false;
+          } else {
+            if (ipo.grade !== activeGrade) return false;
+          }
+        }
+        return true;
+      });
+    }
+
+    // ── Render ──
+    function render() {
+      const container = document.getElementById('analysisContainer');
+      const filtered = getFilteredIPOs();
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">&#9749;</div>
+            <p class="empty-text">조건에 맞는 공모주가 없습니다</p>
+          </div>`;
+        return;
+      }
+
+      // 등급별 그룹핑
+      const groups = {};
+      GRADE_ORDER.forEach(g => { groups[g] = []; });
+      filtered.forEach(ipo => {
+        if (groups[ipo.grade]) groups[ipo.grade].push(ipo);
+      });
+
+      let html = '';
+      GRADE_ORDER.forEach(grade => {
+        const items = groups[grade];
+        if (items.length === 0) return;
+
+        const info = getGradeInfo(grade);
+        html += `
+          <div class="section-header">
+            <div class="grade-badge ${info.color}">${grade}</div>
+            <span class="section-label">${grade}등급</span>
+            <span class="section-sublabel">${info.label}</span>
+            <span class="section-count">${items.length}건</span>
+          </div>
+          <div class="analysis-list">`;
+
+        items.forEach(ipo => {
+          const conditions = evaluate(ipo);
+          const conditionsHtml = conditions.map(c => {
+            const cls = !c.available ? 'fail' : (c.pass ? 'pass' : 'fail');
+            const status = !c.available ? '미확정' : (c.pass ? '충족' : '미충족');
+            const icon = !c.available ? '&#8943;' : (c.pass ? '&#10003;' : '&#10007;');
+            return `
+              <div class="analysis-item ${cls}">
+                <div class="analysis-label"><span class="num">${c.num}</span> ${c.name}</div>
+                <div class="analysis-value">${c.value}</div>
+                <div class="analysis-status">${icon} ${status}</div>
+                <div class="analysis-threshold">기준: ${c.threshold}</div>
+              </div>`;
+          }).join('');
+
+          html += `
+            <div class="analysis-card">
+              <div class="card-top">
+                <div class="card-name-group">
+                  <div class="card-name">${ipo.name}</div>
+                  <div class="card-badges">
+                    <span class="ipo-badge ${ipo.market}">${ipo.market === 'kospi' ? '코스피' : '코스닥'}</span>
+                    <span class="ipo-badge ${ipo.status}">${getStatusLabel(ipo.status)}</span>
+                  </div>
+                </div>
+                <div class="card-grade ${grade}">${grade}</div>
+              </div>
+              <div class="analysis-grid">${conditionsHtml}</div>
+              <div class="card-info">
+                <div class="info-item">
+                  <span class="info-label">청약일</span>
+                  <span class="info-value">${fmtDate(ipo.subscribe[0])}~${fmtDate(ipo.subscribe[1])}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">주관사</span>
+                  <span class="info-value">${ipo.lead}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">공모가 밴드</span>
+                  <span class="info-value">${ipo.priceRange}</span>
+                </div>
+                <div class="info-item">
+                  <span class="info-label">공모주식수</span>
+                  <span class="info-value">${ipo.shares}</span>
+                </div>
+              </div>
+            </div>`;
+        });
+
+        html += '</div>';
+      });
+
+      container.innerHTML = html;
+    }
+
+    // ── Filter Handlers ──
+    document.getElementById('gradeFilters').addEventListener('click', e => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      document.querySelectorAll('#gradeFilters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeGrade = btn.dataset.grade;
+      render();
+    });
+
+    document.getElementById('statusFilters').addEventListener('click', e => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      document.querySelectorAll('#statusFilters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeStatus = btn.dataset.status;
+      render();
+    });
+
+    // ── Init ──
+    render();
+  </script>
+</body>
+</html>
