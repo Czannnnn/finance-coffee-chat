@@ -61,19 +61,26 @@ function fetchAsEucKr(url) {
 function parseListPage(html) {
   const ipos = [];
 
-  // summary="공모주 청약일정" 테이블 찾기
-  const tableMatch = html.match(/<table[^>]*summary[^>]*>([\s\S]*?)<\/table>/i);
-  if (!tableMatch) return ipos;
+  // fund 상세 링크가 포함된 테이블 찾기
+  const tables = html.match(/<table[^>]*>([\s\S]*?)<\/table>/gi);
+  if (!tables) return ipos;
 
-  const tableHtml = tableMatch[1];
+  let tableHtml = '';
+  for (const table of tables) {
+    if (table.includes('/html/fund/') && table.includes('o=v')) {
+      tableHtml = table;
+      break;
+    }
+  }
+  if (!tableHtml) return ipos;
 
-  // tbody 내 tr 추출
-  const rows = tableHtml.match(/<tr\s+bgcolor[^>]*>([\s\S]*?)<\/tr>/gi);
+  // fund 링크가 포함된 행 추출
+  const rows = tableHtml.match(/<tr[^>]*>([\s\S]*?)<\/tr>/gi);
   if (!rows) return ipos;
 
   for (const row of rows) {
-    // 헤더 행 건너뛰기
-    if (row.includes('<th')) continue;
+    // fund 상세 링크가 없는 행 건너뛰기
+    if (!row.includes('/html/fund/') || !row.includes('o=v')) continue;
 
     const cells = [];
     const cellMatches = row.match(/<td[^>]*>([\s\S]*?)<\/td>/gi);
@@ -84,12 +91,12 @@ function parseListPage(html) {
       cells.push(text);
     }
 
-    // 종목명 링크에서 상세 URL 추출
-    const linkMatch = row.match(/href="([^"]*o=v[^"]*)"/i);
+    // 종목명 링크에서 상세 URL 추출 (&amp; 디코딩 포함)
+    const linkMatch = row.match(/href=["']([^"']*fund[^"']*o=v[^"']*)["']/i);
     let detailUrl = '';
     if (linkMatch) {
-      const path = linkMatch[1];
-      detailUrl = path.startsWith('http') ? path : `http://www.38.co.kr${path.startsWith('/') ? '' : '/html/fund/'}${path}`;
+      const path = linkMatch[1].replace(/&amp;/g, '&');
+      detailUrl = path.startsWith('http') ? path : `http://www.38.co.kr${path}`;
     }
 
     // 청약 상태 판별 (font color)
