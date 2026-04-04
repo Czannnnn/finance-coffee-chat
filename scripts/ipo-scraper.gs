@@ -183,21 +183,16 @@ function parseDetailPage(html) {
     detail.shares = sharesMatch[1].replace(/<[^>]+>/g, '').trim();
   }
 
-  // 유통가능물량 비율 (공모분석 섹션의 총계 행에서 추출)
-  // 구조: 총계 | 공모전주식수 | 100% | 공모후주식수 | 100% | 매각제한 | X% | 유통가능 | Y% | -
-  // → 마지막 퍼센트(Y%)가 유통가능물량 비율
-  const totalRowMatches = html.match(/총\s*계[\s\S]*?<\/TR>/gi);
-  if (totalRowMatches) {
-    for (const totalRow of totalRowMatches) {
-      const pctMatches = totalRow.match(/([\d,.]+)\s*%/g);
-      if (pctMatches && pctMatches.length >= 4) {
-        // 100%, 100%, 매각제한%, 유통가능% 패턴
-        const lastPct = pctMatches[pctMatches.length - 1].replace(/[,%]/g, '').trim();
-        const num = parseFloat(lastPct);
-        if (num > 0 && num < 100) {
-          detail.floatRatio = `${lastPct}%`;
-          break;
-        }
+  // 유통가능물량 비율
+  // "유통가능" 텍스트 이후 첫 번째 퍼센트 값이 유통가능물량 비율
+  const floatIdx = html.indexOf('유통가능');
+  if (floatIdx >= 0) {
+    const afterFloat = html.substring(floatIdx, floatIdx + 5000);
+    const floatPctMatch = afterFloat.match(/([\d,.]+)\s*%/);
+    if (floatPctMatch) {
+      const num = parseFloat(floatPctMatch[1].replace(/,/g, ''));
+      if (num > 0 && num < 100) {
+        detail.floatRatio = `${num}%`;
       }
     }
   }
