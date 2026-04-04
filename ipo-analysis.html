@@ -378,6 +378,10 @@
   </div>
 
   <script>
+    // ── Google Sheets 연동 설정 ──
+    const SHEET_ID = '1_xXYdZ5d8COXBajVZ_tyd2p5JaOhQcQnNPQrS9-e-Jk';
+    const SHEET_NAME = 'IPO데이터';
+
     // ── 샘플 데이터 ──
     const SAMPLE_DATA = [
       {
@@ -445,9 +449,139 @@
       },
     ];
 
-    let IPO_DATA = SAMPLE_DATA;
+    let IPO_DATA = [];
     let activeGrade = 'all';
     let activeStatus = 'all';
+
+    // ── 등급 자동 계산 ──
+    function calcGrade(ipo) {
+      const conds = evaluate(ipo);
+      const passCount = conds.filter(c => c.pass).length;
+      if (passCount === 4 && ipo.lockupNum >= 50) return 'S';
+      if (passCount >= 3) return 'A';
+      if (passCount >= 2) return 'B';
+      if (passCount >= 1) return 'C';
+      return 'D';
+    }
+
+    // ── Google Sheets에서 데이터 로드 ──
+    async function loadFromSheets() {
+      if (!SHEET_ID) {
+        IPO_DATA = SAMPLE_DATA;
+        IPO_DATA.forEach(ipo => { if (!ipo.grade) ipo.grade = calcGrade(ipo); });
+        render();
+        return;
+      }
+
+      try {
+        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+        const res = await fetch(url);
+        const text = await res.text();
+        const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?/)[1]);
+        const rows = json.table.rows;
+
+        IPO_DATA = rows.map(row => {
+          const c = row.c;
+          const val = (i) => {
+            if (!c[i]) return '';
+            return c[i].f ? String(c[i].f) : (c[i].v != null ? String(c[i].v) : '');
+          };
+          const dateVal = (i) => {
+            if (!c[i] || c[i].v == null) return '';
+            const raw = String(c[i].v);
+            const dm = raw.match(/Date\((\d+),(\d+),(\d+)\)/);
+            if (dm) {
+              const y = dm[1];
+              const m = String(Number(dm[2]) + 1).padStart(2, '0');
+              const d = dm[3].padStart(2, '0');
+              return `${y}-${m}-${d}`;
+            }
+            if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+            if (c[i].f) {
+              const fm = String(c[i].f).match(/(\d{4})[-.](\d{1,2})[-.](\d{1,2})/);
+              if (fm) return `${fm[1]}-${fm[2].padStart(2,'0')}-${fm[3].padStart(2,'0')}`;
+            }
+            return raw;
+          };
+          const numVal = (i) => {
+            const v = val(i);
+            const n = parseFloat(v.replace(/[^0-9.]/g, ''));
+            return isNaN(n) ? 0 : n;
+          };
+
+          // 컬럼: 0종목명, 1시장, 2상태, 3확정공모가, 4희망공모가, 5청약시작, 6청약종료, 7환불, 8상장, 9주관사, 10경쟁률, 11확약비율, 12공모주식수, 13유통비율, 14업데이트
+          const confirmedPrice = val(3);
+          const expectedPrice = val(4);
+          const competitionStr = val(10);
+          const lockupStr = val(11);
+          const floatStr = val(13);
+
+          // 경쟁률 숫자 파싱 (예: "1,247.34:1" → 1247.34)
+          const compMatch = competitionStr.match(/([\d,.]+)\s*:/);
+          const competitionNum = compMatch ? parseFloat(compMatch[1].replace(/,/g, '')) : 0;
+
+          // 확약비율 숫자 파싱
+          const lockupNum = parseFloat(lockupStr.replace(/[^0-9.]/g, '')) || 0;
+
+          // 유통비율 숫자 파싱
+          const floatRatioNum = parseFloat(floatStr.replace(/[^0-9.]/g, '')) || 0;
+
+          // 공모가 밴드 상단 파싱 (예: "12,000~15,000" → 15000)
+          const priceNums = expectedPrice.replace(/[^0-9~,]/g, '').split('~');
+          const priceBandTop = priceNums.length >= 2 ? parseInt(priceNums[priceNums.length - 1].replace(/,/g, '')) || 0 : 0;
+          const priceFixed = confirmedPrice ? parseInt(confirmedPrice.replace(/,/g, '')) || 0 : 0;
+
+          const ipo = {
+            name: val(0),
+            market: val(1) || 'kosdaq',
+            status: val(2) || 'upcoming',
+            grade: '', // 아래에서 자동 계산
+            price: confirmedPrice ? `${confirmedPrice}원` : '-',
+            priceRange: expectedPrice ? `${expectedPrice}원` : '-',
+            priceBandTop: priceBandTop,
+            priceFixed: priceFixed,
+            competition: competitionStr || '-',
+            competitionNum: competitionNum,
+            lockup: lockupStr || '-',
+            lockupNum: lockupNum,
+            floatRatio: floatStr || '-',
+            floatRatioNum: floatRatioNum,
+            shares: val(12) || '-',
+            lead: val(9),
+            subscribe: [dateVal(5), dateVal(6)],
+            refund: dateVal(7),
+            listing: dateVal(8),
+          };
+          return ipo;
+        }).filter(ipo => ipo.name && ipo.subscribe[0]);
+
+        // 등급 자동 계산
+        IPO_DATA.forEach(ipo => { ipo.grade = calcGrade(ipo); });
+
+        console.log(`Google Sheets에서 ${IPO_DATA.length}건 로드 완료`);
+        showDataSource('live');
+      } catch (e) {
+        console.error('Sheets 로드 실패, 샘플 데이터 사용:', e);
+        IPO_DATA = SAMPLE_DATA;
+        IPO_DATA.forEach(ipo => { if (!ipo.grade) ipo.grade = calcGrade(ipo); });
+        showDataSource('sample');
+      }
+
+      render();
+    }
+
+    function showDataSource(type) {
+      const badge = document.querySelector('.data-source');
+      if (!badge) return;
+      if (type === 'live') {
+        badge.textContent = 'LIVE DATA';
+        badge.style.background = 'var(--green-light)';
+        badge.style.color = 'var(--green)';
+        badge.style.borderColor = 'rgba(74,124,89,0.2)';
+      } else {
+        badge.textContent = 'SAMPLE DATA';
+      }
+    }
 
     // ── 4대 조건 판정 ──
     function evaluate(ipo) {
@@ -615,7 +749,7 @@
     });
 
     // ── Init ──
-    render();
+    loadFromSheets();
   </script>
 </body>
 </html>

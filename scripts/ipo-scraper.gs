@@ -38,6 +38,7 @@ function fetchIPOData() {
         ipo.listingDate = detail.listingDate || '';
         ipo.lockup = detail.lockup || '';
         ipo.shares = detail.shares || '';
+        ipo.floatRatio = detail.floatRatio || '';
         Utilities.sleep(500); // 서버 부하 방지
       } catch (e) {
         Logger.log(`상세 페이지 오류 (${ipo.name}): ${e.message}`);
@@ -114,6 +115,7 @@ function parseListPage(html) {
       listingDate: '',
       lockup: '',
       shares: '',
+      floatRatio: '',
     };
 
     if (ipo.name) {
@@ -132,6 +134,7 @@ function parseDetailPage(html) {
     listingDate: '',
     lockup: '',
     shares: '',
+    floatRatio: '',
   };
 
   // 시장구분
@@ -171,6 +174,24 @@ function parseDetailPage(html) {
   const sharesMatch = html.match(/총공모주식수[\s\S]*?<td[^>]*>([\s\S]*?)<\/td>/i);
   if (sharesMatch) {
     detail.shares = sharesMatch[1].replace(/<[^>]+>/g, '').trim();
+  }
+
+  // 유통가능물량 비율 (공모분석 섹션의 총계 행에서 추출)
+  // 총계 행의 마지막 퍼센트 값이 유통가능물량 비율
+  const readtextMatch = html.match(/<span\s+class=['"]readtext['"]>([\s\S]*?)<\/span>/i);
+  if (readtextMatch) {
+    const analysisHtml = readtextMatch[1];
+    // 총계 행 찾기 (다양한 인코딩/포맷 대응)
+    const totalRowMatch = analysisHtml.match(/총\s*계[\s\S]*?<\/tr>/i);
+    if (totalRowMatch) {
+      // 총계 행에서 모든 퍼센트 값 추출
+      const pctMatches = totalRowMatch[0].match(/([\d.]+)\s*%/g);
+      if (pctMatches && pctMatches.length >= 2) {
+        // 마지막 퍼센트가 유통가능물량 비율
+        const lastPct = pctMatches[pctMatches.length - 1].replace('%', '').trim();
+        detail.floatRatio = `${lastPct}%`;
+      }
+    }
   }
 
   return detail;
@@ -238,7 +259,7 @@ function getOrCreateSheet() {
   const headers = [
     '종목명', '시장구분', '상태', '확정공모가', '희망공모가',
     '청약시작일', '청약종료일', '환불일', '상장일',
-    '주관사', '경쟁률', '확약비율', '공모주식수', '업데이트'
+    '주관사', '경쟁률', '확약비율', '공모주식수', '유통비율', '업데이트'
   ];
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
@@ -250,7 +271,7 @@ function writeToSheet(sheet, ipos) {
   // 기존 데이터 삭제 (헤더 제외)
   const lastRow = sheet.getLastRow();
   if (lastRow > 1) {
-    sheet.getRange(2, 1, lastRow - 1, 14).clear();
+    sheet.getRange(2, 1, lastRow - 1, 15).clear();
   }
 
   if (ipos.length === 0) return;
@@ -270,10 +291,11 @@ function writeToSheet(sheet, ipos) {
     ipo.competition,
     ipo.lockup,
     ipo.shares,
+    ipo.floatRatio,
     now,
   ]);
 
-  sheet.getRange(2, 1, data.length, 14).setValues(data);
+  sheet.getRange(2, 1, data.length, 15).setValues(data);
 }
 
 // ─── 트리거 설정 (최초 1회 실행) ───
