@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>공모주 청약 가이드 - Finance Coffee Chat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --espresso: #2C1810;
+      --dark-roast: #3D2317;
+      --medium-roast: #6B3A2A;
+      --caramel: #C4853C;
+      --caramel-light: rgba(196,133,60,0.12);
+      --latte: #E8D5B7;
+      --cream: #F5EDE0;
+      --oat-milk: #FAF6F0;
+      --white: #FFFDF9;
+      --green: #4A7C59;
+      --green-light: rgba(74,124,89,0.12);
+      --blue: #3D5A80;
+      --blue-light: rgba(61,90,128,0.12);
+      --red-soft: #C0564B;
+      --red-light: rgba(192,86,75,0.10);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--oat-milk);
+      color: var(--espresso);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    nav { background: var(--espresso); padding: 12px 16px; text-align: center; }
+    nav a {
+      color: var(--cream); margin: 0 12px; text-decoration: none;
+      font-size: 14px; font-weight: 500; letter-spacing: 0.3px;
+      transition: color 0.15s;
+    }
+    nav a:hover { color: var(--caramel); }
+    .subnav {
+      background: var(--dark-roast); padding: 8px 16px; text-align: center;
+      border-bottom: 1px solid rgba(196,133,60,0.15);
+    }
+    .subnav-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--caramel); margin-right: 12px;
+    }
+    .subnav a {
+      color: var(--latte); margin: 0 8px; text-decoration: none;
+      font-size: 13px; font-weight: 400; letter-spacing: 0.3px;
+      transition: color 0.15s; padding: 4px 8px; border-radius: 6px;
+    }
+    .subnav a:hover { color: var(--caramel); }
+    .subnav a.active { color: var(--cream); background: rgba(196,133,60,0.2); font-weight: 600; }
+
+    .container { max-width: 720px; margin: 0 auto; padding: 48px 28px 64px; }
+    .header { text-align: center; margin-bottom: 40px; }
+    .badge {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase; color: var(--caramel);
+      background: var(--caramel-light); padding: 5px 16px; border-radius: 20px;
+      margin-bottom: 16px; border: 1px solid rgba(196,133,60,0.2);
+    }
+    .header h1 {
+      font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 700;
+      color: var(--espresso); letter-spacing: -0.5px;
+    }
+    .header h1 em { font-style: italic; color: var(--medium-roast); }
+    .header .sub { font-size: 14px; color: var(--medium-roast); font-weight: 300; margin-top: 8px; }
+    .divider { width: 40px; height: 2px; background: var(--caramel); margin: 20px auto 0; border-radius: 1px; }
+
+    /* TOC */
+    .toc {
+      background: var(--white); border-radius: 16px; padding: 24px;
+      border: 1px solid rgba(44,24,16,0.05); box-shadow: 0 2px 20px rgba(44,24,16,0.04);
+      margin-bottom: 32px;
+    }
+    .toc-title { font-size: 13px; font-weight: 600; color: var(--medium-roast); margin-bottom: 12px; letter-spacing: 0.5px; }
+    .toc a {
+      display: block; padding: 6px 0; font-size: 14px; color: var(--espresso);
+      text-decoration: none; font-weight: 400; transition: color 0.15s;
+      border-bottom: 1px solid rgba(44,24,16,0.04);
+    }
+    .toc a:last-child { border-bottom: none; }
+    .toc a:hover { color: var(--caramel); }
+    .toc .num { color: var(--caramel); font-weight: 600; margin-right: 8px; }
+
+    /* Sections */
+    .section {
+      background: var(--white); border-radius: 16px; padding: 28px 24px;
+      border: 1px solid rgba(44,24,16,0.05); box-shadow: 0 2px 20px rgba(44,24,16,0.04);
+      margin-bottom: 24px;
+    }
+    .section h2 {
+      font-size: 18px; font-weight: 700; color: var(--espresso); margin-bottom: 16px;
+      padding-bottom: 10px; border-bottom: 2px solid var(--caramel-light);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section h2 .icon { font-size: 22px; }
+    .section p { font-size: 14px; line-height: 1.9; color: var(--espresso); margin-bottom: 12px; }
+    .section p:last-child { margin-bottom: 0; }
+    .highlight {
+      background: var(--caramel-light); padding: 14px 18px; border-radius: 10px;
+      margin: 14px 0; border-left: 3px solid var(--caramel);
+    }
+    .highlight p { margin-bottom: 0; font-size: 13.5px; }
+
+    /* Term Cards */
+    .term-grid { display: flex; flex-direction: column; gap: 12px; }
+    .term-card {
+      background: var(--oat-milk); border-radius: 12px; padding: 18px 20px;
+    }
+    .term-name {
+      font-size: 15px; font-weight: 700; color: var(--espresso); margin-bottom: 6px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .term-tag {
+      font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 8px;
+      letter-spacing: 0.3px;
+    }
+    .term-tag.alloc { background: var(--green-light); color: var(--green); }
+    .term-tag.metric { background: var(--blue-light); color: var(--blue); }
+    .term-tag.schedule { background: var(--caramel-light); color: var(--caramel); }
+    .term-desc { font-size: 13.5px; color: var(--espresso); line-height: 1.8; }
+    .term-tip {
+      margin-top: 8px; font-size: 12.5px; color: var(--medium-roast);
+      background: var(--white); padding: 8px 12px; border-radius: 8px;
+    }
+
+    /* Step Cards */
+    .step-list { display: flex; flex-direction: column; gap: 16px; }
+    .step-card {
+      display: flex; gap: 16px; align-items: flex-start;
+      background: var(--oat-milk); border-radius: 12px; padding: 20px;
+    }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 700; color: var(--white);
+      background: var(--caramel);
+    }
+    .step-content { flex: 1; }
+    .step-title { font-size: 15px; font-weight: 600; color: var(--espresso); margin-bottom: 6px; }
+    .step-desc { font-size: 13.5px; color: var(--espresso); line-height: 1.8; }
+
+    /* Sell Strategy Table */
+    .strategy-table {
+      width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px;
+    }
+    .strategy-table th {
+      text-align: left; padding: 10px 12px; background: var(--espresso); color: var(--cream);
+      font-weight: 600; font-size: 12px;
+    }
+    .strategy-table th:first-child { border-radius: 8px 0 0 0; }
+    .strategy-table th:last-child { border-radius: 0 8px 0 0; }
+    .strategy-table td {
+      padding: 10px 12px; border-bottom: 1px solid rgba(44,24,16,0.06);
+      color: var(--espresso);
+    }
+    .strategy-table tr:last-child td { border-bottom: none; }
+    .strategy-table tr:hover td { background: var(--caramel-light); }
+
+    /* CTA */
+    .cta-area {
+      text-align: center; margin-top: 32px; padding: 28px;
+      background: var(--white); border-radius: 16px;
+      border: 1px solid rgba(44,24,16,0.05); box-shadow: 0 2px 20px rgba(44,24,16,0.04);
+    }
+    .cta-area p { font-size: 14px; color: var(--medium-roast); margin-bottom: 16px; }
+    .cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px;
+      border-radius: 10px; font-size: 13px; font-weight: 600; text-decoration: none;
+      transition: all 0.15s;
+    }
+    .cta-btn.primary { background: var(--caramel); color: var(--white); }
+    .cta-btn.primary:hover { background: var(--medium-roast); }
+    .cta-btn.secondary { background: var(--oat-milk); color: var(--espresso); border: 1px solid rgba(44,24,16,0.1); }
+    .cta-btn.secondary:hover { border-color: var(--caramel); color: var(--caramel); }
+
+    /* Disclaimer */
+    .disclaimer {
+      margin-top: 24px; padding: 16px 20px;
+      background: rgba(44,24,16,0.03); border-radius: 12px;
+      border: 1px solid rgba(44,24,16,0.06);
+    }
+    .disclaimer p { font-size: 12px; color: var(--medium-roast); line-height: 1.8; margin: 0; }
+
+    @media (max-width: 600px) {
+      .container { padding: 32px 16px 48px; }
+      .header h1 { font-size: 26px; }
+      nav a { margin: 0 6px; font-size: 12.5px; }
+      .subnav a { font-size: 12px; margin: 0 4px; }
+      .section { padding: 22px 18px; }
+      .section h2 { font-size: 16px; }
+      .step-card { flex-direction: column; gap: 10px; }
+      .cta-btns { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/">홈</a>
+    <a href="/portfolio.html">포트폴리오</a>
+    <a href="/asset.html">자산관리101</a>
+    <a href="/ipo.html">공모주</a>
+  </nav>
+  <div class="subnav">
+    <span class="subnav-label">공모주</span>
+    <a href="/ipo-guide.html" class="active">청약 가이드</a>
+    <a href="/ipo.html">캘린더</a>
+    <a href="/ipo-analysis.html">종목 분석</a>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <div class="badge">IPO Guide</div>
+      <h1>공모주 청약 <em>가이드</em></h1>
+      <p class="sub">공모주 청약의 기초부터 실전까지</p>
+      <div class="divider"></div>
+    </div>
+
+    <!-- 목차 -->
+    <div class="toc">
+      <div class="toc-title">목차</div>
+      <a href="#what"><span class="num">01</span> 공모주 청약이란?</a>
+      <a href="#terms"><span class="num">02</span> 핵심 용어 사전</a>
+      <a href="#steps"><span class="num">03</span> 청약 절차 7단계</a>
+    </div>
+
+    <!-- 1. 공모주 청약이란 -->
+    <div class="section" id="what">
+      <h2><span class="icon">&#9749;</span> 공모주 청약이란?</h2>
+      <p>공모주 청약은 기업이 코스피 또는 코스닥에 상장하기 전, 일반 투자자에게 신주를 배정받을 수 있는 기회를 제공하는 절차입니다. 투자자는 상장 전 확정된 <strong>공모가</strong>로 주식을 매수하여, 상장 후 시세 차익을 기대할 수 있습니다.</p>
+
+      <div class="highlight">
+        <p><strong>누구나 참여 가능!</strong> 해당 IPO의 주관 증권사에 계좌만 있으면 됩니다. 2021년 제도 개편으로 일반 투자자 배정 물량의 <strong>50%가 균등배정</strong>으로 바뀌어, 소액으로도 공평하게 참여할 수 있습니다.</p>
+      </div>
+
+      <p>공모주 투자는 비교적 단기간에 수익을 기대할 수 있는 투자 방법으로, 청약부터 상장일 매도까지 보통 2~3주 정도 소요됩니다. 다만 모든 공모주가 상장 후 오르는 것은 아니므로, 종목 분석이 중요합니다.</p>
+    </div>
+
+    <!-- 2. 핵심 용어 -->
+    <div class="section" id="terms">
+      <h2><span class="icon">&#128214;</span> 핵심 용어 사전</h2>
+
+      <div class="term-grid">
+        <div class="term-card">
+          <div class="term-name">균등배정 <span class="term-tag alloc">배정</span></div>
+          <div class="term-desc">일반 투자자 배정 물량의 <strong>50%</strong>를 청약자 수로 균등하게 나누는 방식입니다. 최소 청약 증거금(보통 공모가 x 10주 x 50%)만 있으면 참여할 수 있어, 소액 투자자에게 유리합니다.</div>
+          <div class="term-tip">1주 미만이 되면 추첨으로 배정됩니다. (예: 0.7주 → 10명 중 7명에게 1주 배정)</div>
+        </div>
+
+        <div class="term-card">
+          <div class="term-name">비례배정 <span class="term-tag alloc">배정</span></div>
+          <div class="term-desc">일반 투자자 배정 물량의 나머지 <strong>50%</strong>를 납입한 증거금 비율에 따라 배분합니다. 더 많은 증거금을 납입할수록 더 많은 주식을 받을 수 있어, 자금 여유가 있는 투자자에게 유리합니다.</div>
+          <div class="term-tip">1주를 비례로 받으려면 상당한 증거금이 필요할 수 있습니다.</div>
+        </div>
+
+        <div class="term-card">
+          <div class="term-name">기관 경쟁률 <span class="term-tag metric">분석지표</span></div>
+          <div class="term-desc">수요예측 단계에서 기관투자자들의 참여 경쟁률입니다. 예를 들어 <strong>800:1</strong>이면 배정 가능 물량 대비 800배의 수량이 신청되었다는 뜻입니다.</div>
+          <div class="term-tip">높을수록 기관의 관심이 크다는 신호. 일반적으로 800:1 이상이면 양호합니다.</div>
+        </div>
+
+        <div class="term-card">
+          <div class="term-name">확정 공모가 <span class="term-tag metric">분석지표</span></div>
+          <div class="term-desc">기관 수요예측 결과를 반영하여 최종 결정된 주당 가격입니다. 기업이 제시한 <strong>희망 공모가 밴드</strong>(가격 범위)의 상단 이상으로 확정되면 기관 수요가 강했다는 긍정적 신호입니다.</div>
+          <div class="term-tip">밴드 상단 초과 확정 → 기관들이 더 높은 가격에도 사겠다는 의미</div>
+        </div>
+
+        <div class="term-card">
+          <div class="term-name">의무보유확약 <span class="term-tag metric">분석지표</span></div>
+          <div class="term-desc">수요예측에 참여한 기관이 배정받은 주식을 일정 기간(15일~6개월) 매도하지 않겠다고 약속한 비율입니다. <strong>비율이 높을수록</strong> 상장 직후 매도 물량이 적어 주가에 긍정적입니다.</div>
+          <div class="term-tip">15% 이상이면 양호, 50% 이상이면 매우 긍정적</div>
+        </div>
+
+        <div class="term-card">
+          <div class="term-name">유통가능물량 <span class="term-tag metric">분석지표</span></div>
+          <div class="term-desc">상장일에 실제 거래 가능한 주식 비율입니다. 기존 주주의 보호예수(Lock-up)와 의무보유확약 물량을 제외한 나머지로, <strong>비율이 낮을수록</strong> 매도 물량이 적어 수급에 유리합니다.</div>
+          <div class="term-tip">25% 이하면 양호, 50% 이상이면 매도 압력 주의</div>
+        </div>
+
+        <div class="term-card">
+          <div class="term-name">증거금 <span class="term-tag schedule">청약</span></div>
+          <div class="term-desc">청약 시 납입하는 금액으로, 통상 청약 금액의 <strong>50%</strong>입니다. 예를 들어 공모가 10,000원 x 100주 = 100만원 청약 시 증거금 50만원을 납입합니다.</div>
+          <div class="term-tip">균등배정만 참여 시 최소 청약 단위(보통 10주)의 증거금만 필요</div>
+        </div>
+
+        <div class="term-card">
+          <div class="term-name">시초가 <span class="term-tag schedule">상장</span></div>
+          <div class="term-desc">상장 첫날 형성되는 최초 거래 가격입니다. 공모가 대비 <strong>90%~200% 범위</strong> 내에서 결정되며, 상장일 오전 동시호가(08:00~09:00)에서 매수/매도 주문이 합쳐져 결정됩니다.</div>
+          <div class="term-tip">상장일 주가는 시초가 대비 ±30% 범위에서 변동</div>
+        </div>
+
+        <div class="term-card">
+          <div class="term-name">환불일 <span class="term-tag schedule">일정</span></div>
+          <div class="term-desc">청약 후 배정되지 않은 증거금이 계좌로 돌아오는 날입니다. 통상 청약 마감일로부터 <strong>2~3영업일 후</strong>이며, 환불금을 다음 종목 청약에 재활용할 수 있습니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 청약 절차 -->
+    <div class="section" id="steps">
+      <h2><span class="icon">&#128640;</span> 청약 절차 7단계</h2>
+
+      <div class="step-list">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <div class="step-title">증권사 계좌 개설</div>
+            <div class="step-desc">해당 IPO의 <strong>주관 증권사</strong>에 계좌가 필요합니다. 모바일 앱으로 비대면 개설이 가능하며, 여러 증권사에 계좌를 보유하면 다양한 종목에 청약할 수 있습니다.</div>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <div class="step-title">청약 일정 확인</div>
+            <div class="step-desc"><a href="/ipo.html" style="color:var(--caramel);font-weight:600;">공모주 캘린더</a>에서 수요예측일, 청약일(보통 2일간), 환불일, 상장 예정일을 확인합니다. 일정이 겹치는 종목이 있으면 자금 배분 계획을 세워야 합니다.</div>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <div class="step-title">종목 분석 (4대 조건 확인)</div>
+            <div class="step-desc"><a href="/ipo-analysis.html" style="color:var(--caramel);font-weight:600;">종목 분석 페이지</a>에서 4대 조건(기관 경쟁률, 확정 공모가, 의무확약, 유통물량)과 분석 등급(S~D)을 확인합니다. 등급이 높을수록 상장 후 수익 가능성이 높은 경향이 있습니다.</div>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <div class="step-title">청약 신청</div>
+            <div class="step-desc">증권사 MTS(모바일) 또는 HTS(PC)에서 청약합니다.<br><strong>균등배정:</strong> 최소 단위(보통 10주) 청약 → 소액 참여 가능<br><strong>비례배정:</strong> 원하는 수량만큼 → 증거금 많을수록 유리<br>균등 + 비례 동시 참여도 가능합니다.</div>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">5</div>
+          <div class="step-content">
+            <div class="step-title">배정 결과 확인</div>
+            <div class="step-desc">청약 마감 후 약 1~2영업일 뒤 증권사 앱에서 배정 수량을 확인합니다. 균등배정에서 1주 미만인 경우 추첨 결과도 함께 확인됩니다.</div>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">6</div>
+          <div class="step-content">
+            <div class="step-title">환불금 수령</div>
+            <div class="step-desc">배정되지 않은 증거금은 환불일(청약 마감 + 2~3영업일)에 자동 입금됩니다. 환불금으로 다음 종목 청약에 바로 참여할 수 있습니다.</div>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">7</div>
+          <div class="step-content">
+            <div class="step-title">상장일 매도</div>
+            <div class="step-desc">상장일 매도 전략을 참고하여 판단합니다.</div>
+
+            <table class="strategy-table">
+              <thead>
+                <tr><th>전략</th><th>설명</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>시초가 매도</strong></td><td>장 시작 전 매도 주문. 가장 보수적인 방법</td></tr>
+                <tr><td><strong>분할 매도</strong></td><td>시초가에 절반, 나머지는 장중 추이 관찰 후 매도</td></tr>
+                <tr><td><strong>장중 매도</strong></td><td>상장일 주가 흐름을 보며 매도 시점 결정</td></tr>
+                <tr><td><strong>중장기 보유</strong></td><td>기업 가치를 높게 평가하여 장기 투자</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-area">
+      <p>공모주 청약을 시작해 볼까요?</p>
+      <div class="cta-btns">
+        <a href="/ipo.html" class="cta-btn primary">&#128197; 청약 일정 확인</a>
+        <a href="/ipo-analysis.html" class="cta-btn secondary">&#128270; 종목 분석 보기</a>
+      </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="disclaimer">
+      <p>본 페이지는 공모주 청약에 대한 일반적인 안내 자료이며, 특정 종목에 대한 투자 권유가 아닙니다. 개별 종목의 세부 조건(증거금률, 최소 청약 단위 등)은 해당 투자설명서를 확인하시기 바랍니다. 투자 판단의 책임은 본인에게 있습니다.</p>
+    </div>
+  </div>
+</body>
+</html>
