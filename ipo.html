@@ -105,7 +105,7 @@
     .calendar-card {
       background: var(--white); border-radius: 20px; padding: 28px 24px;
       border: 1px solid rgba(44,24,16,0.05); box-shadow: 0 4px 30px rgba(44,24,16,0.06);
-      margin-bottom: 24px; overflow: hidden; position: relative;
+      margin-bottom: 24px; overflow: visible; position: relative;
     }
     .cal-nav {
       display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
@@ -121,6 +121,7 @@
     }
     .cal-grid {
       display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;
+      width: 100%; max-width: 100%; overflow: hidden;
     }
     .cal-dow {
       text-align: center; font-size: 11px; font-weight: 600; color: var(--medium-roast);
@@ -144,7 +145,7 @@
       font-size: 12px; font-weight: 500; color: var(--espresso); line-height: 1;
       text-align: center; margin-bottom: 1px;
     }
-    .day-events { display: flex; flex-direction: column; gap: 1px; flex: 1; overflow: hidden; }
+    .day-events { display: flex; flex-direction: column; gap: 1px; flex: 1; overflow: hidden; max-width: 100%; }
     .evt-bar {
       font-size: 9px; font-weight: 600; padding: 1px 4px; border-radius: 3px;
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -549,6 +550,22 @@
           ipo.refund === dateStr ||
           ipo.listing === dateStr
         );
+      } else {
+        // 선택 날짜 없을 때: 현재 보고 있는 월에 이벤트가 있는 IPO만 표시
+        const monthStart = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-01`;
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const monthEnd = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(daysInMonth).padStart(2, '0')}`;
+        list = list.filter(ipo => {
+          // 청약일이 해당 월과 겹치는지
+          if (isValidDate(ipo.subscribe[0]) && isValidDate(ipo.subscribe[1])) {
+            if (ipo.subscribe[1] >= monthStart && ipo.subscribe[0] <= monthEnd) return true;
+          }
+          // 환불일이 해당 월인지
+          if (isValidDate(ipo.refund) && ipo.refund >= monthStart && ipo.refund <= monthEnd) return true;
+          // 상장일이 해당 월인지
+          if (isValidDate(ipo.listing) && ipo.listing >= monthStart && ipo.listing <= monthEnd) return true;
+          return false;
+        });
       }
       return list;
     }

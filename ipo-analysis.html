@@ -118,6 +118,13 @@
     .grade-badge.D { background: var(--red-soft); opacity: 0.7; }
     .grade-desc { font-size: 12.5px; color: var(--espresso); flex: 1; }
     .grade-desc strong { font-weight: 600; }
+    .grade-stats {
+      display: inline-block; font-size: 11px; font-weight: 500;
+      color: var(--medium-roast); background: rgba(44,24,16,0.05);
+      padding: 2px 8px; border-radius: 8px; margin-left: 6px;
+    }
+    .grade-stats.positive { color: var(--green); background: var(--green-light); }
+    .grade-stats.negative { color: var(--red-soft); background: var(--red-light); }
 
     /* Filters */
     .filter-bar {
@@ -340,26 +347,26 @@
     <!-- 등급 가이드 -->
     <div class="guide-card">
       <div class="guide-title"><span class="icon">&#127942;</span> 분석 등급 가이드</div>
-      <div class="grade-list">
+      <div class="grade-list" id="gradeGuide">
         <div class="grade-row">
           <div class="grade-badge S">S</div>
-          <div class="grade-desc"><strong>4대 조건 충족 + 확약 50% 이상</strong> &mdash; 핵심 관심 종목</div>
+          <div class="grade-desc"><strong>4대 조건 충족 + 확약 50% 이상</strong> &mdash; 핵심 관심 종목 <span class="grade-stats" data-grade="S"></span></div>
         </div>
         <div class="grade-row">
           <div class="grade-badge A">A</div>
-          <div class="grade-desc"><strong>3개 이상 충족 + 섹터 양호</strong> &mdash; 관심 종목</div>
+          <div class="grade-desc"><strong>3개 이상 충족 + 섹터 양호</strong> &mdash; 관심 종목 <span class="grade-stats" data-grade="A"></span></div>
         </div>
         <div class="grade-row">
           <div class="grade-badge B">B</div>
-          <div class="grade-desc"><strong>2개 충족</strong> &mdash; 균등 배정 관점에서 검토</div>
+          <div class="grade-desc"><strong>2개 충족</strong> &mdash; 균등 배정 관점에서 검토 <span class="grade-stats" data-grade="B"></span></div>
         </div>
         <div class="grade-row">
           <div class="grade-badge C">C</div>
-          <div class="grade-desc"><strong>1개 충족</strong> &mdash; 지표 부진, 신중한 판단 필요</div>
+          <div class="grade-desc"><strong>1개 충족</strong> &mdash; 지표 부진, 신중한 판단 필요 <span class="grade-stats" data-grade="C"></span></div>
         </div>
         <div class="grade-row">
           <div class="grade-badge D">D</div>
-          <div class="grade-desc"><strong>미충족</strong> &mdash; 하회 리스크 존재</div>
+          <div class="grade-desc"><strong>미충족</strong> &mdash; 하회 리스크 존재 <span class="grade-stats" data-grade="D"></span></div>
         </div>
       </div>
     </div>
@@ -648,38 +655,37 @@
 
     const GRADE_ORDER = ['S', 'A', 'B', 'C', 'D'];
 
-    // ── 균등배정 추정 ──
-    function getUniformAlloc(ipo) {
+    // ── 균등배정 확률 추정 ──
+    // 균등 배정풀 = 공모주식수 × 25%(일반) × 50%(균등) = 12.5%
+    // 청약 건수 추정 = 기관경쟁률이 높을수록 개인 관심도 높음
+    // 경험적으로: 기관 800:1 이상이면 균등 1주 확률 50~80%, 400 이하면 거의 100%
+    function getUniformProb(ipo) {
       if (!ipo.competitionNum || ipo.competitionNum === 0) return '-';
       if (ipo.shares === '-' || !ipo.shares) return '-';
-      const totalShares = parseInt(ipo.shares.replace(/[^0-9]/g, '')) || 0;
-      if (totalShares === 0) return '-';
 
-      // 일반청약 비율 25%, 그 중 균등 50% = 전체의 12.5%
-      const uniformPool = Math.floor(totalShares * 0.125);
-      // 균등 배정 예상: 기관경쟁률 대비 개인은 보통 2~5배 높음, 평균 3배 가정
-      const estRetailComp = ipo.competitionNum * 3;
-      const perPerson = uniformPool / estRetailComp;
-      const perPersonRound = Math.round(perPerson * 10) / 10;
+      const comp = ipo.competitionNum;
+      // 기관 경쟁률 기반 균등배정 확률 추정 (경험적 구간)
+      let prob;
+      if (comp >= 2000) prob = '30~50%';
+      else if (comp >= 1500) prob = '40~60%';
+      else if (comp >= 1000) prob = '50~70%';
+      else if (comp >= 800) prob = '60~80%';
+      else if (comp >= 500) prob = '70~90%';
+      else if (comp >= 200) prob = '80~95%';
+      else prob = '90~100%';
 
-      if (perPersonRound >= 1) {
-        return `약 ${Math.floor(perPersonRound)}주`;
-      } else {
-        // 1주 미만 → 확률로 표시
-        const pct = Math.round(perPerson * 100);
-        return `${pct}% 확률 (1주)`;
-      }
+      return prob;
     }
 
-    // ── 비례배정 1주 증거금 ──
+    // ── 비례배정 1주 증거금 추정 ──
     function getProportionalDeposit(ipo) {
       if (!ipo.competitionNum || ipo.competitionNum === 0) return '';
       if (ipo.priceFixed === 0) return '';
 
-      // 비례배정 1주를 받으려면: 공모가 × 청약경쟁률(개인추정) × 0.5(증거금50%)
-      // 개인 경쟁률 ≈ 기관 경쟁률 × 3 (경험적 추정)
-      const estRetailComp = ipo.competitionNum * 3;
-      const deposit = ipo.priceFixed * estRetailComp * 0.5;
+      // 비례 1주 증거금 = 공모가 × (개인경쟁률 추정) × 50%(증거금비율)
+      // 개인경쟁률 ≈ 기관경쟁률 기반 추정 (통상 기관의 50~200%)
+      const retailComp = Math.round(ipo.competitionNum * 0.8);
+      const deposit = ipo.priceFixed * retailComp * 0.5;
 
       if (deposit <= 0) return '';
       const formatted = deposit >= 100000000
@@ -739,7 +745,44 @@
     }
 
     // ── Render ──
+    function updateGradeStats() {
+      // 전체 데이터(필터 무관) 기반 등급별 통계
+      const stats = {};
+      GRADE_ORDER.forEach(g => { stats[g] = { count: 0, profits: [] }; });
+
+      IPO_DATA.forEach(ipo => {
+        if (!ipo.grade || !stats[ipo.grade]) return;
+        stats[ipo.grade].count++;
+        // 시초가 수익률 계산 (completed 종목만)
+        if (ipo.status === 'completed' && ipo.openPrice && ipo.openPrice !== '-' && ipo.priceFixed > 0) {
+          const openNum = parseInt(ipo.openPrice.replace(/[^0-9]/g, '')) || 0;
+          if (openNum > 0) {
+            const pct = ((openNum - ipo.priceFixed) / ipo.priceFixed) * 100;
+            stats[ipo.grade].profits.push(pct);
+          }
+        }
+      });
+
+      document.querySelectorAll('.grade-stats').forEach(el => {
+        const grade = el.dataset.grade;
+        const s = stats[grade];
+        if (!s || s.count === 0) { el.textContent = ''; return; }
+
+        let text = `총 ${s.count}건`;
+        if (s.profits.length > 0) {
+          const avg = s.profits.reduce((a, b) => a + b, 0) / s.profits.length;
+          const sign = avg >= 0 ? '+' : '';
+          text += ` · 평균 수익률 ${sign}${avg.toFixed(1)}%`;
+          el.className = `grade-stats ${avg >= 0 ? 'positive' : 'negative'}`;
+        } else {
+          el.className = 'grade-stats';
+        }
+        el.textContent = text;
+      });
+    }
+
     function render() {
+      updateGradeStats();
       const container = document.getElementById('analysisContainer');
       const filtered = getFilteredIPOs();
 
@@ -820,8 +863,8 @@
                   <span class="info-value">${ipo.shares}</span>
                 </div>
                 <div class="info-item">
-                  <span class="info-label">균등배정(추정)</span>
-                  <span class="info-value">${getUniformAlloc(ipo)}</span>
+                  <span class="info-label">균등 배정 확률</span>
+                  <span class="info-value">${getUniformProb(ipo)}</span>
                 </div>
                 ${getProportionalDeposit(ipo)}
               </div>
