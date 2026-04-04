@@ -184,19 +184,20 @@ function parseDetailPage(html) {
   }
 
   // 유통가능물량 비율 (공모분석 섹션의 총계 행에서 추출)
-  // 총계 행의 마지막 퍼센트 값이 유통가능물량 비율
-  const readtextMatch = html.match(/<span\s+class=['"]readtext['"]>([\s\S]*?)<\/span>/i);
-  if (readtextMatch) {
-    const analysisHtml = readtextMatch[1];
-    // 총계 행 찾기 (다양한 인코딩/포맷 대응)
-    const totalRowMatch = analysisHtml.match(/총\s*계[\s\S]*?<\/tr>/i);
-    if (totalRowMatch) {
-      // 총계 행에서 모든 퍼센트 값 추출
-      const pctMatches = totalRowMatch[0].match(/([\d.]+)\s*%/g);
-      if (pctMatches && pctMatches.length >= 2) {
-        // 마지막 퍼센트가 유통가능물량 비율
-        const lastPct = pctMatches[pctMatches.length - 1].replace('%', '').trim();
-        detail.floatRatio = `${lastPct}%`;
+  // 구조: 총계 | 공모전주식수 | 100% | 공모후주식수 | 100% | 매각제한 | X% | 유통가능 | Y% | -
+  // → 마지막 퍼센트(Y%)가 유통가능물량 비율
+  const totalRowMatches = html.match(/총\s*계[\s\S]*?<\/TR>/gi);
+  if (totalRowMatches) {
+    for (const totalRow of totalRowMatches) {
+      const pctMatches = totalRow.match(/([\d,.]+)\s*%/g);
+      if (pctMatches && pctMatches.length >= 4) {
+        // 100%, 100%, 매각제한%, 유통가능% 패턴
+        const lastPct = pctMatches[pctMatches.length - 1].replace(/[,%]/g, '').trim();
+        const num = parseFloat(lastPct);
+        if (num > 0 && num < 100) {
+          detail.floatRatio = `${lastPct}%`;
+          break;
+        }
       }
     }
   }

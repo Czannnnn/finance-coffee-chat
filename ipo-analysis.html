@@ -520,11 +520,13 @@
           const compMatch = competitionStr.match(/([\d,.]+)\s*:/);
           const competitionNum = compMatch ? parseFloat(compMatch[1].replace(/,/g, '')) : 0;
 
-          // 확약비율 숫자 파싱
-          const lockupNum = parseFloat(lockupStr.replace(/[^0-9.]/g, '')) || 0;
+          // 확약비율 숫자 파싱 (Sheets가 43.06%를 0.4306으로 저장하는 경우 대응)
+          let lockupNum = parseFloat(lockupStr.replace(/[^0-9.]/g, '')) || 0;
+          if (lockupNum > 0 && lockupNum < 1) lockupNum = Math.round(lockupNum * 10000) / 100;
 
-          // 유통비율 숫자 파싱
-          const floatRatioNum = parseFloat(floatStr.replace(/[^0-9.]/g, '')) || 0;
+          // 유통비율 숫자 파싱 (동일 패턴 대응)
+          let floatRatioNum = parseFloat(floatStr.replace(/[^0-9.]/g, '')) || 0;
+          if (floatRatioNum > 0 && floatRatioNum < 1) floatRatioNum = Math.round(floatRatioNum * 10000) / 100;
 
           // 공모가 밴드 상단 파싱 (예: "12,000~15,000" → 15000)
           const priceNums = expectedPrice.replace(/[^0-9~,]/g, '').split('~');
@@ -542,9 +544,9 @@
             priceFixed: priceFixed,
             competition: competitionStr || '-',
             competitionNum: competitionNum,
-            lockup: lockupStr || '-',
+            lockup: lockupNum > 0 ? `${lockupNum}%` : '-',
             lockupNum: lockupNum,
-            floatRatio: floatStr || '-',
+            floatRatio: floatRatioNum > 0 ? `${floatRatioNum}%` : '-',
             floatRatioNum: floatRatioNum,
             shares: val(12) || '-',
             lead: val(9),
