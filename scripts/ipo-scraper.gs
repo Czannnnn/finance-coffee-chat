@@ -184,10 +184,11 @@ function parseDetailPage(html) {
   }
 
   // 유통가능물량 비율
-  // "유통가능" 텍스트 이후 첫 번째 퍼센트 값이 유통가능물량 비율
-  const floatIdx = html.indexOf('유통가능');
+  // "유통가능물량" 컬럼 헤더 이후 첫 번째 퍼센트 값 추출
+  // ("유통가능"은 섹션 제목에도 등장하므로 "유통가능물량"으로 정확히 매칭)
+  const floatIdx = html.indexOf('유통가능물량');
   if (floatIdx >= 0) {
-    const afterFloat = html.substring(floatIdx, floatIdx + 5000);
+    const afterFloat = html.substring(floatIdx, floatIdx + 10000);
     const floatPctMatch = afterFloat.match(/([\d,.]+)\s*%/);
     if (floatPctMatch) {
       const num = parseFloat(floatPctMatch[1].replace(/,/g, ''));
