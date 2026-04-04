@@ -220,6 +220,17 @@
       letter-spacing: 0.5px; flex-shrink: 0;
     }
     .grade-mini.none { background: rgba(44,24,16,0.06); color: var(--medium-roast); font-weight: 500; }
+    .grade-note {
+      font-size: 10px; font-weight: 400; color: var(--medium-roast);
+      background: rgba(44,24,16,0.04); padding: 2px 6px; border-radius: 4px;
+    }
+    .detail-btn {
+      display: block; text-align: center; margin-top: 12px; padding: 9px 16px;
+      background: var(--oat-milk); border: 1px solid rgba(196,133,60,0.2);
+      border-radius: 10px; color: var(--caramel); font-size: 13px; font-weight: 500;
+      text-decoration: none; transition: all 0.15s;
+    }
+    .detail-btn:hover { background: var(--caramel-light); border-color: var(--caramel); }
     .ipo-badges { display: flex; gap: 6px; flex-wrap: wrap; }
     .ipo-badge {
       font-size: 10.5px; font-weight: 600; padding: 3px 10px; border-radius: 12px;
@@ -532,22 +543,28 @@
       return d >= parseDate(rangeStart) && d <= parseDate(rangeEnd);
     }
 
-    function getGradeBadge(grade) {
-      if (!grade) return '<span class="grade-mini none">미확정</span>';
+    function getGradeBadge(grade, dataCount) {
+      if (!grade) return '<span class="grade-mini none">등급 미확정</span>';
       const colors = { S: 'var(--green)', A: 'var(--blue)', B: 'var(--caramel)', C: 'var(--red-soft)', D: 'var(--red-soft)' };
       const bg = { S: 'var(--green-light)', A: 'var(--blue-light)', B: 'var(--caramel-light)', C: 'var(--red-light)', D: 'var(--red-light)' };
-      return `<span class="grade-mini" style="background:${bg[grade]};color:${colors[grade]}">${grade}</span>`;
+      let html = `<span class="grade-mini" style="background:${bg[grade]};color:${colors[grade]}">${grade}</span>`;
+      if (dataCount < 3) {
+        html += '<span class="grade-note">자료 추가 조사중</span>';
+      }
+      return html;
     }
 
     // ── 등급 계산 ──
     function calcGrade(ipo) {
       let pass = 0;
-      if (ipo.competitionNum >= 800) pass++;
-      if (ipo.priceFixed > 0 && ipo.priceFixed >= ipo.priceBandTop) pass++;
-      if (ipo.lockupNum >= 15) pass++;
-      if (ipo.floatNum > 0 && ipo.floatNum <= 25) pass++;
-      // 데이터가 하나도 없으면 미확정
-      if (ipo.competitionNum === 0 && ipo.priceFixed === 0 && ipo.lockupNum === 0 && ipo.floatNum === 0) return '';
+      // 확인된 지표 수 카운트
+      let available = 0;
+      if (ipo.competitionNum > 0) { available++; if (ipo.competitionNum >= 800) pass++; }
+      if (ipo.priceFixed > 0) { available++; if (ipo.priceFixed >= ipo.priceBandTop) pass++; }
+      if (ipo.lockupNum > 0) { available++; if (ipo.lockupNum >= 15) pass++; }
+      if (ipo.floatNum > 0) { available++; if (ipo.floatNum <= 25) pass++; }
+      ipo._dataCount = available;
+      if (available === 0) return '';
       if (pass === 4 && ipo.lockupNum >= 50) return 'S';
       if (pass >= 3) return 'A';
       if (pass >= 2) return 'B';
@@ -766,7 +783,7 @@
         <div class="ipo-card">
           <div class="ipo-top">
             <div class="ipo-name-group">
-              <div class="ipo-name">${ipo.name} ${getGradeBadge(ipo.grade)}</div>
+              <div class="ipo-name">${ipo.name} ${getGradeBadge(ipo.grade, ipo._dataCount || 0)}</div>
               <div class="ipo-badges">
                 <span class="ipo-badge ${ipo.market}">${ipo.market === 'kospi' ? '코스피' : '코스닥'}</span>
                 <span class="ipo-badge ${ipo.status}">${getStatusLabel(ipo.status)}</span>
@@ -807,6 +824,7 @@
             </div>
           </div>
           ${ipo.status === 'upcoming' ? getCalendarBtn(ipo) : ''}
+          <a href="/ipo-analysis.html${ipo.grade ? '?grade=' + ipo.grade : ''}" class="detail-btn">&#128270; 세부 분석 보러가기</a>
         </div>`;
       }).join('');
     }

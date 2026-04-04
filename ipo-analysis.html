@@ -933,7 +933,20 @@
       render();
     });
 
+    // ── URL 파라미터로 등급 필터 초기화 ──
+    function initFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      const grade = params.get('grade');
+      if (grade && ['S','A','B','C','D','CD'].includes(grade)) {
+        activeGrade = grade === 'C' || grade === 'D' ? 'CD' : grade;
+        document.querySelectorAll('#gradeFilters .filter-btn').forEach(b => {
+          b.classList.toggle('active', b.dataset.grade === activeGrade);
+        });
+      }
+    }
+
     // ── Init ──
+    initFromURL();
     loadFromSheets();
   </script>
 </body>
