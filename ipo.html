@@ -257,6 +257,17 @@
     .info-value { font-size: 13px; font-weight: 600; color: var(--espresso); }
 
     /* Empty state */
+    /* Google Calendar Button */
+    .gcal-btn {
+      display: block; text-align: center; margin-top: 14px; padding: 10px 16px;
+      background: var(--oat-milk); border: 1px solid rgba(61,90,128,0.2);
+      border-radius: 10px; color: var(--blue); font-size: 13px; font-weight: 500;
+      text-decoration: none; transition: all 0.15s;
+    }
+    .gcal-btn:hover {
+      background: var(--blue-light); border-color: var(--blue);
+    }
+
     .empty-state {
       text-align: center; padding: 48px 24px;
       background: var(--white); border-radius: 16px;
@@ -493,6 +504,20 @@
       if (!isValidDate(dateStr) || !isValidDate(rangeStart) || !isValidDate(rangeEnd)) return false;
       const d = parseDate(dateStr);
       return d >= parseDate(rangeStart) && d <= parseDate(rangeEnd);
+    }
+
+    function getCalendarBtn(ipo) {
+      if (!isValidDate(ipo.subscribe[0]) || !isValidDate(ipo.subscribe[1])) return '';
+      // Google Calendar URL: 청약일 종일 이벤트
+      const start = ipo.subscribe[0].replace(/-/g, '');
+      // 종료일은 다음날 (Google Calendar 종일 이벤트는 exclusive end)
+      const endDate = parseDate(ipo.subscribe[1]);
+      endDate.setDate(endDate.getDate() + 1);
+      const end = `${endDate.getFullYear()}${String(endDate.getMonth()+1).padStart(2,'0')}${String(endDate.getDate()).padStart(2,'0')}`;
+      const title = encodeURIComponent(`[공모주 청약] ${ipo.name}`);
+      const details = encodeURIComponent(`종목: ${ipo.name}\n공모가: ${ipo.price !== '-' ? ipo.price : ipo.priceRange}\n주관사: ${ipo.lead}\n\n☕ Finance Coffee Chat`);
+      const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}`;
+      return `<a href="${url}" target="_blank" rel="noopener" class="gcal-btn">&#128197; 구글 캘린더에 청약일정 추가</a>`;
     }
 
     function getDDay(ipo) {
@@ -732,6 +757,7 @@
               <span class="info-value">${ipo.lockup}</span>
             </div>
           </div>
+          ${ipo.status === 'upcoming' ? getCalendarBtn(ipo) : ''}
         </div>`;
       }).join('');
     }
