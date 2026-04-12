@@ -13,11 +13,52 @@
   <meta property="og:url" content="https://finance-coffee-chat.vercel.app/cost/s1-youth-single.html">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="ko_KR">
-  <meta property="og:site_name" content="Finance Coffee Chat">
+  <meta property="og:site_name" content="투자 커피챗">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="S1 청년 단독 - 비용 최적화 가이드">
   <meta name="twitter:description" content="만 19~34세 1인 가구 청년을 위한 비용 최적화 완벽 가이드.">
   <meta name="twitter:image" content="https://finance-coffee-chat.vercel.app/og-image.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "S1 청년 단독 - 비용 최적화 가이드 - Finance Coffee Chat",
+    "description": "만 19~34세 1인 가구를 위한 8영역 비용 최적화. 청년도약계좌·K-패스 청년·청년월세까지 총정리.",
+    "url": "https://finance-coffee-chat.vercel.app/cost/s1-youth-single.html",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Finance Coffee Chat",
+      "url": "https://finance-coffee-chat.vercel.app/"
+    },
+    "inLanguage": "ko"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "홈",
+        "item": "https://finance-coffee-chat.vercel.app/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "비용최적화",
+        "item": "https://finance-coffee-chat.vercel.app/cost-optimization.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "S1 청년 단독",
+        "item": "https://finance-coffee-chat.vercel.app/cost/s1-youth-single.html"
+      }
+    ]
+  }
+  </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <!-- GA4 -->
@@ -34,6 +75,7 @@
       --caramel: #C4853C;
       --caramel-light: rgba(196,133,60,0.12);
       --cream: #F5EDE0;
+      --latte: #E8DBC5;
       --oat-milk: #FAF6F0;
       --white: #FFFDF9;
       --green: #4A7C59;
@@ -159,6 +201,7 @@
       color: var(--cream); font-size: 13px; letter-spacing: 0.3px;
     }
     @media (max-width: 600px) {
+      nav a { margin: 0 6px; font-size: 12px; }
       .container { padding: 32px 18px 48px; }
       h1 { font-size: 26px; }
       h2 { font-size: 20px; }
@@ -166,14 +209,39 @@
       table { font-size: 12px; }
       th, td { padding: 8px 10px; }
     }
+      .subnav {
+      background: var(--dark-roast); padding: 8px 16px; text-align: center;
+      border-bottom: 1px solid rgba(196,133,60,0.15);
+    }
+    .subnav-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--caramel); margin-right: 12px;
+    }
+    .subnav a {
+      color: var(--latte, #E8DBC5); margin: 0 8px; text-decoration: none;
+      font-size: 13px; font-weight: 400; letter-spacing: 0.3px;
+      transition: color 0.15s; padding: 4px 8px; border-radius: 6px;
+    }
+    .subnav a:hover { color: var(--caramel); }
+    .subnav a.active { color: var(--cream); background: rgba(196,133,60,0.2); font-weight: 600; }
+    @media (max-width: 600px) {
+      .subnav a { font-size: 12px; margin: 0 4px; }
+    }
   </style>
 </head>
 <body>
   <nav>
-    <a href="/">홈</a>
-    <a href="/cost-optimization.html">비용최적화 허브</a>
-    <a href="/asset.html">자산관리101</a>
+    <a href="/" data-ga="click_gnb" data-ga-text="홈" data-ga-loc="gnb">홈</a>
+    <a href="/portfolio.html" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
+    <a href="/asset.html" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
+    <a href="/ipo.html" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
+    <a href="/cost-optimization.html" data-ga="click_gnb" data-ga-text="비용최적화" data-ga-loc="gnb">비용최적화</a>
   </nav>
+  <div class="subnav">
+    <span class="subnav-label">비용최적화</span>
+    <a href="/cost-optimization.html" class="active" data-ga="click_subnav" data-ga-text="가이드" data-ga-loc="subnav">가이드</a>
+    <a href="/cost-simulation.html" data-ga="click_subnav" data-ga-text="시뮬레이션" data-ga-loc="subnav">시뮬레이션</a>
+  </div>
   <div class="container">
     <div class="badge">My Segment Guide</div>
     <h1>S1 청년 단독 - 비용 최적화 가이드</h1>

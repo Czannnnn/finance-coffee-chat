@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>비용 최적화 시뮬레이터 - Finance Coffee Chat</title>
+  <meta name="description" content="가구 유형별 연 비용 절감 시뮬레이션. 연말정산·카드·보험·통신비·금융수수료·공과금·지원금·교통비 8개 영역 인터랙티브 계산. 브라우저 내 로컬 실행, 데이터 저장·전송 없음.">
+  <meta name="keywords" content="비용 최적화 시뮬레이션, 절감 계산기, 연말정산 계산, 통신비 절감, K-패스, 카드 혜택, 보험료 진단, 수수료 계산">
+  <link rel="canonical" href="https://finance-coffee-chat.vercel.app/cost-simulation.html">
+  <meta property="og:title" content="비용 최적화 시뮬레이터 - Finance Coffee Chat">
+  <meta property="og:description" content="가구 유형과 영역별 입력값으로 예상 절감액을 실시간 계산. 100% 로컬, 서버 전송 없음.">
+  <meta property="og:image" content="https://finance-coffee-chat.vercel.app/og-image.png">
+  <meta property="og:url" content="https://finance-coffee-chat.vercel.app/cost-simulation.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="투자 커피챗">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="비용 최적화 시뮬레이터 - Finance Coffee Chat">
+  <meta name="twitter:description" content="가구 유형과 영역별 입력값으로 예상 절감액을 실시간 계산. 100% 로컬.">
+  <meta name="twitter:image" content="https://finance-coffee-chat.vercel.app/og-image.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZEG7YQ80S"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --espresso: #2C1810;
+      --dark-roast: #3D2317;
+      --medium-roast: #6B3A2A;
+      --caramel: #C4853C;
+      --caramel-light: rgba(196,133,60,0.12);
+      --cream: #F5EDE0;
+      --oat-milk: #FAF6F0;
+      --white: #FFFDF9;
+      --latte: #E8DBC5;
+      --green: #2E7D57;
+      --blue: #1F4E8C;
+      --red-soft: #B5392A;
+      --privacy-bg: #E8F5E9;
+      --privacy-border: #2E7D57;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--oat-milk);
+      color: var(--espresso);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    nav { background: var(--espresso); padding: 12px 16px; text-align: center; }
+    nav a {
+      color: var(--cream); margin: 0 12px; text-decoration: none;
+      font-size: 14px; font-weight: 500; letter-spacing: 0.3px;
+      transition: color 0.15s;
+    }
+    nav a:hover { color: var(--caramel); }
+    .subnav {
+      background: var(--dark-roast); padding: 8px 16px; text-align: center;
+      border-bottom: 1px solid rgba(196,133,60,0.15);
+    }
+    .subnav-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--caramel); margin-right: 12px;
+    }
+    .subnav a {
+      color: var(--latte); margin: 0 8px; text-decoration: none;
+      font-size: 13px; font-weight: 400; letter-spacing: 0.3px;
+      transition: color 0.15s; padding: 4px 8px; border-radius: 6px;
+    }
+    .subnav a:hover { color: var(--caramel); }
+    .subnav a.active { color: var(--cream); background: rgba(196,133,60,0.2); font-weight: 600; }
+
+    .container { max-width: 1080px; margin: 0 auto; padding: 40px 24px 64px; }
+    .header { text-align: center; margin-bottom: 32px; }
+    .badge {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase; color: var(--caramel);
+      background: var(--caramel-light); padding: 5px 16px; border-radius: 20px;
+      margin-bottom: 16px; border: 1px solid rgba(196,133,60,0.2);
+    }
+    .header h1 {
+      font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700;
+      color: var(--espresso); letter-spacing: -0.5px;
+    }
+    .header h1 em { font-style: italic; color: var(--medium-roast); }
+    .header .subtitle {
+      margin-top: 10px; font-size: 14px; color: var(--medium-roast); font-weight: 500;
+    }
+    .divider {
+      width: 40px; height: 2px; background: var(--caramel);
+      margin: 20px auto 0; border-radius: 1px;
+    }
+
+    /* Privacy Notice */
+    .privacy-notice {
+      display: flex; align-items: flex-start; gap: 16px;
+      background: var(--privacy-bg);
+      border: 2px solid var(--privacy-border);
+      border-radius: 12px;
+      padding: 18px 22px;
+      margin: 24px auto 36px;
+      max-width: 860px;
+      box-shadow: 0 2px 14px rgba(46,125,87,0.08);
+    }
+    .privacy-icon {
+      font-size: 28px; line-height: 1; flex-shrink: 0;
+    }
+    .privacy-text strong {
+      display: block; font-size: 15px; color: #1B5E20; margin-bottom: 4px; font-weight: 700;
+    }
+    .privacy-text p {
+      font-size: 13px; color: #2E4A2E; line-height: 1.65; margin: 0;
+    }
+    .privacy-notice--compact {
+      padding: 14px 18px; margin-top: 32px;
+    }
+
+    /* Section */
+    .section {
+      margin-top: 40px;
+      background: var(--white);
+      border-radius: 14px;
+      padding: 28px;
+      border: 1px solid rgba(44,24,16,0.08);
+      box-shadow: 0 2px 12px rgba(44,24,16,0.04);
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700;
+      color: var(--espresso); margin-bottom: 6px; letter-spacing: -0.3px;
+    }
+    .section-desc {
+      font-size: 13px; color: var(--medium-roast); margin-bottom: 20px;
+    }
+    .step-marker {
+      display: inline-block;
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      color: var(--caramel); background: var(--caramel-light);
+      padding: 3px 10px; border-radius: 12px; margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    /* Segment cards */
+    .segment-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .segment-btn {
+      background: var(--oat-milk);
+      border: 2px solid rgba(44,24,16,0.08);
+      border-radius: 12px;
+      padding: 16px 14px;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+      color: var(--espresso);
+      transition: all 0.18s;
+    }
+    .segment-btn:hover {
+      border-color: var(--caramel);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(44,24,16,0.07);
+    }
+    .segment-btn.active {
+      background: var(--cream);
+      border-color: var(--caramel);
+      box-shadow: 0 4px 14px rgba(196,133,60,0.22);
+    }
+    .segment-btn .seg-tag {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      letter-spacing: 1px; color: var(--caramel);
+      background: var(--caramel-light); padding: 2px 8px;
+      border-radius: 10px; margin-bottom: 8px;
+    }
+    .segment-btn h3 {
+      font-family: 'Playfair Display', serif; font-size: 16px;
+      color: var(--espresso); margin-bottom: 4px;
+    }
+    .segment-btn p {
+      font-size: 11px; color: var(--medium-roast); line-height: 1.5;
+    }
+
+    /* Summary dashboard */
+    .summary {
+      margin-top: 40px;
+      background: linear-gradient(135deg, var(--espresso) 0%, var(--dark-roast) 100%);
+      color: var(--cream);
+      border-radius: 14px;
+      padding: 28px;
+      box-shadow: 0 6px 22px rgba(44,24,16,0.22);
+    }
+    .summary h2 {
+      font-family: 'Playfair Display', serif; font-size: 20px;
+      color: var(--cream); margin-bottom: 14px;
+    }
+    .summary .summary-meta {
+      font-size: 12px; color: var(--latte); opacity: 0.8; margin-bottom: 18px;
+    }
+    .summary-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+    }
+    .summary-card {
+      background: rgba(255,253,249,0.08);
+      border: 1px solid rgba(196,133,60,0.25);
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .summary-card .label {
+      font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--caramel); margin-bottom: 6px;
+    }
+    .summary-card .value {
+      font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700;
+      color: var(--white);
+    }
+    .summary-card .unit {
+      font-size: 13px; color: var(--latte); margin-left: 4px;
+    }
+
+    /* Area grid (calculators) */
+    .area-disabled {
+      opacity: 0.45; pointer-events: none; filter: grayscale(0.25);
+    }
+    .area-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-top: 20px;
+    }
+    .area-calc {
+      background: var(--oat-milk);
+      border: 1px solid rgba(44,24,16,0.08);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .area-calc h3 {
+      font-family: 'Playfair Display', serif; font-size: 17px;
+      color: var(--espresso); margin-bottom: 4px;
+    }
+    .area-calc .area-num {
+      display: inline-block; font-size: 9px; font-weight: 700;
+      letter-spacing: 1.2px; color: var(--caramel);
+      background: var(--caramel-light); padding: 2px 8px;
+      border-radius: 10px; margin-bottom: 8px;
+    }
+    .area-calc .area-desc {
+      font-size: 11px; color: var(--medium-roast); margin-bottom: 14px; line-height: 1.5;
+    }
+    .form-row {
+      display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px;
+    }
+    .form-row label {
+      font-size: 12px; font-weight: 500; color: var(--dark-roast);
+    }
+    .form-row input[type="number"],
+    .form-row select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid rgba(44,24,16,0.16);
+      border-radius: 8px;
+      background: var(--white);
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--espresso);
+    }
+    .form-row input[type="number"]:focus,
+    .form-row select:focus {
+      outline: none;
+      border-color: var(--caramel);
+      box-shadow: 0 0 0 3px rgba(196,133,60,0.14);
+    }
+    .form-check {
+      display: flex; align-items: center; gap: 8px; font-size: 12px;
+      color: var(--dark-roast); margin: 8px 0;
+    }
+    .form-check input { width: 16px; height: 16px; cursor: pointer; accent-color: var(--caramel); }
+
+    .result-box {
+      margin-top: 14px;
+      background: var(--white);
+      border: 1px dashed rgba(196,133,60,0.4);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .result-line {
+      display: flex; justify-content: space-between;
+      font-size: 12px; padding: 4px 0; color: var(--dark-roast);
+    }
+    .result-line strong { color: var(--espresso); font-weight: 600; }
+    .result-total {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(44,24,16,0.1);
+      font-size: 14px;
+      color: var(--espresso);
+      font-weight: 700;
+    }
+    .result-total .amount { color: var(--green); }
+    .result-advice {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--medium-roast);
+      background: var(--caramel-light);
+      padding: 8px 10px;
+      border-radius: 6px;
+      line-height: 1.55;
+    }
+    .result-advice strong { color: var(--dark-roast); }
+
+    .footer-note {
+      margin-top: 40px;
+      padding: 20px;
+      background: var(--cream);
+      border-radius: 12px;
+      font-size: 12px;
+      color: var(--medium-roast);
+      line-height: 1.7;
+    }
+    .footer-note strong { color: var(--dark-roast); }
+
+    @media (max-width: 900px) {
+      .segment-grid { grid-template-columns: repeat(2, 1fr); }
+      .area-grid { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .container { padding: 28px 14px 48px; }
+      .header h1 { font-size: 25px; }
+      .section { padding: 20px; }
+      .section-title { font-size: 19px; }
+      .segment-grid { grid-template-columns: 1fr; }
+      .privacy-notice { flex-direction: column; gap: 10px; padding: 16px; }
+      .privacy-icon { font-size: 24px; }
+      .subnav a { font-size: 12px; margin: 0 4px; }
+      nav a { margin: 0 8px; font-size: 13px; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "비용 최적화 시뮬레이터",
+    "description": "가구 유형과 영역별 입력값으로 예상 절감액을 실시간 계산하는 100% 로컬 시뮬레이터.",
+    "url": "https://finance-coffee-chat.vercel.app/cost-simulation.html",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" },
+    "inLanguage": "ko"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "홈",
+        "item": "https://finance-coffee-chat.vercel.app/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "비용최적화",
+        "item": "https://finance-coffee-chat.vercel.app/cost-optimization.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": "시뮬레이션",
+        "item": "https://finance-coffee-chat.vercel.app/cost-simulation.html"
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav>
+    <a href="/" data-ga="click_gnb" data-ga-text="홈" data-ga-loc="gnb">홈</a>
+    <a href="/portfolio.html" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
+    <a href="/asset.html" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
+    <a href="/ipo.html" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
+    <a href="/cost-optimization.html" data-ga="click_gnb" data-ga-text="비용최적화" data-ga-loc="gnb">비용최적화</a>
+  </nav>
+  <div class="subnav">
+    <span class="subnav-label">비용최적화</span>
+    <a href="/cost-optimization.html" data-ga="click_subnav" data-ga-text="가이드" data-ga-loc="subnav">가이드</a>
+    <a href="/cost-simulation.html" class="active" data-ga="click_subnav" data-ga-text="시뮬레이션" data-ga-loc="subnav">시뮬레이션</a>
+  </div>
+
+  <div class="container">
+    <header class="header">
+      <div class="badge">Cost Simulator</div>
+      <h1>비용 최적화 <em>시뮬레이터</em></h1>
+      <div class="subtitle">2026년 법령 기준 · 6 세그먼트 × 8 영역 인터랙티브 계산기</div>
+      <div class="divider"></div>
+    </header>
+
+    <!-- Privacy notice (top) -->
+    <div class="privacy-notice" role="note" aria-label="개인정보 보호 고지">
+      <div class="privacy-icon" aria-hidden="true">🔒</div>
+      <div class="privacy-text">
+        <strong>100% 로컬 시뮬레이션 — 입력값은 이 화면을 벗어나지 않습니다</strong>
+        <p>입력된 모든 데이터는 오직 이 브라우저 화면에서만 계산되며, 어떤 서버로도 전송되지 않습니다. 페이지를 새로고침하거나 닫으면 모든 값이 즉시 사라집니다. 저장·수집·분석 모두 없습니다. (GA4는 페이지뷰만 집계하며 입력값은 수집하지 않습니다.)</p>
+      </div>
+    </div>
+
+    <!-- Step 1: Segment -->
+    <section class="section" aria-labelledby="step1-title">
+      <span class="step-marker">Step 1</span>
+      <h2 class="section-title" id="step1-title">가구 유형 선택</h2>
+      <p class="section-desc">본인의 상황에 가장 가까운 카드를 선택하면 아래 8개 계산기의 기본값이 자동으로 세팅됩니다.</p>
+      <div class="segment-grid" id="segmentGrid" role="radiogroup" aria-label="가구 세그먼트 선택">
+        <button type="button" class="segment-btn" data-seg="S1" role="radio" aria-checked="false" data-ga="click_segment" data-ga-loc="simulator_step1">
+          <span class="seg-tag">S1</span>
+          <h3>청년 단독</h3>
+          <p>만 19~34세 1인. 낮은 소득, 청년 전용 혜택 집중.</p>
+        </button>
+        <button type="button" class="segment-btn" data-seg="S2" role="radio" aria-checked="false" data-ga="click_segment" data-ga-loc="simulator_step1">
+          <span class="seg-tag">S2</span>
+          <h3>신혼 맞벌이</h3>
+          <p>결혼 7년 이내. 부부 합산 공제, 분산 전략.</p>
+        </button>
+        <button type="button" class="segment-btn" data-seg="S3" role="radio" aria-checked="false" data-ga="click_segment" data-ga-loc="simulator_step1">
+          <span class="seg-tag">S3</span>
+          <h3>신혼 외벌이</h3>
+          <p>결혼 7년 이내 외벌이. 배우자 공제·현금흐름 관리.</p>
+        </button>
+        <button type="button" class="segment-btn" data-seg="S4" role="radio" aria-checked="false" data-ga="click_segment" data-ga-loc="simulator_step1">
+          <span class="seg-tag">S4</span>
+          <h3>유자녀 1자녀</h3>
+          <p>자녀 1명 가정. 자녀세액공제·교육비 혜택.</p>
+        </button>
+        <button type="button" class="segment-btn" data-seg="S5" role="radio" aria-checked="false" data-ga="click_segment" data-ga-loc="simulator_step1">
+          <span class="seg-tag">S5</span>
+          <h3>유자녀 다자녀</h3>
+          <p>2명 이상. 다자녀 우대·공공요금 감면.</p>
+        </button>
+        <button type="button" class="segment-btn" data-seg="S6" role="radio" aria-checked="false" data-ga="click_segment" data-ga-loc="simulator_step1">
+          <span class="seg-tag">S6</span>
+          <h3>중장년 단독</h3>
+          <p>만 35세 이상 1인. 노후 대비·보험 리밸런싱.</p>
+        </button>
+      </div>
+    </section>
+
+    <!-- Summary Dashboard -->
+    <div class="summary" id="summaryBox" aria-live="polite">
+      <h2>예상 연간 절감 합계</h2>
+      <div class="summary-meta" id="summaryMeta">세그먼트를 먼저 선택한 뒤 각 영역의 값을 입력해 보세요.</div>
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="label">연간 절감 합계</div>
+          <div class="value" id="sumYear">0<span class="unit">만원</span></div>
+        </div>
+        <div class="summary-card">
+          <div class="label">월 환산 절감</div>
+          <div class="value" id="sumMonth">0<span class="unit">만원</span></div>
+        </div>
+        <div class="summary-card">
+          <div class="label">5년 누적</div>
+          <div class="value" id="sum5Year">0<span class="unit">만원</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Areas -->
+    <section class="section area-disabled" id="areaSection" aria-labelledby="step2-title">
+      <span class="step-marker">Step 2</span>
+      <h2 class="section-title" id="step2-title">영역별 시뮬레이션</h2>
+      <p class="section-desc">각 영역에 숫자를 입력하면 즉시 예상 절감액이 계산됩니다. 모든 값은 브라우저 메모리에만 존재합니다.</p>
+
+      <div class="area-grid">
+
+        <!-- 01 Year-end tax -->
+        <div class="area-calc" data-area="01">
+          <span class="area-num">Area 01</span>
+          <h3>연말정산</h3>
+          <p class="area-desc">연금세액공제·카드소득공제·의료비공제를 반영한 환급 추정.</p>
+          <div class="form-row">
+            <label for="a01_salary">총급여 (만원/년)</label>
+            <input type="number" id="a01_salary" min="0" step="100" value="4000">
+          </div>
+          <div class="form-row">
+            <label for="a01_pension">연금저축+IRP 연 납입액 (만원)</label>
+            <input type="number" id="a01_pension" min="0" step="10" value="300">
+          </div>
+          <div class="form-row">
+            <label for="a01_card">카드·현금영수증 연 사용액 (만원)</label>
+            <input type="number" id="a01_card" min="0" step="50" value="1500">
+          </div>
+          <div class="form-row">
+            <label for="a01_medical">의료비 연 지출 (만원)</label>
+            <input type="number" id="a01_medical" min="0" step="10" value="80">
+          </div>
+          <div class="result-box" id="a01_result"></div>
+        </div>
+
+        <!-- 02 Credit cards -->
+        <div class="area-calc" data-area="02">
+          <span class="area-num">Area 02</span>
+          <h3>카드 혜택</h3>
+          <p class="area-desc">월 지출과 업종 비중 기반 최적 카드 수·연 혜택 추정.</p>
+          <div class="form-row">
+            <label for="a02_monthly">월 평균 카드 지출 (만원)</label>
+            <input type="number" id="a02_monthly" min="0" step="10" value="120">
+          </div>
+          <div class="form-row">
+            <label for="a02_main">주 지출 업종</label>
+            <select id="a02_main">
+              <option value="cafe">카페·편의점</option>
+              <option value="dining">외식</option>
+              <option value="transit">교통·주유</option>
+              <option value="online">온라인 쇼핑</option>
+              <option value="general">일반 혼합</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="a02_cards">보유(또는 희망) 카드 수</label>
+            <input type="number" id="a02_cards" min="1" max="5" step="1" value="2">
+          </div>
+          <div class="result-box" id="a02_result"></div>
+        </div>
+
+        <!-- 03 Insurance -->
+        <div class="area-calc" data-area="03">
+          <span class="area-num">Area 03</span>
+          <h3>보험 리밸런싱</h3>
+          <p class="area-desc">월 보험료가 소득 대비 적정 범위 (3~7%)인지 진단.</p>
+          <div class="form-row">
+            <label for="a03_income">월 소득 (만원)</label>
+            <input type="number" id="a03_income" min="0" step="10" value="300">
+          </div>
+          <div class="form-row">
+            <label for="a03_premium">현재 월 보험료 합계 (만원)</label>
+            <input type="number" id="a03_premium" min="0" step="1" value="25">
+          </div>
+          <div class="form-check">
+            <input type="checkbox" id="a03_silson" checked>
+            <label for="a03_silson">실손의료보험 가입함</label>
+          </div>
+          <div class="result-box" id="a03_result"></div>
+        </div>
+
+        <!-- 04 Telecom -->
+        <div class="area-calc" data-area="04">
+          <span class="area-num">Area 04</span>
+          <h3>통신비</h3>
+          <p class="area-desc">MVNO 전환 시 월 요금과 연 절감액을 데이터 사용량 기준으로 추정.</p>
+          <div class="form-row">
+            <label for="a04_current">현재 월 통신비 (만원)</label>
+            <input type="number" id="a04_current" min="0" step="0.5" value="7">
+          </div>
+          <div class="form-row">
+            <label for="a04_data">월 데이터 사용량 (GB)</label>
+            <input type="number" id="a04_data" min="0" step="1" value="15">
+          </div>
+          <div class="form-check">
+            <input type="checkbox" id="a04_contract">
+            <label for="a04_contract">약정 기간 아직 남아있음</label>
+          </div>
+          <div class="result-box" id="a04_result"></div>
+        </div>
+
+        <!-- 05 Financial fees -->
+        <div class="area-calc" data-area="05">
+          <span class="area-num">Area 05</span>
+          <h3>금융상품 수수료</h3>
+          <p class="area-desc">TER 차이로 발생하는 연 수수료와 20년 복리 차이 추정.</p>
+          <div class="form-row">
+            <label for="a05_irp">연금저축+IRP 잔고 (만원)</label>
+            <input type="number" id="a05_irp" min="0" step="100" value="2000">
+          </div>
+          <div class="form-row">
+            <label for="a05_etf">ETF·펀드 잔고 (만원)</label>
+            <input type="number" id="a05_etf" min="0" step="100" value="3000">
+          </div>
+          <div class="form-row">
+            <label for="a05_ter">현재 평균 총보수 (TER, %)</label>
+            <input type="number" id="a05_ter" min="0" max="5" step="0.05" value="0.5">
+          </div>
+          <div class="result-box" id="a05_result"></div>
+        </div>
+
+        <!-- 06 Utilities + subs -->
+        <div class="area-calc" data-area="06">
+          <span class="area-num">Area 06</span>
+          <h3>공과금·구독</h3>
+          <p class="area-desc">공과금 5% 절감 + 중복 구독 정리로 얻는 연 절감.</p>
+          <div class="form-row">
+            <label for="a06_utility">월 공과금 (전기+가스+수도, 만원)</label>
+            <input type="number" id="a06_utility" min="0" step="1" value="12">
+          </div>
+          <div class="form-row">
+            <label for="a06_sub">월 구독료 합계 (만원)</label>
+            <input type="number" id="a06_sub" min="0" step="0.5" value="4">
+          </div>
+          <div class="form-row">
+            <label for="a06_dup">중복 구독 서비스 수</label>
+            <input type="number" id="a06_dup" min="0" max="10" step="1" value="1">
+          </div>
+          <div class="result-box" id="a06_result"></div>
+        </div>
+
+        <!-- 07 Public support -->
+        <div class="area-calc" data-area="07">
+          <span class="area-num">Area 07</span>
+          <h3>국가·지자체 지원금</h3>
+          <p class="area-desc">세그먼트와 소득 기준에 맞는 제도 체크리스트.</p>
+          <div class="form-row">
+            <label for="a07_salary">총급여 (만원/년)</label>
+            <input type="number" id="a07_salary" min="0" step="100" value="4000">
+          </div>
+          <div class="form-check">
+            <input type="checkbox" id="a07_nohome" checked>
+            <label for="a07_nohome">무주택 세대 (또는 세대주)</label>
+          </div>
+          <div class="result-box" id="a07_result"></div>
+        </div>
+
+        <!-- 08 Transport -->
+        <div class="area-calc" data-area="08">
+          <span class="area-num">Area 08</span>
+          <h3>교통비 (K-패스)</h3>
+          <p class="area-desc">K-패스 환급률은 세그먼트에 따라 자동 적용됩니다.</p>
+          <div class="form-row">
+            <label for="a08_trips">월 대중교통 이용 횟수</label>
+            <input type="number" id="a08_trips" min="0" step="1" value="40">
+          </div>
+          <div class="form-row">
+            <label for="a08_fare">1회 평균 요금 (원)</label>
+            <input type="number" id="a08_fare" min="0" step="50" value="1500">
+          </div>
+          <div class="form-row">
+            <label for="a08_taxi">월 택시 지출 (만원)</label>
+            <input type="number" id="a08_taxi" min="0" step="1" value="5">
+          </div>
+          <div class="result-box" id="a08_result"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Privacy notice (bottom) -->
+    <div class="privacy-notice privacy-notice--compact" role="note">
+      <div class="privacy-icon" aria-hidden="true">🔒</div>
+      <div class="privacy-text">
+        <strong>다시 강조 — 저장·수집·전송 없음</strong>
+        <p>이 페이지의 모든 계산은 사용자의 브라우저에서만 일어납니다. 입력값은 localStorage·sessionStorage·쿠키 어디에도 저장되지 않으며, 페이지를 떠나는 순간 완전히 사라집니다. 보안이 걱정된다면 개발자 도구의 네트워크 탭을 열어 확인해 보세요 — 계산 중 어떤 외부 요청도 발생하지 않습니다.</p>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      <strong>업데이트:</strong> 2026-04 · 2026년 세법개정안 및 주요 제도 반영<br>
+      <strong>법적 고지:</strong> 본 시뮬레이션은 공개된 제도·세법 정보를 기반으로 한 <strong>일반적 정보 제공 목적</strong>의 계산 도구입니다. 실제 절감 효과는 개인의 소득·공제 항목·지역·가족 구성 등에 따라 크게 달라질 수 있으며, 투자·세무·법률 자문을 대체하지 않습니다. 최종 결정 전 국세청 홈택스, 금융감독원, 지자체 등 공식 창구 또는 전문가 상담을 권장합니다.
+    </div>
+  </div>
+
+  <script>
+  (function() {
+    'use strict';
+
+    // --- Segment defaults ------------------------------------------------
+    var SEGMENT_DEFAULTS = {
+      S1: { // 청년 단독
+        label: '청년 단독 (만 19~34, 1인)',
+        a01_salary: 3200, a01_pension: 150, a01_card: 1100, a01_medical: 30,
+        a02_monthly: 80, a02_main: 'cafe', a02_cards: 1,
+        a03_income: 267, a03_premium: 12, a03_silson: true,
+        a04_current: 7, a04_data: 25, a04_contract: false,
+        a05_irp: 500, a05_etf: 800, a05_ter: 0.5,
+        a06_utility: 6, a06_sub: 3.5, a06_dup: 2,
+        a07_salary: 3200, a07_nohome: true,
+        a08_trips: 45, a08_fare: 1500, a08_taxi: 3,
+        kpass_rate: 0.30
+      },
+      S2: { // 신혼 맞벌이
+        label: '신혼 맞벌이',
+        a01_salary: 6500, a01_pension: 500, a01_card: 2400, a01_medical: 120,
+        a02_monthly: 200, a02_main: 'general', a02_cards: 2,
+        a03_income: 542, a03_premium: 35, a03_silson: true,
+        a04_current: 12, a04_data: 40, a04_contract: false,
+        a05_irp: 3500, a05_etf: 4500, a05_ter: 0.5,
+        a06_utility: 15, a06_sub: 6, a06_dup: 1,
+        a07_salary: 6500, a07_nohome: true,
+        a08_trips: 50, a08_fare: 1600, a08_taxi: 6,
+        kpass_rate: 0.20
+      },
+      S3: { // 신혼 외벌이
+        label: '신혼 외벌이',
+        a01_salary: 4800, a01_pension: 350, a01_card: 1800, a01_medical: 100,
+        a02_monthly: 150, a02_main: 'general', a02_cards: 2,
+        a03_income: 400, a03_premium: 28, a03_silson: true,
+        a04_current: 11, a04_data: 30, a04_contract: false,
+        a05_irp: 2500, a05_etf: 2500, a05_ter: 0.5,
+        a06_utility: 14, a06_sub: 5, a06_dup: 1,
+        a07_salary: 4800, a07_nohome: true,
+        a08_trips: 42, a08_fare: 1600, a08_taxi: 5,
+        kpass_rate: 0.20
+      },
+      S4: { // 유자녀 1자녀
+        label: '유자녀 1자녀',
+        a01_salary: 6000, a01_pension: 400, a01_card: 2600, a01_medical: 180,
+        a02_monthly: 210, a02_main: 'general', a02_cards: 2,
+        a03_income: 500, a03_premium: 38, a03_silson: true,
+        a04_current: 13, a04_data: 35, a04_contract: false,
+        a05_irp: 2800, a05_etf: 3200, a05_ter: 0.5,
+        a06_utility: 17, a06_sub: 5.5, a06_dup: 1,
+        a07_salary: 6000, a07_nohome: true,
+        a08_trips: 40, a08_fare: 1600, a08_taxi: 7,
+        kpass_rate: 0.20
+      },
+      S5: { // 유자녀 다자녀
+        label: '유자녀 다자녀',
+        a01_salary: 7000, a01_pension: 450, a01_card: 3200, a01_medical: 260,
+        a02_monthly: 260, a02_main: 'general', a02_cards: 3,
+        a03_income: 583, a03_premium: 45, a03_silson: true,
+        a04_current: 16, a04_data: 50, a04_contract: false,
+        a05_irp: 3000, a05_etf: 3500, a05_ter: 0.5,
+        a06_utility: 20, a06_sub: 6, a06_dup: 1,
+        a07_salary: 7000, a07_nohome: true,
+        a08_trips: 35, a08_fare: 1600, a08_taxi: 6,
+        kpass_rate: 0.20
+      },
+      S6: { // 중장년 단독
+        label: '중장년 단독 (만 35+, 1인)',
+        a01_salary: 9000, a01_pension: 900, a01_card: 3000, a01_medical: 150,
+        a02_monthly: 230, a02_main: 'dining', a02_cards: 2,
+        a03_income: 750, a03_premium: 55, a03_silson: true,
+        a04_current: 11, a04_data: 30, a04_contract: false,
+        a05_irp: 6000, a05_etf: 8000, a05_ter: 0.6,
+        a06_utility: 13, a06_sub: 5, a06_dup: 1,
+        a07_salary: 9000, a07_nohome: false,
+        a08_trips: 38, a08_fare: 1600, a08_taxi: 10,
+        kpass_rate: 0.20
+      }
+    };
+
+    // --- State -----------------------------------------------------------
+    var state = {
+      segment: null,
+      savings: { '01':0,'02':0,'03':0,'04':0,'05':0,'06':0,'07':0,'08':0 }
+    };
+
+    // --- Helpers ---------------------------------------------------------
+    function $(id) { return document.getElementById(id); }
+    function num(id) { var v = parseFloat($(id).value); return isFinite(v) ? v : 0; }
+    function fmt(n) {
+      if (!isFinite(n)) return '0';
+      var rounded = Math.round(n * 10) / 10;
+      return rounded.toLocaleString('ko-KR', { maximumFractionDigits: 1 });
+    }
+    function fmtInt(n) {
+      if (!isFinite(n)) return '0';
+      return Math.round(n).toLocaleString('ko-KR');
+    }
+
+    // --- Calculators (8 independent functions) --------------------------
+
+    // 01 연말정산: 연금세액공제 + 카드공제 + 의료비공제
+    function calc01() {
+      var salary = num('a01_salary');
+      var pension = num('a01_pension');
+      var card = num('a01_card');
+      var medical = num('a01_medical');
+
+      // 연금세액공제: min(납입, 900) × (15% if 총급여≤5500, else 12%)
+      var pensionBase = Math.min(pension, 900);
+      var pensionRate = salary <= 5500 ? 0.15 : 0.12;
+      var pensionCredit = pensionBase * pensionRate;
+
+      // 카드소득공제: 총급여 25% 초과분 × 15% (소득세 한계세율 15% 가정)
+      var cardThreshold = salary * 0.25;
+      var cardOver = Math.max(0, card - cardThreshold);
+      // 공제한도 (간이): 총급여 7천 이하 300, 이상 250
+      var cardLimit = salary <= 7000 ? 300 : 250;
+      var cardDeduction = Math.min(cardOver * 0.15, cardLimit);
+      var cardBenefit = cardDeduction * 0.165; // 소득세+지방세 16.5% 가정
+
+      // 의료비세액공제: max(0, 의료비 - 총급여×3%) × 15%
+      var medicalThreshold = salary * 0.03;
+      var medicalCredit = Math.max(0, medical - medicalThreshold) * 0.15;
+
+      var total = pensionCredit + cardBenefit + medicalCredit;
+
+      var advice;
+      if (pension < 900 && salary >= 5000) {
+        advice = '연금저축+IRP 한도(900만원) 추가 납입 시 연 ' + fmt((900 - pension) * pensionRate) + '만원 절세 효과 추가 가능.';
+      } else if (card < cardThreshold) {
+        advice = '카드 사용액이 총급여 25%(' + fmt(cardThreshold) + '만원) 미만이어서 공제가 0원입니다. 임계를 넘기거나 체크카드로 전환 검토.';
+      } else {
+        advice = '핵심 공제 항목은 대체로 잘 활용 중입니다. 기부금·월세·교육비 등 부가 공제 점검 권장.';
+      }
+
+      render01(pensionCredit, cardBenefit, medicalCredit, total, advice);
+      state.savings['01'] = total;
+      updateSummary();
+    }
+
+    function render01(p, c, m, t, advice) {
+      $('a01_result').innerHTML =
+        '<div class="result-line"><span>연금세액공제</span><strong>' + fmt(p) + ' 만원</strong></div>' +
+        '<div class="result-line"><span>카드소득공제 효과</span><strong>' + fmt(c) + ' 만원</strong></div>' +
+        '<div class="result-line"><span>의료비세액공제</span><strong>' + fmt(m) + ' 만원</strong></div>' +
+        '<div class="result-line result-total"><span>예상 환급/절세</span><span class="amount">' + fmt(t) + ' 만원/년</span></div>' +
+        '<div class="result-advice"><strong>권장:</strong> ' + advice + '</div>';
+    }
+
+    // 02 카드 혜택
+    function calc02() {
+      var monthly = num('a02_monthly');
+      var main = $('a02_main').value;
+      var cards = num('a02_cards');
+      var annual = monthly * 12;
+
+      // 업종별 기본 환급률
+      var rateMap = { cafe: 0.045, dining: 0.035, transit: 0.04, online: 0.03, general: 0.025 };
+      var rate = rateMap[main] || 0.025;
+
+      // 카드 수 보정 (1장=1.0, 2장=1.15, 3장=1.25, 4+=1.2 실적 리스크)
+      var multiplier = cards === 1 ? 1.0 : cards === 2 ? 1.15 : cards === 3 ? 1.25 : 1.15;
+      var benefit = annual * rate * multiplier;
+
+      // 전월실적 달성 가능성
+      var perCard = monthly / Math.max(1, cards);
+      var feasibility;
+      if (perCard >= 50) feasibility = '매우 높음';
+      else if (perCard >= 30) feasibility = '양호';
+      else if (perCard >= 15) feasibility = '보통';
+      else feasibility = '낮음 — 카드 수 축소 검토';
+
+      var rec;
+      if (main === 'cafe') rec = '편의점·카페 특화 카드 1장 + 일반 통합할인 1장 조합 추천.';
+      else if (main === 'dining') rec = '외식 5%+ 적립 카드 + 가족카드 합산 실적 활용.';
+      else if (main === 'transit') rec = '교통·주유 특화 (K-패스 연동형) + 생활비 포괄 카드.';
+      else if (main === 'online') rec = '온라인 플랫폼 특화 (쿠팡·네이버·SSG) 카드 + 통신비 할인 카드.';
+      else rec = '포인트 통합 적립형 + 전월실적 낮은 바이럴 카드 2장 조합.';
+
+      var advice = '전월실적 달성 가능성 <strong>' + feasibility + '</strong>. ' + rec;
+
+      $('a02_result').innerHTML =
+        '<div class="result-line"><span>연간 카드 지출</span><strong>' + fmt(annual) + ' 만원</strong></div>' +
+        '<div class="result-line"><span>적용 환급률</span><strong>' + (rate*100).toFixed(1) + ' %</strong></div>' +
+        '<div class="result-line"><span>카드 수 보정</span><strong>×' + multiplier.toFixed(2) + '</strong></div>' +
+        '<div class="result-line result-total"><span>예상 연 혜택</span><span class="amount">' + fmt(benefit) + ' 만원/년</span></div>' +
+        '<div class="result-advice"><strong>권장:</strong> ' + advice + '</div>';
+
+      state.savings['02'] = benefit;
+      updateSummary();
+    }
+
+    // 03 보험 리밸런싱
+    function calc03() {
+      var income = num('a03_income');
+      var premium = num('a03_premium');
+      var silson = $('a03_silson').checked;
+
+      var lowAmt = income * 0.03;
+      var highAmt = income * 0.07;
+      var ratio = income > 0 ? (premium / income) * 100 : 0;
+
+      var status, saving, advice;
+      if (premium > highAmt) {
+        status = '과다 (소득 대비 ' + ratio.toFixed(1) + '%)';
+        saving = (premium - highAmt) * 12;
+        advice = '월 ' + fmt(premium - highAmt) + '만원 초과. 중복 보장·사업비 높은 종신/변액 우선 점검 후 리밸런싱 권장.';
+      } else if (premium < lowAmt && income > 0) {
+        status = '부족 (소득 대비 ' + ratio.toFixed(1) + '%)';
+        saving = 0;
+        advice = silson ? '실손은 확보됨. 소득·가족 구성에 따라 정기/종신 보강 검토 가능.' : '실손 미가입 상태입니다. 실손 먼저 가입 권장.';
+      } else {
+        status = '적정 범위 (' + ratio.toFixed(1) + '%)';
+        // 적정이라도 5% 최적화 여지
+        saving = premium * 12 * 0.08;
+        advice = silson ? '적정 범위입니다. 보장 중복 여부만 연 1회 점검하면 충분.' : '실손 가입 확인 권장. 기본 보장 중 우선순위가 가장 높습니다.';
+      }
+
+      $('a03_result').innerHTML =
+        '<div class="result-line"><span>적정 월 보험료 범위</span><strong>' + fmt(lowAmt) + '~' + fmt(highAmt) + ' 만원</strong></div>' +
+        '<div class="result-line"><span>현재 상태</span><strong>' + status + '</strong></div>' +
+        '<div class="result-line result-total"><span>예상 연 절감</span><span class="amount">' + fmt(saving) + ' 만원/년</span></div>' +
+        '<div class="result-advice"><strong>권장:</strong> ' + advice + '</div>';
+
+      state.savings['03'] = saving;
+      updateSummary();
+    }
+
+    // 04 통신비
+    function calc04() {
+      var current = num('a04_current');
+      var data = num('a04_data');
+      var contract = $('a04_contract').checked;
+
+      var mvno;
+      if (data < 10) mvno = 1.5;
+      else if (data < 50) mvno = 2.0;
+      else if (data < 100) mvno = 2.5;
+      else mvno = 3.5;
+
+      var monthSave = Math.max(0, current - mvno);
+      var yearSave = monthSave * 12;
+
+      var advice;
+      if (contract) {
+        advice = '약정 기간이 남아 있습니다. 해지 위약금(통상 10~30만) 계산 후 잔여 기간에 따라 만료 시점 이동이 더 유리할 수 있습니다.';
+      } else if (monthSave <= 0) {
+        advice = '이미 MVNO 수준으로 최적화된 상태입니다. 부가서비스·가족결합 재점검 정도만 권장.';
+      } else {
+        advice = '알뜰폰(MVNO) 즉시 전환 가능. 번호이동·eSIM 사용 시 당일 전환됩니다.';
+      }
+
+      $('a04_result').innerHTML =
+        '<div class="result-line"><span>데이터 기준 MVNO 요금</span><strong>' + fmt(mvno) + ' 만원/월</strong></div>' +
+        '<div class="result-line"><span>월 절감</span><strong>' + fmt(monthSave) + ' 만원</strong></div>' +
+        '<div class="result-line result-total"><span>예상 연 절감</span><span class="amount">' + fmt(yearSave) + ' 만원/년</span></div>' +
+        '<div class="result-advice"><strong>권장:</strong> ' + advice + '</div>';
+
+      state.savings['04'] = yearSave;
+      updateSummary();
+    }
+
+    // 05 금융상품 수수료
+    function calc05() {
+      var irp = num('a05_irp');
+      var etf = num('a05_etf');
+      var ter = num('a05_ter');
+
+      var totalBalance = irp + etf;
+      var currentFee = totalBalance * (ter / 100);
+      var bestFee = totalBalance * 0.001; // 0.1% 최저 TER 가정
+      var yearSave = Math.max(0, currentFee - bestFee);
+
+      // 20년 복리 절감 (수익률 5% 가정, 단순화된 복리 근사)
+      var r = 0.05;
+      var years = 20;
+      // 절감액이 매년 복리 재투자된다고 가정: FV = save × ((1+r)^n - 1)/r
+      var fv20 = yearSave * (Math.pow(1 + r, years) - 1) / r;
+
+      var advice;
+      if (ter > 0.3) {
+        advice = '현재 TER이 최저 구간(0.1%대) 대비 ' + ((ter - 0.1)).toFixed(2) + '%p 높습니다. S&P500·TDF 최저보수 상품으로 전환 시 20년 누적 수천만원 차이.';
+      } else if (ter > 0.15) {
+        advice = '수수료 수준은 양호한 편입니다. 환헤지·리밸런싱 방식 등 부가 비용도 함께 확인 권장.';
+      } else {
+        advice = '이미 저비용 포트폴리오입니다. 추가 비용 절감보다 분산·리밸런싱 품질에 집중할 단계.';
+      }
+
+      $('a05_result').innerHTML =
+        '<div class="result-line"><span>총 운용 잔고</span><strong>' + fmt(totalBalance) + ' 만원</strong></div>' +
+        '<div class="result-line"><span>현재 연 수수료</span><strong>' + fmt(currentFee) + ' 만원</strong></div>' +
+        '<div class="result-line"><span>최저 TER(0.1%) 연 수수료</span><strong>' + fmt(bestFee) + ' 만원</strong></div>' +
+        '<div class="result-line result-total"><span>연 절감 가능</span><span class="amount">' + fmt(yearSave) + ' 만원</span></div>' +
+        '<div class="result-line"><span>20년 누적 (복리 5%)</span><strong>' + fmt(fv20) + ' 만원</strong></div>' +
+        '<div class="result-advice"><strong>권장:</strong> ' + advice + '</div>';
+
+      state.savings['05'] = yearSave;
+      updateSummary();
+    }
+
+    // 06 공과금·구독
+    function calc06() {
+      var util = num('a06_utility');
+      var sub = num('a06_sub');
+      var dup = num('a06_dup');
+
+      var utilSave = util * 0.05 * 12;  // 5% 절감 × 12개월
+      // 중복 구독은 1개당 평균 1.5만원 월 절감 가정
+      var subSave = dup * 1.5 * 12;
+      var total = utilSave + subSave;
+
+      var advice;
+      if (dup >= 2) {
+        advice = '중복 구독이 ' + dup + '개 존재합니다. 가족 공유 플랜 전환 또는 계정 통폐합으로 즉시 월 ' + fmt(dup*1.5) + '만원 절감 가능.';
+      } else if (util >= 20) {
+        advice = '공과금이 다소 높은 편입니다. 에너지캐시백·탄소중립포인트·관리비 절감 챌린지 참여 권장.';
+      } else {
+        advice = '기본은 잘 관리되고 있습니다. 연 1회 구독 목록 재정비 습관만 유지하세요.';
+      }
+
+      $('a06_result').innerHTML =
+        '<div class="result-line"><span>공과금 5% 절감 (연)</span><strong>' + fmt(utilSave) + ' 만원</strong></div>' +
+        '<div class="result-line"><span>중복 구독 정리 (연)</span><strong>' + fmt(subSave) + ' 만원</strong></div>' +
+        '<div class="result-line result-total"><span>예상 연 절감</span><span class="amount">' + fmt(total) + ' 만원/년</span></div>' +
+        '<div class="result-advice"><strong>권장:</strong> ' + advice + '</div>';
+
+      state.savings['06'] = total;
+      updateSummary();
+    }
+
+    // 07 국가·지자체 지원금
+    function calc07() {
+      var seg = state.segment;
+      var salary = num('a07_salary');
+      var nohome = $('a07_nohome').checked;
+
+      var programs = [];
+      var estimate = 0;
+
+      if (!seg) {
+        $('a07_result').innerHTML = '<div class="result-advice">세그먼트 선택 후 조회됩니다.</div>';
+        state.savings['07'] = 0;
+        updateSummary();
+        return;
+      }
+
+      // S1 청년 단독
+      if (seg === 'S1') {
+        if (salary <= 7500) { programs.push('청년도약계좌 (정부 기여금 최대 연 144만)'); estimate += 144; }
+        if (nohome && salary <= 5000) { programs.push('청년 월세 지원 (월 20만, 최대 24개월)'); estimate += 240/3; }
+        if (nohome) { programs.push('청년우대형 주택청약통장 (비과세+우대금리)'); estimate += 30; }
+      }
+      // S2/S3 신혼
+      if (seg === 'S2' || seg === 'S3') {
+        if (nohome && salary <= 8500) { programs.push('디딤돌·버팀목 대출 (저리)'); estimate += 120; }
+        if (nohome) { programs.push('신혼부부 특별공급·전세자금대출 우대'); estimate += 60; }
+        programs.push('부부 합산 연말정산 경정청구 가능');
+      }
+      // S4/S5 유자녀
+      if (seg === 'S4' || seg === 'S5') {
+        programs.push('자녀세액공제 (첫째 25만, 둘째 30만, 셋째+ 40만)');
+        estimate += seg === 'S5' ? 95 : 25;
+        programs.push('아이돌봄서비스·보육료 지원');
+        estimate += 60;
+        if (seg === 'S5') { programs.push('다자녀 공공요금 감면 (전기·도시가스·수도)'); estimate += 20; }
+      }
+      // S6 중장년 단독
+      if (seg === 'S6') {
+        if (salary < 5500) {
+          programs.push('중장년 내일배움카드·국민취업제도');
+          estimate += 50;
+        } else {
+          programs.push('경정청구 (최대 5년치 놓친 공제 환급)');
+          estimate += 30;
+        }
+        programs.push('ISA 서민형 (총급여 5천↓) / 일반형 비과세 한도 활용');
+      }
+
+      var list = programs.map(function(p){ return '<div class="result-line"><span>■ ' + p + '</span></div>'; }).join('');
+      var advice = seg === 'S6' && salary >= 7500
+        ? '고소득 중장년은 직접 지원금이 제한적입니다. <strong>경정청구</strong>를 통한 과거 5년치 놓친 공제 환급을 우선 검토하세요.'
+        : '해당 가능 프로그램이 위와 같이 식별되었습니다. 실제 수급 여부는 소득·자산·지역 기준을 반드시 공식 창구에서 확인하세요.';
+
+      $('a07_result').innerHTML =
+        list +
+        '<div class="result-line result-total"><span>예상 혜택 범위 (참고)</span><span class="amount">' + fmt(estimate) + ' 만원/년</span></div>' +
+        '<div class="result-advice"><strong>권장:</strong> ' + advice + '</div>';
+
+      state.savings['07'] = estimate;
+      updateSummary();
+    }
+
+    // 08 교통비 (K-패스)
+    function calc08() {
+      var trips = num('a08_trips');
+      var fare = num('a08_fare');
+      var taxi = num('a08_taxi');
+      var rate = (state.segment && SEGMENT_DEFAULTS[state.segment]) ? SEGMENT_DEFAULTS[state.segment].kpass_rate : 0.20;
+
+      var monthlySpend = trips * fare / 10000; // 만원
+      var kpassRefund, notice;
+
+      if (trips < 15) {
+        kpassRefund = 0;
+        notice = 'K-패스는 월 15회 이상 이용 시에만 환급됩니다.';
+      } else {
+        var cappedTrips = Math.min(trips, 60); // 월 60회 한도
+        kpassRefund = (cappedTrips * fare * rate) / 10000;
+        notice = '월 ' + cappedTrips + '회 × ' + (rate*100) + '% 환급 기준.';
+      }
+
+      // 기후동행카드 손익분기 (월 41회 대중교통)
+      var climateBreakeven = trips >= 41 ? ' 기후동행카드(월 65,000원)가 더 유리할 수 있습니다.' : '';
+
+      // 택시 → 대중교통 전환: 택시 30% 줄이면 월 절감
+      var taxiSave = taxi * 0.3 * 12;
+
+      var annualRefund = kpassRefund * 12;
+      var total = annualRefund + taxiSave;
+
+      var advice = notice + climateBreakeven + ' 택시 지출 30% 대중교통 전환 시 연 ' + fmt(taxiSave) + '만원 추가 절감.';
+
+      $('a08_result').innerHTML =
+        '<div class="result-line"><span>월 대중교통 지출</span><strong>' + fmt(monthlySpend) + ' 만원</strong></div>' +
+        '<div class="result-line"><span>K-패스 월 환급</span><strong>' + fmt(kpassRefund) + ' 만원</strong></div>' +
+        '<div class="result-line"><span>택시 전환 절감 (연)</span><strong>' + fmt(taxiSave) + ' 만원</strong></div>' +
+        '<div class="result-line result-total"><span>예상 연 절감</span><span class="amount">' + fmt(total) + ' 만원/년</span></div>' +
+        '<div class="result-advice"><strong>권장:</strong> ' + advice + '</div>';
+
+      state.savings['08'] = total;
+      updateSummary();
+    }
+
+    // --- Summary ---------------------------------------------------------
+    function updateSummary() {
+      var total = 0;
+      Object.keys(state.savings).forEach(function(k){ total += state.savings[k] || 0; });
+      $('sumYear').innerHTML = fmtInt(total) + '<span class="unit">만원</span>';
+      $('sumMonth').innerHTML = fmt(total/12) + '<span class="unit">만원</span>';
+      $('sum5Year').innerHTML = fmtInt(total*5) + '<span class="unit">만원</span>';
+      if (state.segment) {
+        var label = SEGMENT_DEFAULTS[state.segment].label;
+        $('summaryMeta').textContent = state.segment + ' · ' + label + ' · 선택 세그먼트 기준 예상치';
+      }
+    }
+
+    // --- Segment selection & defaults -----------------------------------
+    function applyDefaults(seg) {
+      var d = SEGMENT_DEFAULTS[seg];
+      if (!d) return;
+      Object.keys(d).forEach(function(key){
+        if (key === 'label' || key === 'kpass_rate') return;
+        var el = $(key);
+        if (!el) return;
+        if (el.type === 'checkbox') el.checked = !!d[key];
+        else el.value = d[key];
+      });
+    }
+
+    function selectSegment(seg) {
+      state.segment = seg;
+      document.querySelectorAll('.segment-btn').forEach(function(btn){
+        var isActive = btn.getAttribute('data-seg') === seg;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-checked', isActive ? 'true' : 'false');
+      });
+      $('areaSection').classList.remove('area-disabled');
+      applyDefaults(seg);
+      recalcAll();
+    }
+
+    function recalcAll() {
+      calc01(); calc02(); calc03(); calc04();
+      calc05(); calc06(); calc07(); calc08();
+    }
+
+    // --- Init ------------------------------------------------------------
+    function init() {
+      // Segment buttons
+      document.querySelectorAll('.segment-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){ selectSegment(btn.getAttribute('data-seg')); });
+      });
+
+      // Bind calc functions to their inputs
+      var bindings = {
+        '01': ['a01_salary','a01_pension','a01_card','a01_medical'],
+        '02': ['a02_monthly','a02_main','a02_cards'],
+        '03': ['a03_income','a03_premium','a03_silson'],
+        '04': ['a04_current','a04_data','a04_contract'],
+        '05': ['a05_irp','a05_etf','a05_ter'],
+        '06': ['a06_utility','a06_sub','a06_dup'],
+        '07': ['a07_salary','a07_nohome'],
+        '08': ['a08_trips','a08_fare','a08_taxi']
+      };
+      var calcMap = { '01':calc01,'02':calc02,'03':calc03,'04':calc04,'05':calc05,'06':calc06,'07':calc07,'08':calc08 };
+      Object.keys(bindings).forEach(function(area){
+        bindings[area].forEach(function(id){
+          var el = $(id);
+          if (!el) return;
+          var evt = (el.type === 'checkbox' || el.tagName === 'SELECT') ? 'change' : 'input';
+          el.addEventListener(evt, calcMap[area]);
+        });
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+  </script>
+</body>
+</html>
