@@ -4,9 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>나의 Portfolio - Finance Coffee Chat</title>
+  <meta name="description" content="포트폴리오 자산배분 현황을 한눈에. 주식, 채권, 현금, 연금 등 자산군별 비중과 목표 대비 현황을 차트로 확인하세요.">
+  <meta name="keywords" content="포트폴리오, 자산배분, 자산관리, 투자 현황, 주식 비중, 채권 비중, 자산군">
+  <link rel="canonical" href="https://finance-coffee-chat.vercel.app/portfolio.html">
+  <meta property="og:title" content="나의 Portfolio - Finance Coffee Chat">
+  <meta property="og:description" content="포트폴리오 자산배분 현황을 한눈에. 주식, 채권, 현금, 연금 등 자산군별 비중과 목표 대비 현황을 차트로 확인하세요.">
+  <meta property="og:image" content="https://finance-coffee-chat.vercel.app/og-image.png">
+  <meta property="og:url" content="https://finance-coffee-chat.vercel.app/portfolio.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="투자 커피챗">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="나의 Portfolio - Finance Coffee Chat">
+  <meta name="twitter:description" content="포트폴리오 자산배분 현황을 한눈에. 자산군별 비중과 목표 대비 현황을 차트로 확인하세요.">
+  <meta name="twitter:image" content="https://finance-coffee-chat.vercel.app/og-image.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <!-- GA4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZEG7YQ80S"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
@@ -174,12 +192,28 @@
       .container { padding: 32px 16px 48px; }
       .header h1 { font-size: 26px; }
       .input-field { width: 110px; }
+      nav a { margin: 0 6px; font-size: 12px; }
       .legend-grid { grid-template-columns: 1fr; }
       .chart-actions { flex-direction: column; }
       .btn-back, .btn-save { flex: none; }
       .talk-grid { grid-template-columns: 1fr; }
     }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "나의 Portfolio - Finance Coffee Chat",
+    "description": "포트폴리오 자산배분 현황을 한눈에. 주식, 채권, 현금, 연금 등 자산군별 비중과 목표 대비 현황을 차트로 확인하세요.",
+    "url": "https://finance-coffee-chat.vercel.app/portfolio.html",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Finance Coffee Chat",
+      "url": "https://finance-coffee-chat.vercel.app/"
+    },
+    "inLanguage": "ko"
+  }
+  </script>
 </head>
 <body>
   <nav>
@@ -187,6 +221,7 @@
     <a href="/portfolio.html" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
     <a href="/asset.html" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
     <a href="/ipo.html" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
+    <a href="/cost-optimization.html" data-ga="click_gnb" data-ga-text="비용최적화" data-ga-loc="gnb">비용최적화</a>
   </nav>
 
   <div class="container">
