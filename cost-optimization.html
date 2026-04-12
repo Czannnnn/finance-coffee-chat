@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>비용 최적화 가이드 - Finance Coffee Chat</title>
+  <meta name="description" content="2026년 기준 가구 유형별 비용 최적화 종합 가이드. 청년/신혼/유자녀/중장년 6 세그먼트 × 연말정산/카드/보험/통신 등 8 영역 매트릭스.">
+  <meta name="keywords" content="비용 최적화, 절약, 연말정산, 카드 혜택, 보험 리밸런싱, 통신비, 금융수수료, 공과금, 지자체 지원금, 교통비, 가계부, 재테크">
+  <link rel="canonical" href="https://finance-coffee-chat.vercel.app/cost-optimization.html">
+  <meta property="og:title" content="비용 최적화 가이드 - Finance Coffee Chat">
+  <meta property="og:description" content="2026년 기준 가구 유형별 비용 최적화 종합 가이드. 6 세그먼트 × 8 영역 매트릭스.">
+  <meta property="og:image" content="https://finance-coffee-chat.vercel.app/og-image.png">
+  <meta property="og:url" content="https://finance-coffee-chat.vercel.app/cost-optimization.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="투자 커피챗">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="비용 최적화 가이드 - Finance Coffee Chat">
+  <meta name="twitter:description" content="2026년 기준 가구 유형별 비용 최적화 종합 가이드. 6 세그먼트 × 8 영역 매트릭스.">
+  <meta name="twitter:image" content="https://finance-coffee-chat.vercel.app/og-image.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZEG7YQ80S"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --espresso: #2C1810;
+      --dark-roast: #3D2317;
+      --medium-roast: #6B3A2A;
+      --caramel: #C4853C;
+      --caramel-light: rgba(196,133,60,0.12);
+      --cream: #F5EDE0;
+      --oat-milk: #FAF6F0;
+      --white: #FFFDF9;
+      --green: #3F8A5C;
+      --blue: #3A6EA5;
+      --red-soft: #B8473D;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--oat-milk);
+      color: var(--espresso);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    nav { background: var(--espresso); padding: 12px 16px; text-align: center; }
+    nav a {
+      color: var(--cream); margin: 0 12px; text-decoration: none;
+      font-size: 14px; font-weight: 500; letter-spacing: 0.3px;
+      transition: color 0.15s;
+    }
+    nav a:hover { color: var(--caramel); }
+    .container {
+      max-width: 1100px; margin: 0 auto; padding: 48px 28px 64px;
+    }
+    .header { text-align: center; margin-bottom: 40px; }
+    .badge {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase; color: var(--caramel);
+      background: var(--caramel-light); padding: 5px 16px; border-radius: 20px;
+      margin-bottom: 16px; border: 1px solid rgba(196,133,60,0.2);
+    }
+    .header h1 {
+      font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700;
+      color: var(--espresso); letter-spacing: -0.5px;
+    }
+    .header h1 em { font-style: italic; color: var(--medium-roast); }
+    .header .subtitle {
+      margin-top: 10px; font-size: 14px; color: var(--medium-roast); font-weight: 500;
+    }
+    .divider {
+      width: 40px; height: 2px; background: var(--caramel);
+      margin: 20px auto 0; border-radius: 1px;
+    }
+    .intro {
+      max-width: 760px; margin: 28px auto 0; font-size: 15px;
+      color: var(--dark-roast); text-align: center; line-height: 1.8;
+    }
+    .section {
+      margin-top: 48px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700;
+      color: var(--espresso); margin-bottom: 6px; letter-spacing: -0.3px;
+    }
+    .section-desc {
+      font-size: 13px; color: var(--medium-roast); margin-bottom: 8px;
+    }
+    .segment-grid, .area-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 24px 0;
+    }
+    @media (max-width: 768px) {
+      .segment-grid, .area-grid { grid-template-columns: 1fr; }
+    }
+    .segment-card, .area-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid rgba(44,24,16,0.08);
+      box-shadow: 0 2px 12px rgba(44,24,16,0.04);
+      text-decoration: none;
+      color: var(--espresso);
+      transition: all 0.2s;
+      display: block;
+    }
+    .segment-card:hover, .area-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(44,24,16,0.08);
+      border-color: var(--caramel);
+    }
+    .segment-card h3, .area-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: var(--espresso);
+      margin-bottom: 8px;
+    }
+    .segment-card .tag, .area-card .num {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--caramel);
+      background: var(--caramel-light);
+      padding: 3px 10px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    .segment-card p, .area-card p {
+      font-size: 13px;
+      color: var(--medium-roast);
+      margin-bottom: 12px;
+    }
+    .card-cta {
+      display: inline-block;
+      color: var(--caramel);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .matrix-wrapper {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid rgba(44,24,16,0.08);
+      box-shadow: 0 2px 12px rgba(44,24,16,0.04);
+      overflow-x: auto;
+      margin-top: 20px;
+    }
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 720px;
+    }
+    .matrix-table th, .matrix-table td {
+      padding: 10px 8px;
+      text-align: center;
+      border-bottom: 1px solid rgba(44,24,16,0.08);
+    }
+    .matrix-table thead th {
+      background: var(--cream);
+      color: var(--espresso);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.2px;
+    }
+    .matrix-table tbody th {
+      background: var(--oat-milk);
+      color: var(--dark-roast);
+      font-weight: 600;
+      text-align: left;
+      padding-left: 12px;
+      white-space: nowrap;
+    }
+    .matrix-table tbody tr:hover td {
+      background: rgba(196,133,60,0.04);
+    }
+    .matrix-table .star-3 { color: var(--red-soft); font-weight: 700; }
+    .matrix-table .star-2 { color: var(--caramel); }
+    .matrix-table .star-1 { color: var(--medium-roast); opacity: 0.7; }
+    .matrix-legend {
+      display: flex; flex-wrap: wrap; gap: 16px;
+      margin-top: 14px; font-size: 12px; color: var(--medium-roast);
+    }
+    .matrix-legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .footer-note {
+      margin-top: 56px;
+      padding: 20px;
+      background: var(--cream);
+      border-radius: 12px;
+      font-size: 12px;
+      color: var(--medium-roast);
+      line-height: 1.7;
+    }
+    .footer-note strong { color: var(--dark-roast); }
+    @media (max-width: 600px) {
+      .container { padding: 32px 16px 48px; }
+      .header h1 { font-size: 26px; }
+      .section-title { font-size: 19px; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "비용 최적화 가이드 - Finance Coffee Chat",
+    "description": "2026년 기준 가구 유형별 비용 최적화 종합 가이드. 청년/신혼/유자녀/중장년 6 세그먼트 × 연말정산/카드/보험/통신 등 8 영역 매트릭스.",
+    "url": "https://finance-coffee-chat.vercel.app/cost-optimization.html",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Finance Coffee Chat",
+      "url": "https://finance-coffee-chat.vercel.app/"
+    },
+    "inLanguage": "ko"
+  }
+  </script>
+</head>
+<body>
+  <nav>
+    <a href="/" data-ga="click_gnb" data-ga-text="홈" data-ga-loc="gnb">홈</a>
+    <a href="/portfolio.html" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
+    <a href="/asset.html" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
+    <a href="/ipo.html" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
+    <a href="/cost-optimization.html" data-ga="click_gnb" data-ga-text="비용최적화" data-ga-loc="gnb">비용최적화</a>
+  </nav>
+
+  <div class="container">
+    <header class="header">
+      <div class="badge">Cost Optimization</div>
+      <h1>비용 최적화 <em>가이드</em></h1>
+      <div class="subtitle">2026년 기준 · 6 세그먼트 × 8 영역 매트릭스</div>
+      <div class="divider"></div>
+      <p class="intro">
+        월급은 그대로인데 지출만 늘어나는 시대, 새는 돈부터 막는 것이 가장 빠른 재테크입니다.
+        가구 유형에 따라 공략해야 할 비용 항목과 우선순위는 완전히 다릅니다.
+        본 가이드는 2026년 최신 제도와 세법을 반영해 <strong>청년 단독/신혼/유자녀/중장년 6 세그먼트</strong>별로
+        연말정산·카드·보험·통신·금융수수료·공과금·지원금·교통비 <strong>8개 영역</strong>의 절약 전략을 매트릭스로 정리했습니다.
+        본인 상황에 맞는 세그먼트를 먼저 선택한 뒤, 필요한 영역별 심층 자료를 확인해 보세요.
+      </p>
+    </header>
+
+    <section class="section">
+      <h2 class="section-title">1. 내 가구 유형 선택하기</h2>
+      <p class="section-desc">세그먼트별 빠른 가이드 — 본인 상황에 맞는 카드를 선택하세요.</p>
+      <div class="segment-grid">
+        <a class="segment-card" href="cost/s1-youth-single.html" data-ga="click_segment" data-ga-text="S1" data-ga-loc="cost_hub">
+          <span class="tag">S1 Youth Single</span>
+          <h3>청년 단독</h3>
+          <p>만 19~34세 1인 가구. 낮은 소득·높은 월세 부담, 청년 전용 제도 활용이 핵심.</p>
+          <span class="card-cta">빠른 가이드 →</span>
+        </a>
+        <a class="segment-card" href="cost/s2-newlywed-dual.html" data-ga="click_segment" data-ga-text="S2" data-ga-loc="cost_hub">
+          <span class="tag">S2 Newlywed Dual</span>
+          <h3>신혼 맞벌이</h3>
+          <p>결혼 7년 이내 맞벌이 부부. 부부 합산 공제와 금융상품 분산 전략이 승부처.</p>
+          <span class="card-cta">빠른 가이드 →</span>
+        </a>
+        <a class="segment-card" href="cost/s3-newlywed-single-income.html" data-ga="click_segment" data-ga-text="S3" data-ga-loc="cost_hub">
+          <span class="tag">S3 Newlywed Single</span>
+          <h3>신혼 외벌이</h3>
+          <p>결혼 7년 이내 외벌이. 배우자 공제·보험 재설계로 현금흐름을 지켜내는 단계.</p>
+          <span class="card-cta">빠른 가이드 →</span>
+        </a>
+        <a class="segment-card" href="cost/s4-parent-1child.html" data-ga="click_segment" data-ga-text="S4" data-ga-loc="cost_hub">
+          <span class="tag">S4 Parent 1 Child</span>
+          <h3>유자녀 1자녀</h3>
+          <p>자녀 한 명 육아 가정. 자녀세액공제·교육비·돌봄 지원금을 빠짐없이 챙기기.</p>
+          <span class="card-cta">빠른 가이드 →</span>
+        </a>
+        <a class="segment-card" href="cost/s5-parent-multichild.html" data-ga="click_segment" data-ga-text="S5" data-ga-loc="cost_hub">
+          <span class="tag">S5 Multi Child</span>
+          <h3>유자녀 다자녀</h3>
+          <p>2명 이상 다자녀 가정. 다자녀 우대·공공요금 감면·교육 지원의 극대화 전략.</p>
+          <span class="card-cta">빠른 가이드 →</span>
+        </a>
+        <a class="segment-card" href="cost/s6-mid-single.html" data-ga="click_segment" data-ga-text="S6" data-ga-loc="cost_hub">
+          <span class="tag">S6 Mid Single</span>
+          <h3>중장년 단독</h3>
+          <p>만 35세 이상 1인 가구. 노후 대비 세액공제·보험 리밸런싱이 가장 급한 숙제.</p>
+          <span class="card-cta">빠른 가이드 →</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">2. 영역별 상세 가이드</h2>
+      <p class="section-desc">8개 영역의 심층 자료 — 각 영역별 제도, 수치, 체크리스트를 제공합니다.</p>
+      <div class="area-grid">
+        <a class="area-card" href="cost/area-01-year-end-tax.html" data-ga="click_area" data-ga-text="01" data-ga-loc="cost_hub">
+          <span class="num">Area 01</span>
+          <h3>연말정산</h3>
+          <p>2026 개정 세법 반영. 소득·세액공제 한도와 신고 팁 총정리.</p>
+          <span class="card-cta">자세히 보기 →</span>
+        </a>
+        <a class="area-card" href="cost/area-02-credit-cards.html" data-ga="click_area" data-ga-text="02" data-ga-loc="cost_hub">
+          <span class="num">Area 02</span>
+          <h3>카드 혜택</h3>
+          <p>소득공제 한도 충족과 실적 최적화, 체크카드 병행 전략.</p>
+          <span class="card-cta">자세히 보기 →</span>
+        </a>
+        <a class="area-card" href="cost/area-03-insurance.html" data-ga="click_area" data-ga-text="03" data-ga-loc="cost_hub">
+          <span class="num">Area 03</span>
+          <h3>보험 리밸런싱</h3>
+          <p>중복·과잉 보장 제거, 실손·정기보험 중심 최소 포트폴리오.</p>
+          <span class="card-cta">자세히 보기 →</span>
+        </a>
+        <a class="area-card" href="cost/area-04-telecom.html" data-ga="click_area" data-ga-text="04" data-ga-loc="cost_hub">
+          <span class="num">Area 04</span>
+          <h3>통신비</h3>
+          <p>알뜰폰·결합할인·선택약정 비교로 월 5~7만 원 절감.</p>
+          <span class="card-cta">자세히 보기 →</span>
+        </a>
+        <a class="area-card" href="cost/area-05-financial-fees.html" data-ga="click_area" data-ga-text="05" data-ga-loc="cost_hub">
+          <span class="num">Area 05</span>
+          <h3>금융상품 수수료</h3>
+          <p>ETF 총보수·증권 수수료·환전 스프레드까지 한눈에 비교.</p>
+          <span class="card-cta">자세히 보기 →</span>
+        </a>
+        <a class="area-card" href="cost/area-06-utilities-subscriptions.html" data-ga="click_area" data-ga-text="06" data-ga-loc="cost_hub">
+          <span class="num">Area 06</span>
+          <h3>공과금·구독</h3>
+          <p>전기·가스·수도 감면 제도와 OTT 중복 구독 정리법.</p>
+          <span class="card-cta">자세히 보기 →</span>
+        </a>
+        <a class="area-card" href="cost/area-07-public-support.html" data-ga="click_area" data-ga-text="07" data-ga-loc="cost_hub">
+          <span class="num">Area 07</span>
+          <h3>국가·지자체 지원금</h3>
+          <p>청년·신혼·육아·중장년 지원금 신청 조건 및 수급 노하우.</p>
+          <span class="card-cta">자세히 보기 →</span>
+        </a>
+        <a class="area-card" href="cost/area-08-transport.html" data-ga="click_area" data-ga-text="08" data-ga-loc="cost_hub">
+          <span class="num">Area 08</span>
+          <h3>교통비</h3>
+          <p>K-패스·기후동행카드·알뜰교통 비교, 통근 유형별 최적 선택.</p>
+          <span class="card-cta">자세히 보기 →</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">3. 우선순위 매트릭스</h2>
+      <p class="section-desc">세그먼트 × 영역 별 공략 순위. ★★★ 최우선 · ★★ 권장 · ★ 보조.</p>
+      <div class="matrix-wrapper">
+        <table class="matrix-table" aria-label="세그먼트별 영역 우선순위 매트릭스">
+          <thead>
+            <tr>
+              <th scope="col">세그먼트 \ 영역</th>
+              <th scope="col">01 연말정산</th>
+              <th scope="col">02 카드</th>
+              <th scope="col">03 보험</th>
+              <th scope="col">04 통신비</th>
+              <th scope="col">05 금융수수료</th>
+              <th scope="col">06 공과금·구독</th>
+              <th scope="col">07 지원금</th>
+              <th scope="col">08 교통비</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">S1 청년 단독</th>
+              <td class="star-3">★★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-1">★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-3">★★★</td>
+            </tr>
+            <tr>
+              <th scope="row">S2 신혼 맞벌이</th>
+              <td class="star-3">★★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-2">★★</td>
+            </tr>
+            <tr>
+              <th scope="row">S3 신혼 외벌이</th>
+              <td class="star-3">★★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-2">★★</td>
+            </tr>
+            <tr>
+              <th scope="row">S4 유자녀 1자녀</th>
+              <td class="star-3">★★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-2">★★</td>
+            </tr>
+            <tr>
+              <th scope="row">S5 유자녀 다자녀</th>
+              <td class="star-3">★★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-2">★★</td>
+            </tr>
+            <tr>
+              <th scope="row">S6 중장년 단독</th>
+              <td class="star-3">★★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-1">★</td>
+              <td class="star-1">★</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="matrix-legend">
+          <span><span class="star-3">★★★</span> 최우선 공략</span>
+          <span><span class="star-2">★★</span> 권장</span>
+          <span><span class="star-1">★</span> 보조</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      <strong>업데이트:</strong> 2026-04 · 2026년 세법개정안 및 주요 지자체 제도 반영<br>
+      <strong>법적 고지:</strong> 본 자료는 공개된 제도·세법 정보를 바탕으로 한 일반 안내이며 투자·세무·법률 자문이 아닙니다.
+      개별 상황에 따라 적용 가능 여부와 혜택 금액이 달라질 수 있으므로, 최종 결정 전 국세청·금융감독원·지자체 등 공식 창구 또는 전문가 상담을 권장합니다.
+      제도 변경으로 일부 정보가 시점과 다를 수 있으며, 본 페이지의 이용으로 발생한 결과에 대해 운영자는 책임지지 않습니다.
+    </div>
+  </div>
+</body>
+</html>
