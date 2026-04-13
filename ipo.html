@@ -846,7 +846,7 @@
         <div class="ipo-card">
           <div class="ipo-top">
             <div class="ipo-name-group">
-              <div class="ipo-name">${ipo.name} ${getGradeBadge(ipo.grade, ipo._dataCount || 0)}</div>
+              <div class="ipo-name">${getGradeBadge(ipo.grade, ipo._dataCount || 0)} ${ipo.name}</div>
               <div class="ipo-badges">
                 <span class="ipo-badge ${ipo.market}">${ipo.market === 'kospi' ? '코스피' : '코스닥'}</span>
                 <span class="ipo-badge ${ipo.status}">${getStatusLabel(ipo.status)}</span>
