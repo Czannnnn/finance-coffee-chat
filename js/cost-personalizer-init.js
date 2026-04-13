@@ -128,9 +128,177 @@
     setTimeout(function () { toast.classList.remove('visible'); }, 1800);
   }
 
-  // ── 전체 렌더 (Task 12/13에서 확장) ──
+  // ── 규칙 로딩 (한 번만 fetch, 캐시) ──
+  function loadRecommendations() {
+    if (recommendationsPromise) return recommendationsPromise;
+    recommendationsPromise = fetch('data/cost-recommendations.json')
+      .then(function (res) {
+        if (!res.ok) throw new Error('Failed to load recommendations');
+        return res.json();
+      })
+      .then(function (data) { return data.rules || []; })
+      .catch(function (err) {
+        console.error('[cost-personalizer] 규칙 로딩 실패', err);
+        return [];
+      });
+    return recommendationsPromise;
+  }
+
+  // ── 영역 번호 → 라벨 매핑 ──
+  var AREA_LABELS = {
+    '01': '01 연말정산',
+    '02': '02 카드',
+    '03': '03 보험',
+    '04': '04 통신',
+    '05': '05 금융수수료',
+    '06': '06 공과금·구독',
+    '07': '07 지원금',
+    '08': '08 교통'
+  };
+
+  function getAreaLabel(areaRef) {
+    var num = (areaRef || '').substring(0, 2);
+    return AREA_LABELS[num] || areaRef;
+  }
+
+  // ── 필터 조합 시그니처 (GA용) ──
+  function filterSignature() {
+    return ['s', 'income', 'home', 'dep', 'region']
+      .map(function (f) { return state[f] || '_'; })
+      .join('_');
+  }
+
+  // ── 상태 요약 문구 ──
+  var INCOME_LABELS = {
+    '0-30': '3천만원 이하', '30-50': '3천~5천', '50-70': '5천~7천',
+    '70-100': '7천~1억', '100+': '1억 초과'
+  };
+  var HOME_LABELS = { own: '자가', jeonse: '전세', rent: '월세' };
+  var REGION_LABELS = { metro: '수도권', nonmetro: '비수도권' };
+
+  function stateSummaryText() {
+    var parts = [];
+    if (state.income) parts.push(INCOME_LABELS[state.income]);
+    if (state.home) parts.push(HOME_LABELS[state.home]);
+    if (state.region) parts.push(REGION_LABELS[state.region]);
+    return parts.join(' · ') + ' 독자에게';
+  }
+
+  // ── HTML 이스케이프 (XSS 방지) ──
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  // ── 맞춤 요약 섹션 렌더 ──
+  var lastRenderedSignature = null;
+
+  function renderRecommendSection() {
+    var section = $('#recommendSection');
+    if (!section) return;
+
+    if (!P.hasRequiredFields(state)) {
+      section.className = 'recommend-section empty';
+      section.innerHTML =
+        '<div class="recommend-title">내 맞춤 요약</div>' +
+        '<div class="recommend-subtitle">👉 내 상황 3가지만 골라주시면 맞춤 추천이 여기에 나타나요</div>';
+      lastRenderedSignature = null;
+      return;
+    }
+
+    loadRecommendations().then(function (rules) {
+      // 상태가 렌더 도중 바뀌었을 수 있으니 재확인
+      if (!P.hasRequiredFields(state)) return;
+      var classified = P.classifyRules(rules, state);
+      section.className = 'recommend-section';
+
+      if (classified.top3.length === 0) {
+        section.innerHTML =
+          '<div class="recommend-title">내 맞춤 요약</div>' +
+          '<div class="recommend-subtitle">🤔 아직 이 조합에 맞는 규칙이 준비되지 않았어요. 아래 전체 카탈로그를 참고해 주세요.</div>';
+        return;
+      }
+
+      var topCardsHtml = classified.top3.map(function (rule) {
+        return (
+          '<a class="recommend-card" href="' + escapeHtml(rule.linkHref) + '" ' +
+          'data-ga="click_recommendation" data-ga-text="' + escapeHtml(rule.id) + '" data-ga-loc="cost_hub_recommend">' +
+          '<span class="recommend-card-area">' + escapeHtml(getAreaLabel(rule.areaRef)) + '</span>' +
+          '<div class="recommend-card-title">' + escapeHtml(rule.title) + '</div>' +
+          '<div class="recommend-card-saving">💰 ' + escapeHtml(rule.savingHint) + '</div>' +
+          '<div class="recommend-card-link">' + escapeHtml(rule.linkLabel || '자세히 →') + '</div>' +
+          '</a>'
+        );
+      }).join('');
+
+      var extendedHtml = '';
+      if (classified.extended.length > 0) {
+        extendedHtml =
+          '<div class="recommend-extended">' +
+          '<div class="recommend-extended-title">💡 챙길 만한 것 ' + classified.extended.length + '개</div>' +
+          '<div class="recommend-extended-list">' +
+          classified.extended.map(function (rule) {
+            return (
+              '<a class="recommend-extended-item" href="' + escapeHtml(rule.linkHref) + '" ' +
+              'data-ga="click_recommendation" data-ga-text="' + escapeHtml(rule.id) + '" data-ga-loc="cost_hub_recommend">' +
+              '<span>' + escapeHtml(rule.title) + '</span>' +
+              '<span style="color: var(--green); font-size: 12px;">' + escapeHtml(rule.savingHint) + '</span>' +
+              '</a>'
+            );
+          }).join('') +
+          '</div></div>';
+      }
+
+      var notApplicableHtml = '';
+      if (classified.notApplicable.length > 0) {
+        notApplicableHtml =
+          '<div class="recommend-notapplicable" id="recommendNotApplicable">' +
+          '<button class="recommend-notapplicable-toggle" type="button">' +
+          '🚫 이번엔 해당 없음 ' + classified.notApplicable.length + '개 보기' +
+          '</button>' +
+          '<div class="recommend-notapplicable-list">' +
+          classified.notApplicable.map(function (rule) {
+            return '▸ ' + escapeHtml(rule.title) + ' — <em>' + escapeHtml(rule.savingHint) + '</em>';
+          }).join('<br>') +
+          '</div></div>';
+      }
+
+      section.innerHTML =
+        '<div class="recommend-title">' + escapeHtml(stateSummaryText()) + '</div>' +
+        '<div class="recommend-subtitle">필터 조건에 맞춰 우선순위로 정렬했어요.</div>' +
+        '<div class="recommend-top-label">📌 지금 바로 챙길 액션 TOP ' + classified.top3.length + '</div>' +
+        '<div class="recommend-cards">' + topCardsHtml + '</div>' +
+        extendedHtml +
+        notApplicableHtml;
+
+      // 해당없음 토글 바인딩
+      var notApplicableEl = $('#recommendNotApplicable');
+      if (notApplicableEl) {
+        notApplicableEl.querySelector('.recommend-notapplicable-toggle').addEventListener('click', function () {
+          notApplicableEl.classList.toggle('expanded');
+        });
+      }
+
+      // view_recommendation_rendered (필터 조합이 바뀔 때마다 발화)
+      var sig = filterSignature();
+      if (sig !== lastRenderedSignature && window.gtag) {
+        window.gtag('event', 'view_recommendation_rendered', {
+          click_text: sig,
+          click_location: 'cost_hub_recommend'
+        });
+        lastRenderedSignature = sig;
+      }
+    });
+  }
+
+  // ── 전체 렌더 ──
   function renderAll() {
-    // 맞춤 요약 섹션 렌더는 Task 12, 기존 섹션 재정렬은 Task 13
+    renderRecommendSection();
+    // Task 13에서 기존 섹션 재정렬 추가 예정
   }
 
   // ── 이벤트 바인딩 ──
