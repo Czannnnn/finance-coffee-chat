@@ -50,6 +50,95 @@
     });
   }
 
+  // ───────────────────────── 2. 규칙 매칭 & 점수 정렬 ─────────────────────────
+
+  // 세그먼트 × 영역 가중치 (cost-optimization.html 매트릭스 테이블 기반)
+  // ★★★=3, ★★=2, ★=1
+  var SEGMENT_AREA_WEIGHTS = {
+    s1: { '01': 3, '02': 2, '03': 2, '04': 3, '05': 2, '06': 1, '07': 3, '08': 3 },
+    s2: { '01': 3, '02': 3, '03': 2, '04': 2, '05': 3, '06': 2, '07': 3, '08': 2 },
+    s3: { '01': 3, '02': 2, '03': 3, '04': 2, '05': 2, '06': 2, '07': 3, '08': 2 },
+    s4: { '01': 3, '02': 3, '03': 3, '04': 2, '05': 2, '06': 2, '07': 3, '08': 2 },
+    s5: { '01': 3, '02': 3, '03': 3, '04': 2, '05': 2, '06': 3, '07': 3, '08': 2 },
+    s6: { '01': 3, '02': 3, '03': 3, '04': 3, '05': 3, '06': 2, '07': 1, '08': 1 }
+  };
+
+  function getAreaNumFromRef(areaRef) {
+    // "01-year-end-tax" → "01"
+    var match = (areaRef || '').match(/^(\d{2})/);
+    return match ? match[1] : null;
+  }
+
+  function getSegmentAreaWeight(segmentKey, areaRef) {
+    if (!segmentKey || !SEGMENT_AREA_WEIGHTS[segmentKey]) return 0;
+    var areaNum = getAreaNumFromRef(areaRef);
+    if (!areaNum) return 0;
+    return SEGMENT_AREA_WEIGHTS[segmentKey][areaNum] || 0;
+  }
+
+  function ruleMatches(rule, state) {
+    var conditions = rule.conditions || {};
+    var fields = Object.keys(conditions);
+    if (fields.length === 0) return true; // 조건 없음 = 모두 매칭
+    return fields.every(function (field) {
+      var allowedValues = conditions[field];
+      if (!Array.isArray(allowedValues) || allowedValues.length === 0) return true;
+      // 사용자가 해당 필드를 선택하지 않았다면, 옵션 필드는 매칭 스킵
+      if (!state[field]) {
+        return OPTIONAL_FIELDS.indexOf(field) !== -1;
+      }
+      return allowedValues.indexOf(state[field]) !== -1;
+    });
+  }
+
+  function countMismatchedFields(rule, state) {
+    var conditions = rule.conditions || {};
+    var mismatched = 0;
+    Object.keys(conditions).forEach(function (field) {
+      if (!state[field]) return;
+      var allowedValues = conditions[field];
+      if (Array.isArray(allowedValues) && allowedValues.indexOf(state[field]) === -1) {
+        mismatched++;
+      }
+    });
+    return mismatched;
+  }
+
+  function scoreRule(rule, state) {
+    var base = (rule.priority || 1) * 10;
+    var optionalMatchBonus = 0;
+    OPTIONAL_FIELDS.forEach(function (field) {
+      var conditions = rule.conditions || {};
+      if (state[field] && conditions[field] && conditions[field].indexOf(state[field]) !== -1) {
+        optionalMatchBonus += 3;
+      }
+    });
+    var segmentWeight = getSegmentAreaWeight(state.s, rule.areaRef);
+    return base + optionalMatchBonus + segmentWeight;
+  }
+
+  function classifyRules(rules, state) {
+    var matched = [];
+    var notApplicable = [];
+    rules.forEach(function (rule) {
+      if (ruleMatches(rule, state)) {
+        matched.push({ rule: rule, score: scoreRule(rule, state) });
+        return;
+      }
+      var mismatches = countMismatchedFields(rule, state);
+      if (mismatches === 1) {
+        notApplicable.push(rule);
+      }
+      // mismatches >= 2 는 아예 제외
+    });
+    matched.sort(function (a, b) { return b.score - a.score; });
+    return {
+      top3: matched.slice(0, 3).map(function (x) { return x.rule; }),
+      extended: matched.slice(3, 8).map(function (x) { return x.rule; }),
+      notApplicable: notApplicable
+    };
+  }
+
   // ───────────────────────── 내보내기 (테스트용) ─────────────────────────
 
   var api = {
@@ -58,7 +147,12 @@
     OPTIONAL_FIELDS: OPTIONAL_FIELDS,
     parseFilterState: parseFilterState,
     serializeFilterState: serializeFilterState,
-    hasRequiredFields: hasRequiredFields
+    hasRequiredFields: hasRequiredFields,
+    // 규칙 매칭
+    SEGMENT_AREA_WEIGHTS: SEGMENT_AREA_WEIGHTS,
+    ruleMatches: ruleMatches,
+    scoreRule: scoreRule,
+    classifyRules: classifyRules
   };
 
   global.CostPersonalizer = api;
