@@ -571,6 +571,86 @@
       </p>
     </header>
 
+    <section class="section" id="personalizerSection" aria-label="내 상황 필터">
+      <div class="personalizer">
+        <div class="personalizer-title">내 상황 알려주기</div>
+        <div class="personalizer-desc">아래 3~5개 질문이면 딱 맞는 가이드를 뽑아드려요.</div>
+
+        <div class="filter-row">
+          <div class="filter-label">가구 유형</div>
+          <div class="filter-chips" data-field="s">
+            <button type="button" class="chip" data-value="s1">청년 단독</button>
+            <button type="button" class="chip" data-value="s2">신혼 맞벌이</button>
+            <button type="button" class="chip" data-value="s3">신혼 외벌이</button>
+            <button type="button" class="chip" data-value="s4">유자녀 1자녀</button>
+            <button type="button" class="chip" data-value="s5">유자녀 다자녀</button>
+            <button type="button" class="chip" data-value="s6">중장년 단독</button>
+          </div>
+        </div>
+
+        <div class="filter-row">
+          <div class="filter-label">연봉 구간</div>
+          <div class="filter-chips" data-field="income">
+            <button type="button" class="chip" data-value="0-30">~3천만</button>
+            <button type="button" class="chip" data-value="30-50">3천~5천</button>
+            <button type="button" class="chip" data-value="50-70">5천~7천</button>
+            <button type="button" class="chip" data-value="70-100">7천~1억</button>
+            <button type="button" class="chip" data-value="100+">1억+</button>
+          </div>
+        </div>
+
+        <div class="filter-row">
+          <div class="filter-label">주거</div>
+          <div class="filter-chips" data-field="home">
+            <button type="button" class="chip" data-value="own">자가</button>
+            <button type="button" class="chip" data-value="jeonse">전세</button>
+            <button type="button" class="chip" data-value="rent">월세</button>
+          </div>
+        </div>
+
+        <button type="button" class="filter-more-toggle" id="filterMoreToggle" aria-expanded="false">
+          더 정확히 보려면 2문항 더 ▼
+        </button>
+
+        <div class="filter-more" id="filterMore">
+          <div class="filter-row">
+            <div class="filter-label">부양가족</div>
+            <div class="filter-chips" data-field="dep">
+              <button type="button" class="chip" data-value="0">0명</button>
+              <button type="button" class="chip" data-value="1">1명</button>
+              <button type="button" class="chip" data-value="2">2명</button>
+              <button type="button" class="chip" data-value="3">3명 이상</button>
+            </div>
+          </div>
+          <div class="filter-row">
+            <div class="filter-label">거주권역</div>
+            <div class="filter-chips" data-field="region">
+              <button type="button" class="chip" data-value="metro">수도권</button>
+              <button type="button" class="chip" data-value="nonmetro">비수도권</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-actions">
+          <button type="button" class="filter-btn" id="filterReset" data-ga="click_filter_reset" data-ga-loc="cost_hub_filter">🔄 초기화</button>
+          <button type="button" class="filter-btn" id="filterShare" data-ga="click_filter_share" data-ga-loc="cost_hub_filter">🔗 이 결과 공유</button>
+          <label class="filter-mask-checkbox">
+            <input type="checkbox" id="filterShareMask" checked>
+            민감정보(연봉·부양가족) 제외
+          </label>
+        </div>
+
+        <div class="privacy-notice">
+          🔒 이 정보는 URL에만 담깁니다. 사이트나 브라우저 저장소에 저장되지 않으며, 탭을 닫는 순간 우리 쪽에는 어떤 흔적도 남지 않습니다.
+        </div>
+      </div>
+
+      <div class="recommend-section empty" id="recommendSection">
+        <div class="recommend-title">내 맞춤 요약</div>
+        <div class="recommend-subtitle">👉 내 상황 3가지만 골라주시면 맞춤 추천이 여기에 나타나요</div>
+      </div>
+    </section>
+
     <section class="section">
       <h2 class="section-title">가구 유형별 빠른 가이드</h2>
       <p class="section-desc">본인 상황과 가장 가까운 카드를 선택하세요. 필터를 적용하면 내 유형이 강조됩니다.</p>
@@ -771,5 +851,10 @@
       제도 변경으로 일부 정보가 시점과 다를 수 있으며, 본 페이지의 이용으로 발생한 결과에 대해 운영자는 책임지지 않습니다.
     </div>
   </div>
+
+    <div class="toast" id="toast">링크가 복사되었어요</div>
+
+    <script src="js/cost-personalizer.js"></script>
+    <script src="js/cost-personalizer-init.js"></script>
 </body>
 </html>
