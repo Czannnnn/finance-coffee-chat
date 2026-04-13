@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>cost-personalizer tests</title>
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 20px; background: #fafafa; }
+    h1 { font-size: 20px; }
+    .test { padding: 6px 10px; margin: 4px 0; border-left: 4px solid #ccc; }
+    .pass { border-left-color: #3F8A5C; background: #f0f7f3; }
+    .fail { border-left-color: #B8473D; background: #fbf0ee; }
+    .summary { margin-top: 20px; padding: 10px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>cost-personalizer.js — 단위 테스트</h1>
+  <div id="results"></div>
+  <div class="summary" id="summary"></div>
+
+  <script src="cost-personalizer.js"></script>
+  <script>
+    var results = document.getElementById('results');
+    var summary = document.getElementById('summary');
+    var passed = 0, failed = 0;
+
+    function assert(name, actual, expected) {
+      var ok;
+      if (typeof expected === 'object') {
+        ok = JSON.stringify(actual) === JSON.stringify(expected);
+      } else {
+        ok = actual === expected;
+      }
+      var div = document.createElement('div');
+      div.className = 'test ' + (ok ? 'pass' : 'fail');
+      div.textContent = (ok ? '✓ ' : '✗ ') + name +
+        (ok ? '' : ' | expected: ' + JSON.stringify(expected) + ' | got: ' + JSON.stringify(actual));
+      results.appendChild(div);
+      if (ok) passed++; else failed++;
+    }
+
+    var P = window.CostPersonalizer;
+
+    // parseFilterState
+    assert('parseFilterState: 빈 쿼리 → 빈 상태',
+      P.parseFilterState(''),
+      {});
+    assert('parseFilterState: 전체 필드',
+      P.parseFilterState('?s=s4&income=50-70&home=rent&dep=1&region=metro'),
+      { s: 's4', income: '50-70', home: 'rent', dep: '1', region: 'metro' });
+    assert('parseFilterState: 잘못된 값 무시',
+      P.parseFilterState('?s=s9&income=banana&home=rent'),
+      { home: 'rent' });
+    assert('parseFilterState: 일부 필드만',
+      P.parseFilterState('?s=s1&home=rent'),
+      { s: 's1', home: 'rent' });
+
+    // serializeFilterState
+    assert('serializeFilterState: 전체',
+      P.serializeFilterState({ s: 's4', income: '50-70', home: 'rent', dep: '1', region: 'metro' }),
+      '?s=s4&income=50-70&home=rent&dep=1&region=metro');
+    assert('serializeFilterState: 민감정보 제외',
+      P.serializeFilterState({ s: 's4', income: '50-70', home: 'rent', dep: '1', region: 'metro' }, { excludeSensitive: true }),
+      '?s=s4&home=rent&region=metro');
+    assert('serializeFilterState: 빈 상태',
+      P.serializeFilterState({}),
+      '');
+
+    // hasRequiredFields
+    assert('hasRequiredFields: 충족',
+      P.hasRequiredFields({ s: 's1', income: '0-30', home: 'rent' }),
+      true);
+    assert('hasRequiredFields: 하나 부족',
+      P.hasRequiredFields({ s: 's1', home: 'rent' }),
+      false);
+    assert('hasRequiredFields: 빈 상태',
+      P.hasRequiredFields({}),
+      false);
+
+    // ruleMatches
+    var sampleRule = {
+      id: 'test-rule',
+      conditions: { home: ['rent'], income: ['0-30', '30-50'] }
+    };
+    assert('ruleMatches: 모든 조건 충족',
+      P.ruleMatches(sampleRule, { home: 'rent', income: '30-50' }),
+      true);
+    assert('ruleMatches: 한 조건 불일치',
+      P.ruleMatches(sampleRule, { home: 'own', income: '30-50' }),
+      false);
+    assert('ruleMatches: 조건 없는 규칙은 항상 매칭',
+      P.ruleMatches({ conditions: {} }, { s: 's1' }),
+      true);
+    assert('ruleMatches: 옵션 필드는 사용자 미선택 시 스킵',
+      P.ruleMatches({ conditions: { region: ['metro'] } }, { s: 's1' }),
+      true);
+
+    // scoreRule
+    var ruleA = { priority: 3, areaRef: '01-year-end-tax', conditions: { home: ['rent'] } };
+    var scoreA = P.scoreRule(ruleA, { s: 's4', home: 'rent' });
+    // priority 3 * 10 + segment weight (s4, area 01 = ★★★ = 3) = 33
+    assert('scoreRule: priority 3 + s4/01 가중치',
+      scoreA,
+      33);
+
+    var ruleB = { priority: 2, areaRef: '08-transport', conditions: { region: ['metro'] } };
+    var scoreB = P.scoreRule(ruleB, { s: 's1', region: 'metro' });
+    // priority 2 * 10 + optional match bonus 3 + s1/08 weight 3 = 26
+    assert('scoreRule: 옵션 매칭 보너스',
+      scoreB,
+      26);
+
+    // classifyRules
+    var rules = [
+      { id: 'r1', priority: 3, areaRef: '01-year-end-tax', conditions: { home: ['rent'] } },
+      { id: 'r2', priority: 3, areaRef: '07-public-support', conditions: { home: ['own'] } },
+      { id: 'r3', priority: 2, areaRef: '04-telecom', conditions: {} }
+    ];
+    var classified = P.classifyRules(rules, { s: 's4', income: '50-70', home: 'rent' });
+    assert('classifyRules: top3 개수',
+      classified.top3.length,
+      2); // r1 매칭, r3 매칭
+    assert('classifyRules: notApplicable 개수',
+      classified.notApplicable.length,
+      1); // r2 (home 정반대)
+    assert('classifyRules: top3 첫 규칙은 r1 (가중치 가장 높음)',
+      classified.top3[0].id,
+      'r1');
+
+    summary.textContent = '총 ' + (passed + failed) + '개 중 ' + passed + '개 통과, ' + failed + '개 실패';
+    summary.style.color = failed === 0 ? '#3F8A5C' : '#B8473D';
+  </script>
+</body>
+</html>
