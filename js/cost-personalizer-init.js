@@ -295,10 +295,81 @@
     });
   }
 
+  // ── 기존 섹션 렌더 (세그먼트 카드, 영역 카드, 매트릭스 행) ──
+  function renderExistingSections() {
+    renderSegmentCards();
+    renderAreaCards();
+    renderMatrixRow();
+    updateGaLocForCardsAndAreas();
+  }
+
+  function renderSegmentCards() {
+    $$('.segment-card').forEach(function (card) {
+      card.classList.remove('my-segment');
+      var href = card.getAttribute('href') || '';
+      // href 예: "cost/s4-parent-1child.html"
+      var match = href.match(/\/(s\d)-/);
+      var seg = match ? match[1] : null;
+      if (seg && seg === state.s) {
+        card.classList.add('my-segment');
+      }
+    });
+  }
+
+  function renderAreaCards() {
+    var grid = $('.area-grid');
+    if (!grid) return;
+    var cards = $$('.area-card', grid);
+    if (!state.s || !P.SEGMENT_AREA_WEIGHTS[state.s]) {
+      // 원래 순서로 복구
+      cards.sort(function (a, b) {
+        return Number(a.dataset.originalOrder) - Number(b.dataset.originalOrder);
+      });
+      cards.forEach(function (card) { grid.appendChild(card); });
+      return;
+    }
+    var weights = P.SEGMENT_AREA_WEIGHTS[state.s];
+    cards.sort(function (a, b) {
+      var areaA = (a.getAttribute('href') || '').match(/area-(\d{2})/);
+      var areaB = (b.getAttribute('href') || '').match(/area-(\d{2})/);
+      var wA = areaA ? (weights[areaA[1]] || 0) : 0;
+      var wB = areaB ? (weights[areaB[1]] || 0) : 0;
+      if (wA !== wB) return wB - wA;
+      // 동점이면 원래 순서 유지 (안정 정렬)
+      return Number(a.dataset.originalOrder) - Number(b.dataset.originalOrder);
+    });
+    cards.forEach(function (card) { grid.appendChild(card); });
+  }
+
+  function renderMatrixRow() {
+    $$('.matrix-table tbody tr').forEach(function (row) {
+      row.classList.remove('my-row');
+    });
+    if (!state.s) return;
+    var segIndex = { s1: 0, s2: 1, s3: 2, s4: 3, s5: 4, s6: 5 }[state.s];
+    if (segIndex == null) return;
+    var rows = $$('.matrix-table tbody tr');
+    if (rows[segIndex]) rows[segIndex].classList.add('my-row');
+  }
+
+  function updateGaLocForCardsAndAreas() {
+    var loc = P.hasRequiredFields(state) ? 'cost_hub_filtered' : 'cost_hub';
+    $$('.segment-card, .area-card').forEach(function (el) {
+      el.setAttribute('data-ga-loc', loc);
+    });
+  }
+
+  // 초기 영역 카드 순서 기록 (첫 렌더 전에 한 번만)
+  (function captureOriginalOrder() {
+    $$('.area-grid .area-card').forEach(function (card, i) {
+      card.dataset.originalOrder = String(i);
+    });
+  })();
+
   // ── 전체 렌더 ──
   function renderAll() {
     renderRecommendSection();
-    // Task 13에서 기존 섹션 재정렬 추가 예정
+    renderExistingSections();
   }
 
   // ── 이벤트 바인딩 ──
