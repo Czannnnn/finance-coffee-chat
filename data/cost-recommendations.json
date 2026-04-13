@@ -1,0 +1,197 @@
+{
+  "version": "2026-04",
+  "rules": [
+    {
+      "id": "rent-tax-credit",
+      "title": "월세세액공제 신청",
+      "savingHint": "연 최대 75만원 환급",
+      "areaRef": "01-year-end-tax",
+      "priority": 3,
+      "conditions": {
+        "home": ["rent"],
+        "income": ["0-30", "30-50", "50-70"]
+      },
+      "linkHref": "cost/area-01-year-end-tax.html",
+      "linkLabel": "자세히 →"
+    },
+    {
+      "id": "youth-rent-support",
+      "title": "청년월세 지원금",
+      "savingHint": "월 최대 20만원 · 12개월",
+      "areaRef": "07-public-support",
+      "priority": 3,
+      "conditions": {
+        "s": ["s1"],
+        "home": ["rent"],
+        "income": ["0-30", "30-50"]
+      },
+      "linkHref": "cost/area-07-public-support.html",
+      "linkLabel": "신청 경로 →"
+    },
+    {
+      "id": "k-pass-transit",
+      "title": "K-패스 교통카드 전환",
+      "savingHint": "월 1~2만원 환급",
+      "areaRef": "08-transport",
+      "priority": 2,
+      "conditions": {
+        "region": ["metro"]
+      },
+      "linkHref": "cost/area-08-transport.html",
+      "linkLabel": "가이드 →"
+    },
+    {
+      "id": "climate-card-metro",
+      "title": "기후동행카드 (수도권 정액권)",
+      "savingHint": "월 1~3만원 절감",
+      "areaRef": "08-transport",
+      "priority": 2,
+      "conditions": {
+        "region": ["metro"]
+      },
+      "linkHref": "cost/area-08-transport.html",
+      "linkLabel": "비교 →"
+    },
+    {
+      "id": "mvno-telecom",
+      "title": "알뜰폰(MVNO) 전환",
+      "savingHint": "월 3~5만원 절감",
+      "areaRef": "04-telecom",
+      "priority": 3,
+      "conditions": {},
+      "linkHref": "cost/area-04-telecom.html",
+      "linkLabel": "요금제 비교 →"
+    },
+    {
+      "id": "insurance-rebalance",
+      "title": "중복·과잉 보험 정리",
+      "savingHint": "월 5~15만원 절감",
+      "areaRef": "03-insurance",
+      "priority": 3,
+      "conditions": {},
+      "linkHref": "cost/area-03-insurance.html",
+      "linkLabel": "리밸런싱 가이드 →"
+    },
+    {
+      "id": "child-tax-credit",
+      "title": "자녀 세액공제 최대화",
+      "savingHint": "자녀당 연 15~30만원",
+      "areaRef": "01-year-end-tax",
+      "priority": 3,
+      "conditions": {
+        "dep": ["1", "2", "3"]
+      },
+      "linkHref": "cost/area-01-year-end-tax.html",
+      "linkLabel": "자세히 →"
+    },
+    {
+      "id": "multichild-utility-discount",
+      "title": "다자녀 공공요금 감면",
+      "savingHint": "전기·가스·수도 연 10~30만원",
+      "areaRef": "06-utilities-subscriptions",
+      "priority": 3,
+      "conditions": {
+        "s": ["s5"],
+        "dep": ["2", "3"]
+      },
+      "linkHref": "cost/area-06-utilities-subscriptions.html",
+      "linkLabel": "신청 방법 →"
+    },
+    {
+      "id": "credit-card-income-deduction",
+      "title": "신용카드 소득공제 한도 채우기",
+      "savingHint": "연 최대 30만원 환급",
+      "areaRef": "02-credit-cards",
+      "priority": 3,
+      "conditions": {
+        "income": ["30-50", "50-70", "70-100"]
+      },
+      "linkHref": "cost/area-02-credit-cards.html",
+      "linkLabel": "전략 →"
+    },
+    {
+      "id": "etf-fee-optimization",
+      "title": "ETF 총보수 최적화",
+      "savingHint": "장기 연 0.3~0.7% 수익률 개선",
+      "areaRef": "05-financial-fees",
+      "priority": 2,
+      "conditions": {
+        "income": ["50-70", "70-100", "100+"]
+      },
+      "linkHref": "cost/area-05-financial-fees.html",
+      "linkLabel": "비교 →"
+    },
+    {
+      "id": "newlywed-housing-loan",
+      "title": "신혼부부 디딤돌·버팀목 대출",
+      "savingHint": "금리 1~2% 우대",
+      "areaRef": "07-public-support",
+      "priority": 3,
+      "conditions": {
+        "s": ["s2", "s3"],
+        "home": ["jeonse", "rent"]
+      },
+      "linkHref": "cost/area-07-public-support.html",
+      "linkLabel": "조건 확인 →"
+    },
+    {
+      "id": "midlife-pension-deduction",
+      "title": "연금저축·IRP 세액공제 극대화",
+      "savingHint": "연 최대 148만원 환급",
+      "areaRef": "01-year-end-tax",
+      "priority": 3,
+      "conditions": {
+        "s": ["s6"],
+        "income": ["50-70", "70-100", "100+"]
+      },
+      "linkHref": "cost/area-01-year-end-tax.html",
+      "linkLabel": "가이드 →"
+    },
+    {
+      "id": "ott-subscription-audit",
+      "title": "OTT 중복 구독 정리",
+      "savingHint": "월 2~4만원 절감",
+      "areaRef": "06-utilities-subscriptions",
+      "priority": 2,
+      "conditions": {},
+      "linkHref": "cost/area-06-utilities-subscriptions.html",
+      "linkLabel": "체크리스트 →"
+    },
+    {
+      "id": "utility-discount-low-income",
+      "title": "저소득층 공과금 감면",
+      "savingHint": "연 10~40만원 절감",
+      "areaRef": "06-utilities-subscriptions",
+      "priority": 3,
+      "conditions": {
+        "income": ["0-30"]
+      },
+      "linkHref": "cost/area-06-utilities-subscriptions.html",
+      "linkLabel": "자격 확인 →"
+    },
+    {
+      "id": "high-income-isa",
+      "title": "ISA 계좌 절세 활용",
+      "savingHint": "연 200만원 비과세",
+      "areaRef": "05-financial-fees",
+      "priority": 2,
+      "conditions": {
+        "income": ["70-100", "100+"]
+      },
+      "linkHref": "cost/area-05-financial-fees.html",
+      "linkLabel": "시작 가이드 →"
+    },
+    {
+      "id": "homeowner-property-tax",
+      "title": "1주택자 재산세 감면 신청",
+      "savingHint": "연 10~30만원 절감",
+      "areaRef": "07-public-support",
+      "priority": 2,
+      "conditions": {
+        "home": ["own"]
+      },
+      "linkHref": "cost/area-07-public-support.html",
+      "linkLabel": "자세히 →"
+    }
+  ]
+}
