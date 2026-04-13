@@ -854,6 +854,18 @@
 
     <div class="toast" id="toast">링크가 복사되었어요</div>
 
+    <script>
+    // 전역 GA 클릭 위임 — 다른 페이지와 동일 패턴
+    document.addEventListener('click', function(e) {
+      var el = e.target.closest('[data-ga]');
+      if (!el) return;
+      if (typeof gtag !== 'function') return;
+      gtag('event', el.dataset.ga, {
+        click_text: el.dataset.gaText || el.textContent.trim().substring(0, 50),
+        click_location: el.dataset.gaLoc || 'unknown'
+      });
+    });
+    </script>
     <script src="js/cost-personalizer.js"></script>
     <script src="js/cost-personalizer-init.js"></script>
 </body>
