@@ -6,11 +6,11 @@
   <title>내 상황에 맞는 절약 가이드 - Finance Coffee Chat</title>
   <meta name="description" content="2026년 기준 나에게 딱 맞는 비용 절약 전략. 가구 유형·소득·주거 상황별 추천 액션을 3분 만에 확인하세요.">
   <meta name="keywords" content="비용 최적화, 절약, 연말정산, 카드 혜택, 보험 리밸런싱, 통신비, 금융수수료, 공과금, 지자체 지원금, 교통비, 가계부, 재테크">
-  <link rel="canonical" href="https://finance-coffee-chat.vercel.app/cost-optimization.html">
+  <link rel="canonical" href="https://finance-coffee-chat.vercel.app/cost-optimization">
   <meta property="og:title" content="내 상황에 맞는 절약 가이드 - Finance Coffee Chat">
   <meta property="og:description" content="내 상황 몇 가지만 고르면 딱 맞는 절약 액션 추천. 2026 최신 제도 반영.">
   <meta property="og:image" content="https://finance-coffee-chat.vercel.app/og-image.png">
-  <meta property="og:url" content="https://finance-coffee-chat.vercel.app/cost-optimization.html">
+  <meta property="og:url" content="https://finance-coffee-chat.vercel.app/cost-optimization">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ko_KR">
   <meta property="og:site_name" content="투자 커피챗">
@@ -82,6 +82,27 @@
     .intro {
       max-width: 760px; margin: 28px auto 0; font-size: 15px;
       color: var(--dark-roast); text-align: center; line-height: 1.8;
+    }
+    .onboarding-steps {
+      max-width: 760px; margin: 24px auto 0;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    }
+    .onboarding-step {
+      background: var(--white); border: 1px solid rgba(44,24,16,0.06);
+      border-radius: 12px; padding: 14px 16px; text-align: left;
+      box-shadow: 0 2px 10px rgba(44,24,16,0.04);
+      display: flex; gap: 10px; align-items: flex-start;
+    }
+    .onboarding-step .num {
+      flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+      background: var(--caramel); color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+    }
+    .onboarding-step .text { font-size: 12.5px; color: var(--dark-roast); line-height: 1.5; }
+    .onboarding-step .text strong { color: var(--espresso); font-weight: 700; }
+    @media (max-width: 600px) {
+      .onboarding-steps { grid-template-columns: 1fr; }
     }
     .section {
       margin-top: 48px;
@@ -513,7 +534,7 @@
     "@type": "WebPage",
     "name": "내 상황에 맞는 절약 가이드 - Finance Coffee Chat",
     "description": "2026년 기준 나에게 딱 맞는 비용 절약 전략. 가구 유형·소득·주거 상황별 추천 액션을 3분 만에 확인하세요.",
-    "url": "https://finance-coffee-chat.vercel.app/cost-optimization.html",
+    "url": "https://finance-coffee-chat.vercel.app/cost-optimization",
     "isPartOf": {
       "@type": "WebSite",
       "name": "Finance Coffee Chat",
@@ -537,7 +558,7 @@
         "@type": "ListItem",
         "position": 2,
         "name": "비용최적화",
-        "item": "https://finance-coffee-chat.vercel.app/cost-optimization.html"
+        "item": "https://finance-coffee-chat.vercel.app/cost-optimization"
       }
     ]
   }
@@ -546,15 +567,15 @@
 <body>
   <nav>
     <a href="/" data-ga="click_gnb" data-ga-text="홈" data-ga-loc="gnb">홈</a>
-    <a href="/portfolio.html" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
-    <a href="/asset.html" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
-    <a href="/ipo.html" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
-    <a href="/cost-optimization.html" data-ga="click_gnb" data-ga-text="비용최적화" data-ga-loc="gnb">비용최적화</a>
+    <a href="/portfolio" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
+    <a href="/asset" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
+    <a href="/ipo" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
+    <a href="/cost-optimization" data-ga="click_gnb" data-ga-text="비용최적화" data-ga-loc="gnb">비용최적화</a>
   </nav>
   <div class="subnav">
     <span class="subnav-label">비용최적화</span>
-    <a href="/cost-optimization.html" class="active" data-ga="click_subnav" data-ga-text="가이드" data-ga-loc="subnav">가이드</a>
-    <a href="/cost-simulation.html" data-ga="click_subnav" data-ga-text="시뮬레이션" data-ga-loc="subnav">시뮬레이션</a>
+    <a href="/cost-optimization" class="active" data-ga="click_subnav" data-ga-text="가이드" data-ga-loc="subnav">가이드</a>
+    <a href="/cost-simulation" data-ga="click_subnav" data-ga-text="시뮬레이션" data-ga-loc="subnav">시뮬레이션</a>
   </div>
 
   <div class="container">
@@ -569,6 +590,20 @@
         아래 필터에서 내 상황 몇 가지만 골라주시면, 나한테 해당되는 제도와 액션만 추려서 보여드려요.
         2026년 최신 제도와 세법을 반영했습니다.
       </p>
+      <div class="onboarding-steps">
+        <div class="onboarding-step">
+          <div class="num">1</div>
+          <div class="text"><strong>내 상황 3가지 선택</strong><br>가구·연봉·주거 칩 클릭 (30초)</div>
+        </div>
+        <div class="onboarding-step">
+          <div class="num">2</div>
+          <div class="text"><strong>맞춤 추천 TOP 3 확인</strong><br>자동으로 우선순위 액션 제안</div>
+        </div>
+        <div class="onboarding-step">
+          <div class="num">3</div>
+          <div class="text"><strong>세부 가이드로 바로 이동</strong><br>실제 신청 절차·절감액까지</div>
+        </div>
+      </div>
     </header>
 
     <section class="section" id="personalizerSection" aria-label="내 상황 필터">
@@ -655,37 +690,37 @@
       <h2 class="section-title">가구 유형별 빠른 가이드</h2>
       <p class="section-desc">본인 상황과 가장 가까운 카드를 선택하세요. 필터를 적용하면 내 유형이 강조됩니다.</p>
       <div class="segment-grid">
-        <a class="segment-card" href="cost/s1-youth-single.html" data-ga="click_segment" data-ga-text="S1" data-ga-loc="cost_hub">
+        <a class="segment-card" href="cost/s1-youth-single" data-ga="click_segment" data-ga-text="S1" data-ga-loc="cost_hub">
           <span class="tag">S1 Youth Single</span>
           <h3>청년 단독</h3>
           <p>만 19~34세 1인 가구. 낮은 소득·높은 월세 부담, 청년 전용 제도 활용이 핵심.</p>
           <span class="card-cta">빠른 가이드 →</span>
         </a>
-        <a class="segment-card" href="cost/s2-newlywed-dual.html" data-ga="click_segment" data-ga-text="S2" data-ga-loc="cost_hub">
+        <a class="segment-card" href="cost/s2-newlywed-dual" data-ga="click_segment" data-ga-text="S2" data-ga-loc="cost_hub">
           <span class="tag">S2 Newlywed Dual</span>
           <h3>신혼 맞벌이</h3>
           <p>결혼 7년 이내 맞벌이 부부. 부부 합산 공제와 금융상품 분산 전략이 승부처.</p>
           <span class="card-cta">빠른 가이드 →</span>
         </a>
-        <a class="segment-card" href="cost/s3-newlywed-single-income.html" data-ga="click_segment" data-ga-text="S3" data-ga-loc="cost_hub">
+        <a class="segment-card" href="cost/s3-newlywed-single-income" data-ga="click_segment" data-ga-text="S3" data-ga-loc="cost_hub">
           <span class="tag">S3 Newlywed Single</span>
           <h3>신혼 외벌이</h3>
           <p>결혼 7년 이내 외벌이. 배우자 공제·보험 재설계로 현금흐름을 지켜내는 단계.</p>
           <span class="card-cta">빠른 가이드 →</span>
         </a>
-        <a class="segment-card" href="cost/s4-parent-1child.html" data-ga="click_segment" data-ga-text="S4" data-ga-loc="cost_hub">
+        <a class="segment-card" href="cost/s4-parent-1child" data-ga="click_segment" data-ga-text="S4" data-ga-loc="cost_hub">
           <span class="tag">S4 Parent 1 Child</span>
           <h3>유자녀 1자녀</h3>
           <p>자녀 한 명 육아 가정. 자녀세액공제·교육비·돌봄 지원금을 빠짐없이 챙기기.</p>
           <span class="card-cta">빠른 가이드 →</span>
         </a>
-        <a class="segment-card" href="cost/s5-parent-multichild.html" data-ga="click_segment" data-ga-text="S5" data-ga-loc="cost_hub">
+        <a class="segment-card" href="cost/s5-parent-multichild" data-ga="click_segment" data-ga-text="S5" data-ga-loc="cost_hub">
           <span class="tag">S5 Multi Child</span>
           <h3>유자녀 다자녀</h3>
           <p>2명 이상 다자녀 가정. 다자녀 우대·공공요금 감면·교육 지원의 극대화 전략.</p>
           <span class="card-cta">빠른 가이드 →</span>
         </a>
-        <a class="segment-card" href="cost/s6-mid-single.html" data-ga="click_segment" data-ga-text="S6" data-ga-loc="cost_hub">
+        <a class="segment-card" href="cost/s6-mid-single" data-ga="click_segment" data-ga-text="S6" data-ga-loc="cost_hub">
           <span class="tag">S6 Mid Single</span>
           <h3>중장년 단독</h3>
           <p>만 35세 이상 1인 가구. 노후 대비 세액공제·보험 리밸런싱이 가장 급한 숙제.</p>
@@ -698,49 +733,49 @@
       <h2 class="section-title">나에게 맞는 절약 카드</h2>
       <p class="section-desc">각 절약 영역의 심층 자료 — 필터를 적용하면 내 우선순위 순으로 재정렬됩니다.</p>
       <div class="area-grid">
-        <a class="area-card" href="cost/area-01-year-end-tax.html" data-ga="click_area" data-ga-text="01" data-ga-loc="cost_hub">
+        <a class="area-card" href="cost/area-01-year-end-tax" data-ga="click_area" data-ga-text="01_연말정산" data-ga-loc="cost_hub">
           <span class="num">Area 01</span>
           <h3>연말정산</h3>
           <p>2026 개정 세법 반영. 소득·세액공제 한도와 신고 팁 총정리.</p>
           <span class="card-cta">자세히 보기 →</span>
         </a>
-        <a class="area-card" href="cost/area-02-credit-cards.html" data-ga="click_area" data-ga-text="02" data-ga-loc="cost_hub">
+        <a class="area-card" href="cost/area-02-credit-cards" data-ga="click_area" data-ga-text="02_카드"           data-ga-loc="cost_hub">
           <span class="num">Area 02</span>
           <h3>카드 혜택</h3>
           <p>소득공제 한도 충족과 실적 최적화, 체크카드 병행 전략.</p>
           <span class="card-cta">자세히 보기 →</span>
         </a>
-        <a class="area-card" href="cost/area-03-insurance.html" data-ga="click_area" data-ga-text="03" data-ga-loc="cost_hub">
+        <a class="area-card" href="cost/area-03-insurance" data-ga="click_area" data-ga-text="03_보험"           data-ga-loc="cost_hub">
           <span class="num">Area 03</span>
           <h3>보험 리밸런싱</h3>
           <p>중복·과잉 보장 제거, 실손·정기보험 중심 최소 포트폴리오.</p>
           <span class="card-cta">자세히 보기 →</span>
         </a>
-        <a class="area-card" href="cost/area-04-telecom.html" data-ga="click_area" data-ga-text="04" data-ga-loc="cost_hub">
+        <a class="area-card" href="cost/area-04-telecom" data-ga="click_area" data-ga-text="04_통신"           data-ga-loc="cost_hub">
           <span class="num">Area 04</span>
           <h3>통신비</h3>
           <p>알뜰폰·결합할인·선택약정 비교로 월 5~7만 원 절감.</p>
           <span class="card-cta">자세히 보기 →</span>
         </a>
-        <a class="area-card" href="cost/area-05-financial-fees.html" data-ga="click_area" data-ga-text="05" data-ga-loc="cost_hub">
+        <a class="area-card" href="cost/area-05-financial-fees" data-ga="click_area" data-ga-text="05_금융수수료"     data-ga-loc="cost_hub">
           <span class="num">Area 05</span>
           <h3>금융상품 수수료</h3>
           <p>ETF 총보수·증권 수수료·환전 스프레드까지 한눈에 비교.</p>
           <span class="card-cta">자세히 보기 →</span>
         </a>
-        <a class="area-card" href="cost/area-06-utilities-subscriptions.html" data-ga="click_area" data-ga-text="06" data-ga-loc="cost_hub">
+        <a class="area-card" href="cost/area-06-utilities-subscriptions" data-ga="click_area" data-ga-text="06_공과금구독"     data-ga-loc="cost_hub">
           <span class="num">Area 06</span>
           <h3>공과금·구독</h3>
           <p>전기·가스·수도 감면 제도와 OTT 중복 구독 정리법.</p>
           <span class="card-cta">자세히 보기 →</span>
         </a>
-        <a class="area-card" href="cost/area-07-public-support.html" data-ga="click_area" data-ga-text="07" data-ga-loc="cost_hub">
+        <a class="area-card" href="cost/area-07-public-support" data-ga="click_area" data-ga-text="07_지원금"         data-ga-loc="cost_hub">
           <span class="num">Area 07</span>
           <h3>국가·지자체 지원금</h3>
           <p>청년·신혼·육아·중장년 지원금 신청 조건 및 수급 노하우.</p>
           <span class="card-cta">자세히 보기 →</span>
         </a>
-        <a class="area-card" href="cost/area-08-transport.html" data-ga="click_area" data-ga-text="08" data-ga-loc="cost_hub">
+        <a class="area-card" href="cost/area-08-transport" data-ga="click_area" data-ga-text="08_교통"           data-ga-loc="cost_hub">
           <span class="num">Area 08</span>
           <h3>교통비</h3>
           <p>K-패스·기후동행카드·알뜰교통 비교, 통근 유형별 최적 선택.</p>

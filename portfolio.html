@@ -6,11 +6,11 @@
   <title>나의 Portfolio - Finance Coffee Chat</title>
   <meta name="description" content="포트폴리오 자산배분 현황을 한눈에. 주식, 채권, 현금, 연금 등 자산군별 비중과 목표 대비 현황을 차트로 확인하세요.">
   <meta name="keywords" content="포트폴리오, 자산배분, 자산관리, 투자 현황, 주식 비중, 채권 비중, 자산군">
-  <link rel="canonical" href="https://finance-coffee-chat.vercel.app/portfolio.html">
+  <link rel="canonical" href="https://finance-coffee-chat.vercel.app/portfolio">
   <meta property="og:title" content="나의 Portfolio - Finance Coffee Chat">
   <meta property="og:description" content="포트폴리오 자산배분 현황을 한눈에. 주식, 채권, 현금, 연금 등 자산군별 비중과 목표 대비 현황을 차트로 확인하세요.">
   <meta property="og:image" content="https://finance-coffee-chat.vercel.app/og-image.png">
-  <meta property="og:url" content="https://finance-coffee-chat.vercel.app/portfolio.html">
+  <meta property="og:url" content="https://finance-coffee-chat.vercel.app/portfolio">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ko_KR">
   <meta property="og:site_name" content="투자 커피챗">
@@ -164,9 +164,19 @@
     .btn-save {
       flex: 2; padding: 14px; border: none; border-radius: 10px; background: var(--espresso);
       color: var(--cream); font-family: 'Noto Sans KR', sans-serif; font-size: 14px;
-      font-weight: 600; cursor: pointer; transition: all 0.2s;
+      font-weight: 600; cursor: pointer; transition: all 0.2s; position: relative;
     }
     .btn-save:hover { background: var(--dark-roast); }
+    @keyframes savePulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(196,133,60,0.55); }
+      50%     { box-shadow: 0 0 0 10px rgba(196,133,60,0); }
+    }
+    .btn-save.pulse { animation: savePulse 1.6s ease-out 2; }
+    .save-hint {
+      text-align: center; font-size: 12.5px; color: var(--medium-roast);
+      margin: 12px 0 -4px; font-weight: 500; letter-spacing: 0.2px;
+    }
+    .save-hint strong { color: var(--caramel); font-weight: 700; }
     .talk-section {
       background: var(--white); border-radius: 16px; padding: 28px 24px;
       border: 1px solid rgba(44,24,16,0.05); box-shadow: 0 2px 20px rgba(44,24,16,0.04);
@@ -205,7 +215,7 @@
     "@type": "WebPage",
     "name": "나의 Portfolio - Finance Coffee Chat",
     "description": "포트폴리오 자산배분 현황을 한눈에. 주식, 채권, 현금, 연금 등 자산군별 비중과 목표 대비 현황을 차트로 확인하세요.",
-    "url": "https://finance-coffee-chat.vercel.app/portfolio.html",
+    "url": "https://finance-coffee-chat.vercel.app/portfolio",
     "isPartOf": {
       "@type": "WebSite",
       "name": "Finance Coffee Chat",
@@ -229,7 +239,7 @@
         "@type": "ListItem",
         "position": 2,
         "name": "포트폴리오",
-        "item": "https://finance-coffee-chat.vercel.app/portfolio.html"
+        "item": "https://finance-coffee-chat.vercel.app/portfolio"
       }
     ]
   }
@@ -238,10 +248,10 @@
 <body>
   <nav>
     <a href="/" data-ga="click_gnb" data-ga-text="홈" data-ga-loc="gnb">홈</a>
-    <a href="/portfolio.html" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
-    <a href="/asset.html" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
-    <a href="/ipo.html" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
-    <a href="/cost-optimization.html" data-ga="click_gnb" data-ga-text="비용최적화" data-ga-loc="gnb">비용최적화</a>
+    <a href="/portfolio" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
+    <a href="/asset" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
+    <a href="/ipo" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
+    <a href="/cost-optimization" data-ga="click_gnb" data-ga-text="비용최적화" data-ga-loc="gnb">비용최적화</a>
   </nav>
 
   <div class="container">
@@ -307,9 +317,10 @@
         </div>
       </div>
 
+      <div class="save-hint">☕ 오른쪽 <strong>이미지로 저장</strong> 버튼으로 내 포트폴리오를 커피챗 공유용 이미지로 만들 수 있어요</div>
       <div class="chart-actions">
         <button class="btn-back" onclick="goBack()" data-ga="click_edit_chart" data-ga-text="수정하기" data-ga-loc="portfolio_chart">← 수정하기</button>
-        <button class="btn-save" onclick="saveChart()" data-ga="click_save_chart" data-ga-text="이미지로 저장" data-ga-loc="portfolio_chart">이미지로 저장</button>
+        <button class="btn-save" id="btnSave" onclick="saveChart()" data-ga="click_save_chart" data-ga-text="이미지로 저장" data-ga-loc="portfolio_chart">이미지로 저장</button>
       </div>
     </div>
   </div>
@@ -460,6 +471,13 @@
             <span class="legend-pct">${pct}%</span>
           </div>`;
       });
+
+      const saveBtn = document.getElementById('btnSave');
+      if (saveBtn) {
+        saveBtn.classList.remove('pulse');
+        void saveBtn.offsetWidth;
+        saveBtn.classList.add('pulse');
+      }
     }
 
     function goBack() {

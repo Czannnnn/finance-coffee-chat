@@ -6,11 +6,11 @@
   <title>공모주 청약 가이드 - Finance Coffee Chat</title>
   <meta name="description" content="공모주 청약 완전 가이드. 증권사 계좌 개설부터 청약 방법, 배정 방식, 상장일 매도 전략까지 단계별로 알려드립니다.">
   <meta name="keywords" content="공모주 가이드, 청약 방법, 공모주 투자 방법, 균등배정, 비례배정, 증권사 계좌">
-  <link rel="canonical" href="https://finance-coffee-chat.vercel.app/ipo-guide.html">
+  <link rel="canonical" href="https://finance-coffee-chat.vercel.app/ipo-guide">
   <meta property="og:title" content="공모주 청약 가이드 - Finance Coffee Chat">
   <meta property="og:description" content="공모주 청약 완전 가이드. 증권사 계좌 개설부터 청약 방법, 배정 방식, 상장일 매도 전략까지 단계별로 알려드립니다.">
   <meta property="og:image" content="https://finance-coffee-chat.vercel.app/og-image.png">
-  <meta property="og:url" content="https://finance-coffee-chat.vercel.app/ipo-guide.html">
+  <meta property="og:url" content="https://finance-coffee-chat.vercel.app/ipo-guide">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ko_KR">
   <meta property="og:site_name" content="투자 커피챗">
@@ -94,19 +94,24 @@
 
     /* TOC */
     .toc {
-      background: var(--white); border-radius: 16px; padding: 24px;
+      background: var(--white); border-radius: 16px; padding: 16px 20px;
       border: 1px solid rgba(44,24,16,0.05); box-shadow: 0 2px 20px rgba(44,24,16,0.04);
       margin-bottom: 32px;
+      position: -webkit-sticky; position: sticky; top: 12px; z-index: 20;
     }
-    .toc-title { font-size: 13px; font-weight: 600; color: var(--medium-roast); margin-bottom: 12px; letter-spacing: 0.5px; }
+    .toc-title { font-size: 12px; font-weight: 600; color: var(--medium-roast); margin-bottom: 8px; letter-spacing: 0.5px; }
+    .toc-links { display: flex; flex-wrap: wrap; gap: 8px 16px; }
     .toc a {
-      display: block; padding: 6px 0; font-size: 14px; color: var(--espresso);
-      text-decoration: none; font-weight: 400; transition: color 0.15s;
-      border-bottom: 1px solid rgba(44,24,16,0.04);
+      display: inline-flex; align-items: center; padding: 4px 0; font-size: 13px;
+      color: var(--espresso); text-decoration: none; font-weight: 500; transition: color 0.15s;
     }
-    .toc a:last-child { border-bottom: none; }
     .toc a:hover { color: var(--caramel); }
-    .toc .num { color: var(--caramel); font-weight: 600; margin-right: 8px; }
+    .toc .num { color: var(--caramel); font-weight: 700; margin-right: 6px; font-size: 12px; }
+    @media (max-width: 600px) {
+      .toc { padding: 12px 16px; top: 0; border-radius: 0 0 12px 12px; }
+      .toc-links { gap: 4px 12px; }
+      .toc a { font-size: 12.5px; }
+    }
 
     /* Sections */
     .section {
@@ -226,7 +231,7 @@
     "@type": "WebPage",
     "name": "공모주 청약 가이드 - Finance Coffee Chat",
     "description": "공모주 청약 완전 가이드. 증권사 계좌 개설부터 청약 방법, 배정 방식, 상장일 매도 전략까지 단계별로 알려드립니다.",
-    "url": "https://finance-coffee-chat.vercel.app/ipo-guide.html",
+    "url": "https://finance-coffee-chat.vercel.app/ipo-guide",
     "isPartOf": {
       "@type": "WebSite",
       "name": "Finance Coffee Chat",
@@ -250,13 +255,13 @@
         "@type": "ListItem",
         "position": 2,
         "name": "공모주",
-        "item": "https://finance-coffee-chat.vercel.app/ipo.html"
+        "item": "https://finance-coffee-chat.vercel.app/ipo"
       },
       {
         "@type": "ListItem",
         "position": 3,
         "name": "청약 가이드",
-        "item": "https://finance-coffee-chat.vercel.app/ipo-guide.html"
+        "item": "https://finance-coffee-chat.vercel.app/ipo-guide"
       }
     ]
   }
@@ -265,16 +270,16 @@
 <body>
   <nav>
     <a href="/" data-ga="click_gnb" data-ga-text="홈" data-ga-loc="gnb">홈</a>
-    <a href="/portfolio.html" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
-    <a href="/asset.html" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
-    <a href="/ipo.html" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
-    <a href="/cost-optimization.html" data-ga="click_gnb" data-ga-text="비용최적화" data-ga-loc="gnb">비용최적화</a>
+    <a href="/portfolio" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
+    <a href="/asset" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
+    <a href="/ipo" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
+    <a href="/cost-optimization" data-ga="click_gnb" data-ga-text="비용최적화" data-ga-loc="gnb">비용최적화</a>
   </nav>
   <div class="subnav">
     <span class="subnav-label">공모주</span>
-    <a href="/ipo-guide.html" class="active" data-ga="click_subnav" data-ga-text="청약 가이드" data-ga-loc="subnav">청약 가이드</a>
-    <a href="/ipo.html" data-ga="click_subnav" data-ga-text="캘린더" data-ga-loc="subnav">캘린더</a>
-    <a href="/ipo-analysis.html" data-ga="click_subnav" data-ga-text="종목 분석" data-ga-loc="subnav">종목 분석</a>
+    <a href="/ipo-guide" class="active" data-ga="click_subnav" data-ga-text="청약 가이드" data-ga-loc="subnav">청약 가이드</a>
+    <a href="/ipo" data-ga="click_subnav" data-ga-text="캘린더" data-ga-loc="subnav">캘린더</a>
+    <a href="/ipo-analysis" data-ga="click_subnav" data-ga-text="종목 분석" data-ga-loc="subnav">종목 분석</a>
   </div>
 
   <div class="container">
@@ -285,12 +290,14 @@
       <div class="divider"></div>
     </div>
 
-    <!-- 목차 -->
+    <!-- 목차 (sticky) -->
     <div class="toc">
-      <div class="toc-title">목차</div>
-      <a href="#what" data-ga="click_toc" data-ga-loc="guide_toc"><span class="num">01</span> 공모주 청약이란?</a>
-      <a href="#terms" data-ga="click_toc" data-ga-loc="guide_toc"><span class="num">02</span> 핵심 용어 사전</a>
-      <a href="#steps" data-ga="click_toc" data-ga-loc="guide_toc"><span class="num">03</span> 청약 절차 7단계</a>
+      <div class="toc-title">📑 바로가기</div>
+      <div class="toc-links">
+        <a href="#what" data-ga="click_toc" data-ga-text="공모주 청약이란" data-ga-loc="guide_toc"><span class="num">01</span> 공모주 청약이란?</a>
+        <a href="#terms" data-ga="click_toc" data-ga-text="핵심 용어" data-ga-loc="guide_toc"><span class="num">02</span> 핵심 용어 사전</a>
+        <a href="#steps" data-ga="click_toc" data-ga-text="청약 절차" data-ga-loc="guide_toc"><span class="num">03</span> 청약 절차 7단계</a>
+      </div>
     </div>
 
     <!-- 1. 공모주 청약이란 -->
@@ -382,7 +389,7 @@
           <div class="step-num">2</div>
           <div class="step-content">
             <div class="step-title">청약 일정 확인</div>
-            <div class="step-desc"><a href="/ipo.html" style="color:var(--caramel);font-weight:600;" data-ga="click_inline_link" data-ga-loc="guide_content">공모주 캘린더</a>에서 수요예측일, 청약일(보통 2일간), 환불일, 상장 예정일을 확인합니다. 일정이 겹치는 종목이 있으면 자금 배분 계획을 세워야 합니다.</div>
+            <div class="step-desc"><a href="/ipo" style="color:var(--caramel);font-weight:600;" data-ga="click_inline_link" data-ga-loc="guide_content">공모주 캘린더</a>에서 수요예측일, 청약일(보통 2일간), 환불일, 상장 예정일을 확인합니다. 일정이 겹치는 종목이 있으면 자금 배분 계획을 세워야 합니다.</div>
           </div>
         </div>
 
@@ -390,7 +397,7 @@
           <div class="step-num">3</div>
           <div class="step-content">
             <div class="step-title">종목 분석 (4대 조건 확인)</div>
-            <div class="step-desc"><a href="/ipo-analysis.html" style="color:var(--caramel);font-weight:600;" data-ga="click_inline_link" data-ga-loc="guide_content">종목 분석 페이지</a>에서 4대 조건(기관 경쟁률, 확정 공모가, 의무확약, 유통물량)과 분석 등급(S~D)을 확인합니다. 등급이 높을수록 상장 후 수익 가능성이 높은 경향이 있습니다.</div>
+            <div class="step-desc"><a href="/ipo-analysis" style="color:var(--caramel);font-weight:600;" data-ga="click_inline_link" data-ga-loc="guide_content">종목 분석 페이지</a>에서 4대 조건(기관 경쟁률, 확정 공모가, 의무확약, 유통물량)과 분석 등급(S~D)을 확인합니다. 등급이 높을수록 상장 후 수익 가능성이 높은 경향이 있습니다.</div>
           </div>
         </div>
 
@@ -444,8 +451,8 @@
     <div class="cta-area">
       <p>공모주 청약을 시작해 볼까요?</p>
       <div class="cta-btns">
-        <a href="/ipo.html" class="cta-btn primary" data-ga="click_cta" data-ga-text="청약 일정 확인" data-ga-loc="guide_cta">&#128197; 청약 일정 확인</a>
-        <a href="/ipo-analysis.html" class="cta-btn secondary" data-ga="click_cta" data-ga-text="종목 분석 보기" data-ga-loc="guide_cta">&#128270; 종목 분석 보기</a>
+        <a href="/ipo" class="cta-btn primary" data-ga="click_cta" data-ga-text="청약 일정 확인" data-ga-loc="guide_cta">&#128197; 청약 일정 확인</a>
+        <a href="/ipo-analysis" class="cta-btn secondary" data-ga="click_cta" data-ga-text="종목 분석 보기" data-ga-loc="guide_cta">&#128270; 종목 분석 보기</a>
       </div>
     </div>
 
