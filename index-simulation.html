@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIRE 시뮬레이터 | 언제 경제적 자유? — 투자 커피챗</title>
+  <meta name="description" content="현재 자산·월 적립·수익률·목표만 넣으면 FIRE 달성 시점과 자산 곡선을 즉시 계산. 100% 로컬 시뮬레이션.">
+  <meta name="keywords" content="FIRE 계산기, 경제적 자유 시뮬레이터, 복리 계산, 월 적립 시뮬, 자산 프로젝션, 지수투자 시뮬">
+  <link rel="canonical" href="https://finance-coffee-chat.vercel.app/index-simulation">
+  <meta property="og:title" content="FIRE 시뮬레이터 | 언제 경제적 자유?">
+  <meta property="og:description" content="현재 자산·월 적립·수익률·목표만 넣으면 FIRE 달성 시점과 자산 곡선 즉시 계산.">
+  <meta property="og:image" content="https://finance-coffee-chat.vercel.app/og-image.png">
+  <meta property="og:url" content="https://finance-coffee-chat.vercel.app/index-simulation">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="투자 커피챗">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="FIRE 시뮬레이터 | 언제 경제적 자유?">
+  <meta name="twitter:description" content="현재 자산·월 적립·수익률만으로 FIRE 달성 시점 즉시 계산.">
+  <meta name="twitter:image" content="https://finance-coffee-chat.vercel.app/og-image.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZEG7YQ80S"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --espresso: #2C1810; --dark-roast: #3D2317; --medium-roast: #6B3A2A;
+      --caramel: #C4853C; --caramel-light: rgba(196,133,60,0.12);
+      --cream: #F5EDE0; --latte: #E8DBC5; --oat-milk: #FAF6F0; --white: #FFFDF9;
+      --green: #3F8A5C; --blue: #3A6EA5; --red-soft: #B8473D;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif; background: var(--oat-milk);
+      color: var(--espresso); line-height: 1.6;
+      -webkit-font-smoothing: antialiased; min-height: 100vh;
+    }
+    nav { background: var(--espresso); padding: 12px 16px; text-align: center; }
+    nav a {
+      color: var(--cream); margin: 0 12px; text-decoration: none;
+      font-size: 14px; font-weight: 500; letter-spacing: 0.3px;
+    }
+    nav a:hover { color: var(--caramel); }
+    .subnav {
+      background: var(--dark-roast); padding: 8px 16px;
+      text-align: center; border-bottom: 1px solid rgba(196,133,60,0.15);
+    }
+    .subnav-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--caramel); margin-right: 12px;
+    }
+    .subnav a {
+      color: var(--latte); margin: 0 8px; text-decoration: none;
+      font-size: 13px; padding: 4px 8px; border-radius: 6px;
+    }
+    .subnav a:hover { color: var(--caramel); }
+    .subnav a.active { color: var(--cream); background: rgba(196,133,60,0.2); font-weight: 600; }
+    @media (max-width: 600px) {
+      .subnav a { font-size: 12px; margin: 0 4px; }
+      nav a { margin: 0 6px; font-size: 12px; }
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 48px 28px 64px; }
+    .header { text-align: center; margin-bottom: 28px; }
+    .badge {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase; color: var(--caramel);
+      background: var(--caramel-light); padding: 5px 16px; border-radius: 20px;
+      margin-bottom: 16px; border: 1px solid rgba(196,133,60,0.2);
+    }
+    .header h1 {
+      font-family: 'Playfair Display', serif; font-size: 32px;
+      font-weight: 700; color: var(--espresso); letter-spacing: -0.5px;
+    }
+    .header h1 em { font-style: italic; color: var(--medium-roast); }
+    .header .subtitle {
+      margin-top: 10px; font-size: 14px; color: var(--medium-roast); font-weight: 500;
+    }
+    .divider {
+      width: 40px; height: 2px; background: var(--caramel);
+      margin: 20px auto 0; border-radius: 1px;
+    }
+    .privacy-notice {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: rgba(63,138,92,0.08); border: 1px solid rgba(63,138,92,0.2);
+      border-radius: 10px; padding: 14px 16px;
+      margin-bottom: 32px; font-size: 13px; color: var(--dark-roast);
+    }
+    .privacy-icon { font-size: 20px; flex-shrink: 0; }
+    .privacy-text strong { display: block; color: var(--green); margin-bottom: 4px; }
+    .privacy-text p { font-size: 12px; color: var(--medium-roast); line-height: 1.6; }
+    .section { margin-top: 40px; }
+    .section-title {
+      font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700;
+      color: var(--espresso); margin-bottom: 6px;
+    }
+    .section-desc { font-size: 13px; color: var(--medium-roast); margin-bottom: 20px; }
+    .sim-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 24px; margin-top: 24px;
+    }
+    @media (max-width: 768px) { .sim-grid { grid-template-columns: 1fr; } }
+    .sim-form {
+      background: var(--white); border-radius: 14px; padding: 24px;
+      border: 1px solid rgba(196,133,60,0.2);
+      box-shadow: 0 4px 14px rgba(44,24,16,0.04);
+    }
+    .sim-form h3 {
+      font-family: 'Playfair Display', serif; font-size: 18px;
+      margin-bottom: 16px; color: var(--espresso);
+    }
+    .form-row { margin-bottom: 16px; }
+    .form-row label {
+      display: block; font-size: 13px; font-weight: 600;
+      color: var(--dark-roast); margin-bottom: 6px;
+    }
+    .form-row .hint { font-size: 11px; color: var(--medium-roast); font-weight: 400; }
+    .form-row input {
+      width: 100%; padding: 10px 12px;
+      border: 1px solid rgba(44,24,16,0.15); border-radius: 8px;
+      background: var(--oat-milk); font-size: 14px; font-weight: 500;
+      color: var(--espresso);
+    }
+    .form-row input:focus {
+      outline: none; border-color: var(--caramel);
+      background: var(--white); box-shadow: 0 0 0 2px var(--caramel-light);
+    }
+    .sim-result {
+      background: linear-gradient(180deg, rgba(196,133,60,0.1) 0%, var(--white) 100%);
+      border: 1px solid rgba(196,133,60,0.3);
+      border-radius: 14px; padding: 24px;
+    }
+    .result-status {
+      font-size: 14px; font-weight: 700; color: var(--green);
+      margin-bottom: 4px;
+    }
+    .result-msg {
+      font-size: 13px; color: var(--medium-roast); margin-bottom: 20px;
+      line-height: 1.7;
+    }
+    .result-cards {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+      margin-bottom: 18px;
+    }
+    .result-card {
+      background: var(--white); border-radius: 10px; padding: 14px;
+      border: 1px solid rgba(44,24,16,0.06); text-align: center;
+    }
+    .result-card .label {
+      font-size: 11px; color: var(--medium-roast);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;
+    }
+    .result-card .value {
+      font-family: 'Playfair Display', serif; font-size: 24px;
+      font-weight: 700; color: var(--espresso);
+    }
+    .result-card .value .unit { font-size: 13px; color: var(--medium-roast); margin-left: 4px; font-weight: 400; font-family: 'Noto Sans KR', sans-serif; }
+    .btn-share {
+      padding: 8px 14px; border: 1px solid var(--caramel);
+      background: var(--white); color: var(--caramel);
+      border-radius: 8px; font-size: 13px; cursor: pointer; font-weight: 600;
+    }
+    .btn-share:hover { background: var(--caramel); color: var(--white); }
+    .chart-card {
+      background: var(--white); border-radius: 14px; padding: 20px;
+      border: 1px solid rgba(44,24,16,0.08); margin-top: 20px;
+      box-shadow: 0 2px 12px rgba(44,24,16,0.04);
+    }
+    .chart-card h4 {
+      font-family: 'Playfair Display', serif; font-size: 16px;
+      color: var(--espresso); margin-bottom: 4px;
+    }
+    .chart-card .hint { font-size: 12px; color: var(--medium-roast); margin-bottom: 14px; }
+    .chart-wrap { position: relative; height: 320px; }
+    .chart-wrap.donut { height: 260px; }
+    .toast {
+      position: fixed; bottom: 30px; left: 50%;
+      transform: translateX(-50%); background: var(--espresso);
+      color: var(--white); padding: 10px 20px;
+      border-radius: 10px; font-size: 13px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease; z-index: 1000;
+    }
+    .toast.visible { opacity: 1; }
+    .next-step {
+      margin-top: 48px; padding: 24px;
+      background: linear-gradient(135deg, var(--caramel-light), rgba(58,110,165,0.06));
+      border: 1px solid rgba(196,133,60,0.25); border-radius: 14px; text-align: center;
+    }
+    .next-step h3 {
+      font-family: 'Playfair Display', serif; font-size: 20px;
+      color: var(--espresso); margin-bottom: 8px;
+    }
+    .next-step p { font-size: 14px; color: var(--medium-roast); margin-bottom: 16px; }
+    .next-step .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .next-step .cta-btn {
+      display: inline-block; padding: 10px 20px;
+      background: var(--caramel); color: var(--white);
+      border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 14px;
+    }
+    .next-step .cta-btn:hover { background: var(--medium-roast); }
+    .next-step .cta-btn.secondary {
+      background: var(--white); color: var(--caramel); border: 1px solid var(--caramel);
+    }
+    .footer-note {
+      margin-top: 40px; padding: 20px; background: var(--cream);
+      border-radius: 12px; font-size: 12px;
+      color: var(--medium-roast); line-height: 1.7;
+    }
+    .footer-note strong { color: var(--dark-roast); }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "FIRE 시뮬레이터 - Finance Coffee Chat",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" },
+    "description": "현재 자산·월 적립·수익률·목표만 넣으면 FIRE 달성 시점과 자산 곡선을 즉시 계산. 100% 로컬 실행.",
+    "url": "https://finance-coffee-chat.vercel.app/index-simulation"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "홈", "item": "https://finance-coffee-chat.vercel.app/" },
+      { "@type": "ListItem", "position": 2, "name": "지수투자", "item": "https://finance-coffee-chat.vercel.app/index-investing" },
+      { "@type": "ListItem", "position": 3, "name": "FIRE 시뮬레이션", "item": "https://finance-coffee-chat.vercel.app/index-simulation" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav>
+    <a href="/" data-ga="click_gnb" data-ga-text="홈" data-ga-loc="gnb">홈</a>
+    <a href="/portfolio" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
+    <a href="/asset" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
+    <a href="/index-investing" data-ga="click_gnb" data-ga-text="지수투자" data-ga-loc="gnb">지수투자</a>
+    <a href="/tax-optimization" data-ga="click_gnb" data-ga-text="절세" data-ga-loc="gnb">절세</a>
+    <a href="/ipo" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
+    <a href="/cost-optimization" data-ga="click_gnb" data-ga-text="생활비 줄이기" data-ga-loc="gnb">생활비 줄이기</a>
+  </nav>
+  <div class="subnav">
+    <span class="subnav-label">지수투자</span>
+    <a href="/index-investing" data-ga="click_subnav" data-ga-text="허브" data-ga-loc="subnav">허브</a>
+    <a href="/index-simulation" class="active" data-ga="click_subnav" data-ga-text="FIRE 시뮬레이션" data-ga-loc="subnav">FIRE 시뮬레이션</a>
+  </div>
+
+  <div class="container">
+    <header class="header">
+      <div class="badge">FIRE Simulator</div>
+      <h1>언제 <em>경제적 자유</em>에 도달할까</h1>
+      <div class="subtitle">현재 자산 · 월 적립 · 수익률 · 목표만으로 즉시 계산</div>
+      <div class="divider"></div>
+    </header>
+
+    <div class="privacy-notice" role="note" aria-label="개인정보 보호 고지">
+      <div class="privacy-icon" aria-hidden="true">🔒</div>
+      <div class="privacy-text">
+        <strong>100% 로컬 시뮬레이션 — 입력값은 이 화면을 벗어나지 않습니다</strong>
+        <p>입력한 모든 값은 브라우저 메모리에서만 계산되며, 어떤 서버로도 전송되지 않습니다. URL로 결과를 공유할 때만 파라미터가 링크에 담기며, 민감도가 낮은 값(수익률·목표)만 기본 포함됩니다.</p>
+      </div>
+    </div>
+
+    <section class="section">
+      <h2 class="section-title">시뮬레이션 입력</h2>
+      <p class="section-desc">왼쪽 폼에 값을 입력하면 오른쪽 결과와 아래 자산 곡선이 즉시 업데이트됩니다. 월복리 기준.</p>
+      <div class="sim-grid">
+        <div class="sim-form">
+          <h3>📝 내 투자 현황</h3>
+          <div class="form-row">
+            <label for="inpStart">현재 순자산 (억원) <span class="hint">부채 제외 순자산</span></label>
+            <input type="number" id="inpStart" min="0" step="0.1" value="2.0">
+          </div>
+          <div class="form-row">
+            <label for="inpMonthly">월 적립액 (만원) <span class="hint">투자에 쓰는 월 평균</span></label>
+            <input type="number" id="inpMonthly" min="0" step="10" value="200">
+          </div>
+          <div class="form-row">
+            <label for="inpReturn">연 기대수익률 (%) <span class="hint">S&P500 장기 10~12%, 균형형 7~8%</span></label>
+            <input type="number" id="inpReturn" min="-10" max="30" step="0.5" value="7">
+          </div>
+          <div class="form-row">
+            <label for="inpTarget">목표 순자산 (억원) <span class="hint">FIRE 목표: 연 생활비 × 25</span></label>
+            <input type="number" id="inpTarget" min="0.1" step="0.5" value="10">
+          </div>
+          <div class="form-row">
+            <label for="inpAge">현재 나이 (만 나이)</label>
+            <input type="number" id="inpAge" min="15" max="80" step="1" value="35">
+          </div>
+          <button type="button" class="btn-share" id="btnShare" data-ga="click_filter_share" data-ga-text="fire_sim" data-ga-loc="fire_sim">🔗 이 시뮬 공유</button>
+        </div>
+
+        <div class="sim-result">
+          <div class="result-status" id="resultStatus">계산 중…</div>
+          <div class="result-msg" id="resultMessage"></div>
+          <div class="result-cards">
+            <div class="result-card">
+              <div class="label">달성까지</div>
+              <div class="value"><span id="resultYears">0</span><span class="unit">년</span></div>
+            </div>
+            <div class="result-card">
+              <div class="label">달성 시 나이</div>
+              <div class="value"><span id="resultAge">0</span><span class="unit">세</span></div>
+            </div>
+            <div class="result-card">
+              <div class="label">목표 시점 자산</div>
+              <div class="value"><span id="resultFinal">0</span><span class="unit">억</span></div>
+            </div>
+            <div class="result-card">
+              <div class="label">추가 필요 금액</div>
+              <div class="value"><span id="resultGap">0</span><span class="unit">억</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="chart-card">
+        <h4>📈 연도별 예상 자산 곡선</h4>
+        <p class="hint">현재 나이부터 목표 달성까지의 월복리 프로젝션. 녹색 점선이 목표 금액입니다.</p>
+        <div class="chart-wrap">
+          <canvas id="lineChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="chart-card">
+        <h4>🎯 FIRE 진척도별 권장 자산배분</h4>
+        <p class="hint">현재 순자산/목표 순자산 비율에 따라 자동 추천. 진척도가 높아질수록 배당·채권 비중을 확대합니다. <strong>(참고 예시 · 투자 권유 아님)</strong></p>
+        <div class="chart-wrap donut">
+          <canvas id="donutChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <div class="next-step">
+      <h3>💡 계좌별 배치까지 최적화하려면</h3>
+      <p>같은 자산도 IRP·연저펀·ISA 중 어느 계좌에 담느냐에 따라 연 수익률 0.3~1.5%p 차이가 납니다.</p>
+      <div class="cta-row">
+        <a href="/index-investing#allocation-matrix" class="cta-btn" data-ga="click_next_step_cta" data-ga-text="fire_sim→allocation" data-ga-loc="fire_sim_footer">계좌 배치 원칙 →</a>
+        <a href="/tax-optimization" class="cta-btn secondary" data-ga="click_next_step_cta" data-ga-text="fire_sim→tax" data-ga-loc="fire_sim_footer">세금 최적화 →</a>
+        <a href="/portfolio" class="cta-btn secondary" data-ga="click_next_step_cta" data-ga-text="fire_sim→portfolio" data-ga-loc="fire_sim_footer">포트폴리오 차트 →</a>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      <strong>계산 전제:</strong> 월복리, 세금·인플레이션 미반영(명목 수익률 기준). 연 기대수익률은 고정 가정이며 실제 수익률은 연도별로 변동합니다.
+      월 적립액은 매월 말 투입 가정. 최대 50년 프로젝션.<br>
+      <strong>법적 고지:</strong> 본 시뮬레이션은 교육·참고용이며 투자 성과를 예측하지 않습니다. 과거 수익률이 미래 수익을 보장하지 않습니다.
+      개인별 세금·수수료·환율 등 변수가 제외되어 있으며, 실제 달성 시점은 달라질 수 있습니다. 투자 결정은 본인 책임 하에 하십시오.
+    </div>
+  </div>
+
+  <div class="toast" id="toast">링크가 복사되었어요</div>
+
+  <script>
+  document.addEventListener('click', function(e) {
+    var el = e.target.closest('[data-ga]');
+    if (!el) return;
+    if (typeof gtag !== 'function') return;
+    gtag('event', el.dataset.ga, {
+      click_text: el.dataset.gaText || el.textContent.trim().substring(0, 50),
+      click_location: el.dataset.gaLoc || 'unknown'
+    });
+  });
+  </script>
+  <script src="js/index-simulator.js"></script>
+</body>
+</html>

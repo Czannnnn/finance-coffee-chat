@@ -1,0 +1,265 @@
+{
+  "version": "2026-04",
+  "rules": [
+    {
+      "id": "pension-credit-max-low",
+      "title": "연저펀 600 + IRP 300 완납 — 148.5만 세액공제",
+      "savingHint": "연 148.5만 환급 (소득 5500↓ 16.5%)",
+      "areaRef": "accounts-pension",
+      "priority": 3,
+      "conditions": {
+        "salary": ["0-55", "55-70"],
+        "hasDC": ["no"]
+      },
+      "linkHref": "tax-optimization.html#accounts",
+      "linkLabel": "한도 자세히 →"
+    },
+    {
+      "id": "pension-credit-max-high",
+      "title": "연저펀 600 + IRP 300 완납 — 118.8만 세액공제",
+      "savingHint": "연 118.8만 환급 (소득 5500↑ 13.2%)",
+      "areaRef": "accounts-pension",
+      "priority": 3,
+      "conditions": {
+        "salary": ["70-100", "100-150", "150+"],
+        "hasDC": ["no"]
+      },
+      "linkHref": "tax-optimization.html#accounts",
+      "linkLabel": "한도 자세히 →"
+    },
+    {
+      "id": "pension-credit-dc",
+      "title": "DC 가입 — 연저펀 600만 우선, IRP 대체",
+      "savingHint": "연 79.2~99만 환급 + DC 계좌 운용",
+      "areaRef": "accounts-pension",
+      "priority": 3,
+      "conditions": {
+        "hasDC": ["yes"]
+      },
+      "linkHref": "tax-optimization.html#retirement",
+      "linkLabel": "DC 전략 →"
+    },
+    {
+      "id": "isa-opening",
+      "title": "ISA 계좌 개설 — 연 2000만 납입 분리과세",
+      "savingHint": "만기 200만 비과세 + 초과 9.9% 저율",
+      "areaRef": "accounts-isa",
+      "priority": 3,
+      "conditions": {
+        "ts": ["ts1", "ts2", "ts3"]
+      },
+      "linkHref": "tax-optimization.html#accounts",
+      "linkLabel": "ISA 가이드 →"
+    },
+    {
+      "id": "isa-conversion-bonus",
+      "title": "ISA 만기 60일 내 연금전환 → 300만 추가 공제",
+      "savingHint": "최대 49.5만 추가 환급 (소득 5500↓)",
+      "areaRef": "isa-bonus-conversion",
+      "priority": 3,
+      "conditions": {
+        "ts": ["ts2", "ts3", "ts4"]
+      },
+      "linkHref": "tax-optimization.html#accounts",
+      "linkLabel": "전환 절차 →"
+    },
+    {
+      "id": "furusato-general",
+      "title": "고향사랑기부 10만 — 100% 세액공제 + 답례품",
+      "savingHint": "확정 3만 답례품 + 10만 환급",
+      "areaRef": "year-end-furusato",
+      "priority": 3,
+      "conditions": {},
+      "linkHref": "tax-optimization.html#year-end",
+      "linkLabel": "기부 절차 →"
+    },
+    {
+      "id": "year-end-pension-schedule",
+      "title": "연금 납입 연초 몰아넣기 → 복리 기간 +12개월",
+      "savingHint": "장기 +3~5% 복리 효과",
+      "areaRef": "year-end-schedule",
+      "priority": 2,
+      "conditions": {},
+      "linkHref": "tax-optimization.html#year-end",
+      "linkLabel": "스케줄 가이드 →"
+    },
+    {
+      "id": "monthly-rent-credit",
+      "title": "월세 세액공제 신청 (연 75만 한도)",
+      "savingHint": "연 최대 75만 환급",
+      "areaRef": "year-end-rent",
+      "priority": 3,
+      "conditions": {
+        "salary": ["0-55", "55-70"]
+      },
+      "linkHref": "cost/area-01-year-end-tax.html",
+      "linkLabel": "영수증 체크리스트 →"
+    },
+    {
+      "id": "medical-expense-receipt",
+      "title": "의료비 세액공제 — 연 총급여 3% 초과분 15%",
+      "savingHint": "의료비 많으면 연 10~50만 환급",
+      "areaRef": "year-end-medical",
+      "priority": 2,
+      "conditions": {
+        "dep": ["1", "2", "3"]
+      },
+      "linkHref": "tax-optimization.html#year-end",
+      "linkLabel": "자세히 →"
+    },
+    {
+      "id": "donation-credit",
+      "title": "기부금 세액공제 극대화",
+      "savingHint": "종교·공익 기부 15~30% 환급",
+      "areaRef": "year-end-donation",
+      "priority": 2,
+      "conditions": {},
+      "linkHref": "tax-optimization.html#year-end",
+      "linkLabel": "기부금 팁 →"
+    },
+    {
+      "id": "dc-active-management",
+      "title": "DC 계좌 — 원리금보장 → ETF 혼합 전환",
+      "savingHint": "장기 +5~7%p 수익률 개선",
+      "areaRef": "retirement-dc",
+      "priority": 3,
+      "conditions": {
+        "hasDC": ["yes"]
+      },
+      "linkHref": "tax-optimization.html#retirement",
+      "linkLabel": "DC 운용법 →"
+    },
+    {
+      "id": "db-long-tenure",
+      "title": "대기업·장기근속 → DB 유지가 유리",
+      "savingHint": "임금 상승률 > DC 수익률이면 DB 우위",
+      "areaRef": "retirement-db",
+      "priority": 2,
+      "conditions": {
+        "tenure": ["15-25", "25+"],
+        "salary": ["70-100", "100-150", "150+"]
+      },
+      "linkHref": "tax-optimization.html#retirement",
+      "linkLabel": "DC vs DB 계산 →"
+    },
+    {
+      "id": "dc-favor-short-tenure",
+      "title": "이직 많음·짧은 근속 → DC 선택 + ETF 운용",
+      "savingHint": "개인이 운용하면 장기 +2~4%p",
+      "areaRef": "retirement-dc",
+      "priority": 2,
+      "conditions": {
+        "tenure": ["<5", "5-15"]
+      },
+      "linkHref": "tax-optimization.html#retirement",
+      "linkLabel": "DC 전략 →"
+    },
+    {
+      "id": "overseas-etf-loss-harvest",
+      "title": "해외 ETF 12월 손실 상계 — 양도세 22% 절감",
+      "savingHint": "연 50~200만 환급 (손실액 × 22%)",
+      "areaRef": "loss-harvest-overseas",
+      "priority": 2,
+      "conditions": {
+        "salary": ["70-100", "100-150", "150+"]
+      },
+      "linkHref": "tax-optimization.html#year-end",
+      "linkLabel": "상계 절차 →"
+    },
+    {
+      "id": "general-broker-250",
+      "title": "일반 위탁 양도세 기본공제 250만 매년 리셋",
+      "savingHint": "매년 55만 절세 가능",
+      "areaRef": "accounts-general",
+      "priority": 2,
+      "conditions": {
+        "ts": ["ts2", "ts3", "ts6"]
+      },
+      "linkHref": "tax-optimization.html#accounts",
+      "linkLabel": "매도 전략 →"
+    },
+    {
+      "id": "high-income-full-stack",
+      "title": "고소득 풀스택 — ISA 2000 + 연저펀 600 + IRP 300",
+      "savingHint": "연 118.8만 + ISA 과세이연",
+      "areaRef": "accounts-pension",
+      "priority": 3,
+      "conditions": {
+        "salary": ["100-150", "150+"]
+      },
+      "linkHref": "tax-optimization.html#accounts",
+      "linkLabel": "풀스택 전략 →"
+    },
+    {
+      "id": "dual-income-matching",
+      "title": "맞벌이 부부 각자 900만 — 합산 237만 환급",
+      "savingHint": "부부 합산 연 237만 환급",
+      "areaRef": "accounts-pension",
+      "priority": 3,
+      "conditions": {
+        "ts": ["ts6"]
+      },
+      "linkHref": "tax-optimization.html#accounts",
+      "linkLabel": "부부 설계 →"
+    },
+    {
+      "id": "near-retirement-shift",
+      "title": "퇴직 근접 — 연금 인출 시나리오 설계",
+      "savingHint": "연금소득세 3.3~5.5%",
+      "areaRef": "retirement-withdrawal",
+      "priority": 3,
+      "conditions": {
+        "ts": ["ts4"]
+      },
+      "linkHref": "tax-optimization.html#retirement",
+      "linkLabel": "인출 설계 →"
+    },
+    {
+      "id": "biz-owner-noti",
+      "title": "개인사업자 — 노란우산공제 + 기업소득세 최적",
+      "savingHint": "연 300~500만 소득공제",
+      "areaRef": "accounts-noti",
+      "priority": 3,
+      "conditions": {
+        "ts": ["ts5"]
+      },
+      "linkHref": "tax-optimization.html#accounts",
+      "linkLabel": "사업자 가이드 →"
+    },
+    {
+      "id": "low-income-dongjeok",
+      "title": "저소득·청년 — 청년형 장기집합투자증권 저축",
+      "savingHint": "연 40% 소득공제, 한도 600만",
+      "areaRef": "accounts-youth",
+      "priority": 3,
+      "conditions": {
+        "ts": ["ts1"],
+        "salary": ["0-55"]
+      },
+      "linkHref": "tax-optimization.html#accounts",
+      "linkLabel": "자격 확인 →"
+    },
+    {
+      "id": "year-end-planning-early",
+      "title": "연말정산 사전 계획 — 10월부터 부족분 점검",
+      "savingHint": "연 50~100만 추가 환급 가능",
+      "areaRef": "year-end-planning",
+      "priority": 2,
+      "conditions": {},
+      "linkHref": "tax-optimization.html#year-end",
+      "linkLabel": "10월 체크리스트 →"
+    },
+    {
+      "id": "credit-card-cashback-optimize",
+      "title": "카드 소득공제 한도 채우기 (급여 25% 초과분)",
+      "savingHint": "연 최대 30만 환급",
+      "areaRef": "year-end-card",
+      "priority": 2,
+      "conditions": {
+        "salary": ["0-55", "55-70", "70-100"]
+      },
+      "linkHref": "cost/area-02-credit-cards.html",
+      "linkLabel": "카드 전략 →"
+    }
+  ]
+}

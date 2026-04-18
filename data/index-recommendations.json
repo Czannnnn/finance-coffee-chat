@@ -1,0 +1,227 @@
+{
+  "version": "2026-04",
+  "rules": [
+    {
+      "id": "qqq-core-accumulator",
+      "title": "ACE 나스닥100 코어 — 연저펀/IRP 배치",
+      "savingHint": "장기 연 12~15% 기대수익, 세액공제 최대화",
+      "areaRef": "00-nasdaq100",
+      "priority": 3,
+      "conditions": {
+        "is": ["is1", "is2", "is6"],
+        "age": ["20s", "30s"]
+      },
+      "linkHref": "index-investing.html#assets-nasdaq100",
+      "linkLabel": "ETF 비교 →"
+    },
+    {
+      "id": "sp500-core-balanced",
+      "title": "ACE 미국S&P500 — 전체 코어 50% 배치",
+      "savingHint": "장기 연 10~12%, 500대 기업 분산",
+      "areaRef": "00-sp500",
+      "priority": 3,
+      "conditions": {
+        "is": ["is3", "is4", "is6"]
+      },
+      "linkHref": "index-investing.html#assets-sp500",
+      "linkLabel": "상세 →"
+    },
+    {
+      "id": "schd-dividend-isa",
+      "title": "미국배당다우존스(ACE 402970) → ISA 우선 배치",
+      "savingHint": "분리과세 9.9% + 배당 3~4% 재투자",
+      "areaRef": "00-dividend",
+      "priority": 3,
+      "conditions": {
+        "is": ["is4", "is5"],
+        "age": ["40s", "50s", "60+"]
+      },
+      "linkHref": "index-investing.html#assets-dividend",
+      "linkLabel": "계좌 배치 →"
+    },
+    {
+      "id": "bond-hybrid-irp",
+      "title": "SOL 미국배당미국채혼합50 — IRP 안전자산 30% 대체",
+      "savingHint": "IRP 의무 안전자산 + 배당 2.5%",
+      "areaRef": "00-bond",
+      "priority": 3,
+      "conditions": {
+        "dc": ["no"],
+        "age": ["30s", "40s", "50s", "60+"]
+      },
+      "linkHref": "index-investing.html#assets-bond",
+      "linkLabel": "IRP 구성 →"
+    },
+    {
+      "id": "gold-macro-hedge",
+      "title": "TIGER 골드플러스 — 연저펀에서 10~15% 편입",
+      "savingHint": "주식 급락 시 헤지, 2008년 +25%",
+      "areaRef": "00-gold",
+      "priority": 2,
+      "conditions": {
+        "is": ["is3", "is4", "is5"]
+      },
+      "linkHref": "index-investing.html#assets-gold",
+      "linkLabel": "헤지 전략 →"
+    },
+    {
+      "id": "korea-valueup",
+      "title": "코리아 밸류업 ETF — ISA에서 5~10% 전술 배분",
+      "savingHint": "일본 선례, 2024~2026 +134.9% (KVI)",
+      "areaRef": "00-value",
+      "priority": 2,
+      "conditions": {
+        "is": ["is2", "is3", "is4"]
+      },
+      "linkHref": "index-investing.html#assets-value",
+      "linkLabel": "상세 →"
+    },
+    {
+      "id": "drawdown-response-isa",
+      "title": "나스닥100 -8/-15/-25% 3단계 매수 플랜 (ISA)",
+      "savingHint": "평균단가 ~15% 개선",
+      "areaRef": "00-drawdown",
+      "priority": 2,
+      "conditions": {
+        "is": ["is2", "is4", "is6"]
+      },
+      "linkHref": "index-investing.html#drawdown",
+      "linkLabel": "3단계 플랜 →"
+    },
+    {
+      "id": "dc-default-mix",
+      "title": "기업 DC 계좌 — 나스닥·S&P 혼합 70/30",
+      "savingHint": "원리금보장 대신 ETF 운용으로 장기 +6%p",
+      "areaRef": "00-nasdaq100",
+      "priority": 3,
+      "conditions": {
+        "dc": ["yes"]
+      },
+      "linkHref": "index-investing.html#dc-strategy",
+      "linkLabel": "DC 운용법 →"
+    },
+    {
+      "id": "early-monthly-dca",
+      "title": "월 적립식(DCA) — 매월 같은 날 자동매수",
+      "savingHint": "변동성 완화, 감정 배제",
+      "areaRef": "00-sp500",
+      "priority": 3,
+      "conditions": {
+        "is": ["is1"],
+        "age": ["20s", "30s"]
+      },
+      "linkHref": "index-investing.html#why-index",
+      "linkLabel": "자동화 가이드 →"
+    },
+    {
+      "id": "preservation-shift",
+      "title": "FIRE 85% 도달 — 주식 비중 60%로 축소 + 배당 비중 ↑",
+      "savingHint": "변동성 방어, 인출 대비",
+      "areaRef": "00-dividend",
+      "priority": 3,
+      "conditions": {
+        "is": ["is5"],
+        "fireProgress": ["85+"]
+      },
+      "linkHref": "index-investing.html#allocation-matrix",
+      "linkLabel": "리밸런싱 →"
+    },
+    {
+      "id": "risk-balanced-matrix",
+      "title": "균형형 배분 — 나스닥 30 / S&P 30 / 배당 20 / 채권 15 / 금 5",
+      "savingHint": "MDD -35% 억제, 장기 연 9%",
+      "areaRef": "00-sp500",
+      "priority": 2,
+      "conditions": {
+        "riskTol": ["balanced"]
+      },
+      "linkHref": "index-investing.html#allocation-matrix",
+      "linkLabel": "배분 상세 →"
+    },
+    {
+      "id": "risk-aggressive-matrix",
+      "title": "공격형 배분 — 나스닥 50 / S&P 30 / 밸류업 10 / 드로다운 10",
+      "savingHint": "장기 연 12%+ 기대, MDD -50%",
+      "areaRef": "00-nasdaq100",
+      "priority": 2,
+      "conditions": {
+        "riskTol": ["aggressive"]
+      },
+      "linkHref": "index-investing.html#allocation-matrix",
+      "linkLabel": "배분 상세 →"
+    },
+    {
+      "id": "risk-conservative-matrix",
+      "title": "보수형 배분 — S&P 25 / 배당 35 / 채권 30 / 금 10",
+      "savingHint": "MDD -20% 억제, 장기 연 6~7%",
+      "areaRef": "00-bond",
+      "priority": 2,
+      "conditions": {
+        "riskTol": ["conservative"]
+      },
+      "linkHref": "index-investing.html#allocation-matrix",
+      "linkLabel": "배분 상세 →"
+    },
+    {
+      "id": "family-dividend-coverage",
+      "title": "가족 커버드콜(KODEX 441640) — 월 배당 현금흐름",
+      "savingHint": "월 배당 0.7~1% 배분",
+      "areaRef": "00-dividend",
+      "priority": 2,
+      "conditions": {
+        "is": ["is3"]
+      },
+      "linkHref": "index-investing.html#assets-dividend",
+      "linkLabel": "커버드콜 가이드 →"
+    },
+    {
+      "id": "senior-lowvol",
+      "title": "저변동 배당 + 채권혼합 — 60대+ 인출 단계",
+      "savingHint": "연금소득세 3.3~5.5%",
+      "areaRef": "00-bond",
+      "priority": 3,
+      "conditions": {
+        "age": ["60+"]
+      },
+      "linkHref": "index-investing.html#allocation-matrix",
+      "linkLabel": "인출 전략 →"
+    },
+    {
+      "id": "dc-heavy-rebalance",
+      "title": "DC 중심 — 우리사주 + DC + ISA 3축 리밸런싱",
+      "savingHint": "회사 할인매수 + ETF 운용",
+      "areaRef": "00-nasdaq100",
+      "priority": 2,
+      "conditions": {
+        "is": ["is6"],
+        "dc": ["yes"]
+      },
+      "linkHref": "index-investing.html#dc-strategy",
+      "linkLabel": "3축 운용법 →"
+    },
+    {
+      "id": "fire-mid-progress",
+      "title": "FIRE 60~85% — 나스닥 비중 축소 + 배당 비중 확대",
+      "savingHint": "수익 보존 국면 진입",
+      "areaRef": "00-dividend",
+      "priority": 2,
+      "conditions": {
+        "fireProgress": ["60-85"]
+      },
+      "linkHref": "index-investing.html#allocation-matrix",
+      "linkLabel": "리밸런싱 →"
+    },
+    {
+      "id": "fire-early-progress",
+      "title": "FIRE 0~30% — 적립기, 나스닥 70% 공격 배분",
+      "savingHint": "시간 레버리지 극대화",
+      "areaRef": "00-nasdaq100",
+      "priority": 2,
+      "conditions": {
+        "fireProgress": ["0-30"]
+      },
+      "linkHref": "index-investing.html#allocation-matrix",
+      "linkLabel": "공격 배분 →"
+    }
+  ]
+}

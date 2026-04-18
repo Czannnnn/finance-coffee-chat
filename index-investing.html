@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>지수투자 FIRE 로드맵 | 투자 커피챗</title>
+  <meta name="description" content="나스닥100·S&P500·배당다우존스 4대 지수로 FIRE 달성하기. 연령·DC가입·FIRE진척도별 맞춤 포폴 추천과 시뮬레이션을 3분 만에.">
+  <meta name="keywords" content="지수투자, 패시브 투자, ETF, 나스닥100, S&P500, SCHD, 배당다우존스, 자산배분, FIRE, 경제적 자유, 연금저축 ETF, IRP 운용, DC 운용">
+  <link rel="canonical" href="https://finance-coffee-chat.vercel.app/index-investing">
+  <meta property="og:title" content="지수투자 FIRE 로드맵 | 투자 커피챗">
+  <meta property="og:description" content="4대 지수 ETF로 FIRE 달성하기. 연령·DC·진척도별 맞춤 포폴 추천과 시뮬레이터.">
+  <meta property="og:image" content="https://finance-coffee-chat.vercel.app/og-image.png">
+  <meta property="og:url" content="https://finance-coffee-chat.vercel.app/index-investing">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="투자 커피챗">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="지수투자 FIRE 로드맵 | 투자 커피챗">
+  <meta name="twitter:description" content="4대 지수 ETF로 FIRE 달성하기. 연령·DC·진척도별 맞춤 포폴 추천과 시뮬레이터.">
+  <meta name="twitter:image" content="https://finance-coffee-chat.vercel.app/og-image.png">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZEG7YQ80S"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --espresso: #2C1810;
+      --dark-roast: #3D2317;
+      --medium-roast: #6B3A2A;
+      --caramel: #C4853C;
+      --caramel-light: rgba(196,133,60,0.12);
+      --cream: #F5EDE0;
+      --latte: #E8DBC5;
+      --oat-milk: #FAF6F0;
+      --white: #FFFDF9;
+      --green: #3F8A5C;
+      --blue: #3A6EA5;
+      --red-soft: #B8473D;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--oat-milk);
+      color: var(--espresso);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    nav { background: var(--espresso); padding: 12px 16px; text-align: center; }
+    nav a {
+      color: var(--cream); margin: 0 12px; text-decoration: none;
+      font-size: 14px; font-weight: 500; letter-spacing: 0.3px;
+      transition: color 0.15s;
+    }
+    nav a:hover { color: var(--caramel); }
+    .subnav {
+      background: var(--dark-roast); padding: 8px 16px; text-align: center;
+      border-bottom: 1px solid rgba(196,133,60,0.15);
+    }
+    .subnav-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--caramel); margin-right: 12px;
+    }
+    .subnav a {
+      color: var(--latte); margin: 0 8px; text-decoration: none;
+      font-size: 13px; font-weight: 400; letter-spacing: 0.3px;
+      transition: color 0.15s; padding: 4px 8px; border-radius: 6px;
+    }
+    .subnav a:hover { color: var(--caramel); }
+    .subnav a.active { color: var(--cream); background: rgba(196,133,60,0.2); font-weight: 600; }
+    @media (max-width: 600px) {
+      .subnav a { font-size: 12px; margin: 0 4px; }
+    }
+    .container {
+      max-width: 1100px; margin: 0 auto; padding: 48px 28px 64px;
+    }
+    .header { text-align: center; margin-bottom: 40px; }
+    .badge {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase; color: var(--caramel);
+      background: var(--caramel-light); padding: 5px 16px; border-radius: 20px;
+      margin-bottom: 16px; border: 1px solid rgba(196,133,60,0.2);
+    }
+    .header h1 {
+      font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700;
+      color: var(--espresso); letter-spacing: -0.5px;
+    }
+    .header h1 em { font-style: italic; color: var(--medium-roast); }
+    .header .subtitle {
+      margin-top: 10px; font-size: 14px; color: var(--medium-roast); font-weight: 500;
+    }
+    .divider {
+      width: 40px; height: 2px; background: var(--caramel);
+      margin: 20px auto 0; border-radius: 1px;
+    }
+    .intro {
+      max-width: 760px; margin: 28px auto 0; font-size: 15px;
+      color: var(--dark-roast); text-align: center; line-height: 1.8;
+    }
+    .onboarding-steps {
+      max-width: 760px; margin: 24px auto 0;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    }
+    .onboarding-step {
+      background: var(--white); border: 1px solid rgba(44,24,16,0.06);
+      border-radius: 12px; padding: 14px 16px; text-align: left;
+      box-shadow: 0 2px 10px rgba(44,24,16,0.04);
+      display: flex; gap: 10px; align-items: flex-start;
+    }
+    .onboarding-step .num {
+      flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%;
+      background: var(--caramel); color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+    }
+    .onboarding-step .text { font-size: 12.5px; color: var(--dark-roast); line-height: 1.5; }
+    .onboarding-step .text strong { color: var(--espresso); font-weight: 700; }
+    @media (max-width: 600px) {
+      .onboarding-steps { grid-template-columns: 1fr; }
+    }
+    .section { margin-top: 48px; }
+    .section-title {
+      font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700;
+      color: var(--espresso); margin-bottom: 6px; letter-spacing: -0.3px;
+    }
+    .section-desc {
+      font-size: 13px; color: var(--medium-roast); margin-bottom: 8px;
+    }
+    .why-grid, .segment-grid, .asset-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 24px 0;
+    }
+    @media (max-width: 768px) {
+      .why-grid, .segment-grid, .asset-grid { grid-template-columns: 1fr; }
+    }
+    .why-card, .segment-card, .asset-card {
+      background: var(--white); border-radius: 12px; padding: 20px;
+      border: 1px solid rgba(44,24,16,0.08);
+      box-shadow: 0 2px 12px rgba(44,24,16,0.04);
+      text-decoration: none; color: var(--espresso);
+      transition: all 0.2s; display: block; position: relative;
+    }
+    .why-card:hover, .segment-card:hover, .asset-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(44,24,16,0.08);
+      border-color: var(--caramel);
+    }
+    .why-card .ico, .asset-card .ico {
+      font-size: 28px; margin-bottom: 10px; display: block;
+    }
+    .why-card h3, .segment-card h3, .asset-card h3 {
+      font-family: 'Playfair Display', serif; font-size: 18px;
+      color: var(--espresso); margin-bottom: 8px;
+    }
+    .segment-card .tag, .asset-card .tag {
+      display: inline-block; font-size: 10px; font-weight: 700;
+      letter-spacing: 1.5px; color: var(--caramel);
+      background: var(--caramel-light); padding: 3px 10px;
+      border-radius: 12px; margin-bottom: 10px; text-transform: uppercase;
+    }
+    .why-card p, .segment-card p, .asset-card p {
+      font-size: 13px; color: var(--medium-roast); margin-bottom: 12px;
+    }
+    .asset-card .etf-list {
+      font-size: 12px; color: var(--dark-roast);
+      background: var(--oat-milk); padding: 10px 12px; border-radius: 8px;
+      margin-bottom: 8px; line-height: 1.7;
+    }
+    .asset-card .etf-list strong { color: var(--espresso); }
+    .asset-card .disclaimer {
+      font-size: 11px; color: var(--medium-roast);
+      padding: 6px 10px; background: rgba(184,71,61,0.06);
+      border-radius: 6px; margin-bottom: 8px;
+    }
+    .card-cta {
+      display: inline-block; color: var(--caramel);
+      font-size: 13px; font-weight: 600;
+    }
+    /* ── 개인화 필터 위젯 (cost와 공통) ── */
+    .personalizer {
+      background: var(--white); border: 1px solid rgba(196,133,60,0.2);
+      border-radius: 14px; padding: 24px 28px; margin-bottom: 32px;
+      box-shadow: 0 4px 14px rgba(44,24,16,0.04);
+    }
+    .personalizer-title {
+      font-family: 'Playfair Display', serif; font-size: 22px;
+      color: var(--espresso); margin-bottom: 6px;
+    }
+    .personalizer-desc {
+      font-size: 14px; color: var(--medium-roast); margin-bottom: 18px;
+    }
+    .filter-row {
+      display: flex; align-items: flex-start; gap: 14px;
+      margin-bottom: 12px; flex-wrap: wrap;
+    }
+    .filter-label {
+      min-width: 88px; font-size: 14px; font-weight: 600;
+      color: var(--dark-roast); padding-top: 6px;
+    }
+    .filter-chips { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; }
+    .chip {
+      padding: 8px 14px; border-radius: 999px;
+      border: 1px solid rgba(44,24,16,0.15);
+      background: var(--oat-milk); color: var(--dark-roast);
+      font-size: 13px; cursor: pointer; transition: all 0.15s ease;
+      min-height: 36px; user-select: none;
+    }
+    .chip:hover { border-color: var(--caramel); }
+    .chip.selected {
+      background: var(--caramel); color: var(--white);
+      border-color: var(--caramel); font-weight: 600;
+    }
+    .filter-more-toggle {
+      margin: 10px 0; padding: 6px 12px; background: none;
+      border: 1px dashed rgba(196,133,60,0.4); border-radius: 8px;
+      color: var(--medium-roast); font-size: 13px; cursor: pointer;
+    }
+    .filter-more-toggle:hover { color: var(--caramel); border-color: var(--caramel); }
+    .filter-more { display: none; }
+    .filter-more.expanded { display: block; }
+    .filter-actions {
+      display: flex; gap: 10px; align-items: center; margin-top: 16px;
+      padding-top: 14px; border-top: 1px dashed rgba(44,24,16,0.1);
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 8px 14px; border-radius: 8px;
+      border: 1px solid rgba(44,24,16,0.15);
+      background: var(--white); color: var(--dark-roast);
+      font-size: 13px; cursor: pointer;
+    }
+    .filter-btn:hover { border-color: var(--caramel); color: var(--caramel); }
+    .filter-mask-checkbox {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--medium-roast);
+    }
+    .privacy-notice {
+      margin-top: 12px; padding: 10px 14px;
+      background: rgba(63,138,92,0.06); border-radius: 8px;
+      font-size: 12px; color: var(--medium-roast); line-height: 1.5;
+    }
+    .toast {
+      position: fixed; bottom: 30px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--espresso); color: var(--white);
+      padding: 10px 20px; border-radius: 10px;
+      font-size: 13px; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease; z-index: 1000;
+    }
+    .toast.visible { opacity: 1; }
+    .recommend-section {
+      background: linear-gradient(180deg, rgba(196,133,60,0.08) 0%, var(--white) 100%);
+      border: 1px solid rgba(196,133,60,0.25);
+      border-radius: 14px; padding: 24px 28px; margin-bottom: 32px;
+    }
+    .recommend-section.empty {
+      background: var(--oat-milk); border-style: dashed;
+      text-align: center; color: var(--medium-roast);
+    }
+    .recommend-title {
+      font-family: 'Playfair Display', serif; font-size: 22px;
+      color: var(--espresso); margin-bottom: 6px;
+    }
+    .recommend-subtitle {
+      font-size: 13px; color: var(--medium-roast); margin-bottom: 20px;
+    }
+    .recommend-top-label {
+      font-size: 14px; font-weight: 700;
+      color: var(--dark-roast); margin-bottom: 10px;
+    }
+    .recommend-cards { display: grid; gap: 12px; margin-bottom: 20px; }
+    .recommend-card {
+      display: block; padding: 16px 18px; border-radius: 10px;
+      background: var(--white); border: 1px solid rgba(44,24,16,0.1);
+      color: var(--espresso); text-decoration: none;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+      position: relative;
+    }
+    .recommend-card:hover {
+      border-color: var(--caramel); transform: translateX(2px);
+    }
+    .recommend-card.done { opacity: 0.55; background: var(--oat-milk); }
+    .recommend-card.done .recommend-card-title { text-decoration: line-through; }
+    .action-check {
+      position: absolute; top: 12px; right: 12px;
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 1.5px solid rgba(44,24,16,0.2); background: var(--white);
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 14px; color: var(--medium-roast);
+      transition: all 0.15s; padding: 0; line-height: 1;
+    }
+    .action-check:hover { border-color: var(--caramel); color: var(--caramel); background: var(--caramel-light); }
+    .action-check.checked { background: var(--green); border-color: var(--green); color: var(--white); }
+    .recommend-card-title { padding-right: 42px; font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .recommend-card-area {
+      display: inline-block; font-size: 11px;
+      padding: 2px 8px; background: var(--caramel-light);
+      color: var(--caramel); border-radius: 999px; margin-bottom: 6px;
+    }
+    .recommend-card-saving { font-size: 13px; color: var(--green); margin-bottom: 4px; }
+    .recommend-card-link { font-size: 12px; color: var(--caramel); }
+    .recommend-extended { margin-top: 10px; }
+    .recommend-extended-title { font-size: 13px; font-weight: 600; color: var(--dark-roast); margin-bottom: 8px; }
+    .recommend-extended-list { display: grid; gap: 8px; }
+    .recommend-extended-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 14px; background: var(--white);
+      border: 1px solid rgba(44,24,16,0.08); border-radius: 8px;
+      font-size: 13px; color: var(--dark-roast); text-decoration: none;
+    }
+    .recommend-extended-item.done { opacity: 0.5; text-decoration: line-through; }
+    .recommend-extended-item:hover { border-color: var(--caramel); }
+    .recommend-notapplicable { margin-top: 16px; }
+    .recommend-notapplicable-toggle {
+      font-size: 12px; color: var(--medium-roast); cursor: pointer;
+      background: none; border: none; padding: 4px 0; text-decoration: underline;
+    }
+    .recommend-notapplicable-list {
+      display: none; margin-top: 8px; padding: 10px 14px;
+      background: rgba(44,24,16,0.04); border-radius: 8px;
+      font-size: 12px; color: var(--medium-roast); line-height: 1.8;
+    }
+    .recommend-notapplicable.expanded .recommend-notapplicable-list { display: block; }
+    .segment-card.my-segment {
+      border-color: var(--caramel);
+      box-shadow: 0 0 0 2px var(--caramel-light);
+    }
+    .segment-card.my-segment::before {
+      content: '내 유형'; position: absolute; top: -10px; right: 14px;
+      background: var(--caramel); color: var(--white);
+      font-size: 11px; padding: 3px 10px; border-radius: 999px; font-weight: 600;
+    }
+    /* ── 계좌 배치 매트릭스 ── */
+    .matrix-wrapper {
+      background: var(--white); border-radius: 12px; padding: 20px;
+      border: 1px solid rgba(44,24,16,0.08);
+      box-shadow: 0 2px 12px rgba(44,24,16,0.04);
+      overflow-x: auto; margin-top: 20px;
+    }
+    .matrix-table {
+      width: 100%; border-collapse: collapse;
+      font-size: 13px; min-width: 720px;
+    }
+    .matrix-table th, .matrix-table td {
+      padding: 10px 8px; text-align: center;
+      border-bottom: 1px solid rgba(44,24,16,0.08);
+    }
+    .matrix-table thead th {
+      background: var(--cream); color: var(--espresso);
+      font-weight: 700; font-size: 12px; letter-spacing: 0.2px;
+    }
+    .matrix-table tbody th {
+      background: var(--oat-milk); color: var(--dark-roast);
+      font-weight: 600; text-align: left; padding-left: 12px; white-space: nowrap;
+    }
+    .matrix-table tbody tr:hover td { background: rgba(196,133,60,0.04); }
+    .matrix-table .star-3 { color: var(--red-soft); font-weight: 700; }
+    .matrix-table .star-2 { color: var(--caramel); }
+    .matrix-table .star-1 { color: var(--medium-roast); opacity: 0.7; }
+    .matrix-table .star-0 { color: rgba(44,24,16,0.2); }
+    .matrix-table tr.my-row td, .matrix-table tr.my-row th { background: var(--caramel-light); }
+    .matrix-legend {
+      display: flex; flex-wrap: wrap; gap: 16px;
+      margin-top: 14px; font-size: 12px; color: var(--medium-roast);
+    }
+    .matrix-legend span { display: inline-flex; align-items: center; gap: 6px; }
+    /* ── 급락대응 3단계 ── */
+    .drawdown-strip {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 14px; margin-top: 20px;
+    }
+    @media (max-width: 768px) { .drawdown-strip { grid-template-columns: 1fr; } }
+    .drawdown-step {
+      background: var(--white); border-radius: 12px; padding: 18px;
+      border: 1px solid rgba(44,24,16,0.08); text-align: center;
+    }
+    .drawdown-step.step-1 { border-top: 4px solid var(--green); }
+    .drawdown-step.step-2 { border-top: 4px solid var(--caramel); }
+    .drawdown-step.step-3 { border-top: 4px solid var(--red-soft); }
+    .drawdown-step .level {
+      font-family: 'Playfair Display', serif; font-size: 24px;
+      font-weight: 700; margin-bottom: 6px;
+    }
+    .drawdown-step.step-1 .level { color: var(--green); }
+    .drawdown-step.step-2 .level { color: var(--caramel); }
+    .drawdown-step.step-3 .level { color: var(--red-soft); }
+    .drawdown-step .label {
+      font-size: 12px; color: var(--medium-roast);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;
+    }
+    .drawdown-step .desc {
+      font-size: 13px; color: var(--dark-roast); line-height: 1.7;
+    }
+    /* ── 다음 단계 CTA ── */
+    .next-step {
+      margin-top: 56px; padding: 28px;
+      background: linear-gradient(135deg, var(--caramel-light), rgba(58,110,165,0.06));
+      border: 1px solid rgba(196,133,60,0.25); border-radius: 14px;
+      text-align: center;
+    }
+    .next-step h3 {
+      font-family: 'Playfair Display', serif; font-size: 20px;
+      color: var(--espresso); margin-bottom: 8px;
+    }
+    .next-step p { font-size: 14px; color: var(--medium-roast); margin-bottom: 16px; }
+    .next-step .cta-row {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    }
+    .next-step .cta-btn {
+      display: inline-block; padding: 10px 20px;
+      background: var(--caramel); color: var(--white);
+      border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 14px;
+      transition: all 0.15s;
+    }
+    .next-step .cta-btn:hover { background: var(--medium-roast); transform: translateY(-1px); }
+    .next-step .cta-btn.secondary { background: var(--white); color: var(--caramel); border: 1px solid var(--caramel); }
+    .footer-note {
+      margin-top: 56px; padding: 20px; background: var(--cream);
+      border-radius: 12px; font-size: 12px;
+      color: var(--medium-roast); line-height: 1.7;
+    }
+    .footer-note strong { color: var(--dark-roast); }
+    @media (max-width: 600px) {
+      .personalizer { padding: 16px; }
+      .filter-row { flex-direction: column; gap: 8px; }
+      .filter-label { min-width: auto; padding-top: 0; }
+      .chip { min-height: 44px; padding: 10px 14px; }
+      .filter-actions { flex-direction: column; align-items: stretch; }
+      .filter-btn { width: 100%; text-align: center; }
+      nav a { margin: 0 6px; font-size: 12px; }
+      .container { padding: 32px 16px 48px; }
+      .header h1 { font-size: 26px; }
+      .section-title { font-size: 19px; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "지수투자 FIRE 로드맵 - Finance Coffee Chat",
+    "description": "나스닥100·S&P500·배당다우존스 4대 지수로 FIRE 달성하기. 연령·DC가입·FIRE진척도별 맞춤 포폴 추천과 시뮬레이션.",
+    "url": "https://finance-coffee-chat.vercel.app/index-investing",
+    "isPartOf": { "@type": "WebSite", "name": "Finance Coffee Chat", "url": "https://finance-coffee-chat.vercel.app/" },
+    "inLanguage": "ko"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "홈", "item": "https://finance-coffee-chat.vercel.app/" },
+      { "@type": "ListItem", "position": 2, "name": "지수투자", "item": "https://finance-coffee-chat.vercel.app/index-investing" }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav>
+    <a href="/" data-ga="click_gnb" data-ga-text="홈" data-ga-loc="gnb">홈</a>
+    <a href="/portfolio" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
+    <a href="/asset" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
+    <a href="/index-investing" data-ga="click_gnb" data-ga-text="지수투자" data-ga-loc="gnb">지수투자</a>
+    <a href="/tax-optimization" data-ga="click_gnb" data-ga-text="절세" data-ga-loc="gnb">절세</a>
+    <a href="/ipo" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
+    <a href="/cost-optimization" data-ga="click_gnb" data-ga-text="생활비 줄이기" data-ga-loc="gnb">생활비 줄이기</a>
+  </nav>
+  <div class="subnav">
+    <span class="subnav-label">지수투자</span>
+    <a href="/index-investing" class="active" data-ga="click_subnav" data-ga-text="허브" data-ga-loc="subnav">허브</a>
+    <a href="/index-simulation" data-ga="click_subnav" data-ga-text="FIRE 시뮬레이션" data-ga-loc="subnav">FIRE 시뮬레이션</a>
+  </div>
+
+  <div class="container">
+    <header class="header">
+      <div class="badge">Index Investing</div>
+      <h1>지수투자로 <em>FIRE</em> 달성하기</h1>
+      <div class="subtitle">2026년 기준 · 4대 지수 + 절세계좌 + 급락대응 3단계</div>
+      <div class="divider"></div>
+      <p class="intro">
+        주식 시장을 이기려 하지 마세요. <strong>시장 그 자체를 사세요.</strong>
+        나스닥100·S&P500·배당다우존스 3~4개 ETF에 월 적립만 해도 연 10~12%의 장기 복리가 따라붙습니다.
+        내 연령·자산 상황·DC 가입 여부에 맞춰 자동으로 계좌 배치와 추천 ETF를 뽑아드려요.
+      </p>
+      <div class="onboarding-steps">
+        <div class="onboarding-step">
+          <div class="num">1</div>
+          <div class="text"><strong>내 상황 3가지 선택</strong><br>투자 유형·연령·DC 가입 (30초)</div>
+        </div>
+        <div class="onboarding-step">
+          <div class="num">2</div>
+          <div class="text"><strong>맞춤 포폴 TOP 3 확인</strong><br>계좌별 배치·추천 ETF 제안</div>
+        </div>
+        <div class="onboarding-step">
+          <div class="num">3</div>
+          <div class="text"><strong>FIRE 시뮬레이션</strong><br>언제 도달할지 계산·공유</div>
+        </div>
+      </div>
+    </header>
+
+    <section class="section" id="personalizerSection" aria-label="내 상황 필터">
+      <div class="personalizer">
+        <div class="personalizer-title">내 투자 상황 알려주기</div>
+        <div class="personalizer-desc">아래 3~5개 질문이면 딱 맞는 포폴을 뽑아드려요.</div>
+
+        <div class="filter-row">
+          <div class="filter-label">투자 유형</div>
+          <div class="filter-chips" data-field="is">
+            <button type="button" class="chip" data-value="is1">초기 축적</button>
+            <button type="button" class="chip" data-value="is2">공격 성장</button>
+            <button type="button" class="chip" data-value="is3">가족 균형</button>
+            <button type="button" class="chip" data-value="is4">FIRE 근접</button>
+            <button type="button" class="chip" data-value="is5">보존·인출</button>
+            <button type="button" class="chip" data-value="is6">DC 중심</button>
+          </div>
+        </div>
+
+        <div class="filter-row">
+          <div class="filter-label">연령대</div>
+          <div class="filter-chips" data-field="age">
+            <button type="button" class="chip" data-value="20s">20대</button>
+            <button type="button" class="chip" data-value="30s">30대</button>
+            <button type="button" class="chip" data-value="40s">40대</button>
+            <button type="button" class="chip" data-value="50s">50대</button>
+            <button type="button" class="chip" data-value="60+">60대+</button>
+          </div>
+        </div>
+
+        <div class="filter-row">
+          <div class="filter-label">DC 가입</div>
+          <div class="filter-chips" data-field="dc">
+            <button type="button" class="chip" data-value="yes">가입</button>
+            <button type="button" class="chip" data-value="no">미가입</button>
+          </div>
+        </div>
+
+        <button type="button" class="filter-more-toggle" id="filterMoreToggle" aria-expanded="false">
+          더 정확히 보려면 2문항 더 ▼
+        </button>
+
+        <div class="filter-more" id="filterMore">
+          <div class="filter-row">
+            <div class="filter-label">FIRE 진척도</div>
+            <div class="filter-chips" data-field="fireProgress">
+              <button type="button" class="chip" data-value="0-30">~30%</button>
+              <button type="button" class="chip" data-value="30-60">30~60%</button>
+              <button type="button" class="chip" data-value="60-85">60~85%</button>
+              <button type="button" class="chip" data-value="85+">85%+</button>
+            </div>
+          </div>
+          <div class="filter-row">
+            <div class="filter-label">위험 성향</div>
+            <div class="filter-chips" data-field="riskTol">
+              <button type="button" class="chip" data-value="conservative">보수형</button>
+              <button type="button" class="chip" data-value="balanced">균형형</button>
+              <button type="button" class="chip" data-value="aggressive">공격형</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-actions">
+          <button type="button" class="filter-btn" id="filterReset" data-ga="click_filter_reset" data-ga-loc="index_hub_filter">🔄 초기화</button>
+          <button type="button" class="filter-btn" id="filterShare" data-ga="click_filter_share" data-ga-loc="index_hub_filter">🔗 이 결과 공유</button>
+          <label class="filter-mask-checkbox">
+            <input type="checkbox" id="filterShareMask" checked>
+            민감정보(FIRE 진척도) 제외
+          </label>
+        </div>
+
+        <div class="privacy-notice">
+          🔒 이 정보는 URL에만 담깁니다. 사이트나 브라우저 저장소에 저장되지 않으며, 탭을 닫는 순간 어떤 흔적도 남지 않습니다.
+        </div>
+      </div>
+
+      <div class="recommend-section empty" id="recommendSection">
+        <div class="recommend-title">내 맞춤 포폴 요약</div>
+        <div class="recommend-subtitle">👉 위 3가지(유형·연령·DC)만 골라주시면 맞춤 추천이 여기에 나타나요</div>
+      </div>
+    </section>
+
+    <section class="section" id="why-index">
+      <h2 class="section-title">왜 지수투자인가</h2>
+      <p class="section-desc">개별 종목 고르기에 쏟는 시간과 감정비용을 0으로 만드는 3가지 이유.</p>
+      <div class="why-grid">
+        <div class="why-card">
+          <span class="ico">💸</span>
+          <h3>저비용</h3>
+          <p>국내 지수 ETF 총보수 0.05~0.15%. 20년 누적 <strong>연 0.3~0.7%</strong> 수익률 개선 효과 — 1억이면 300만원 차이.</p>
+        </div>
+        <div class="why-card">
+          <span class="ico">🌐</span>
+          <h3>장기 분산</h3>
+          <p>S&P500 = 미국 500대 기업. 한 회사 망해도 지수는 상승. <strong>20년 연평균 10~12%</strong>의 장기 복리가 따라붙습니다.</p>
+        </div>
+        <div class="why-card">
+          <span class="ico">🧘</span>
+          <h3>감정 배제</h3>
+          <p>매월 같은 날 자동매수 = 고점 공포·저점 미련 0. <strong>평균단가 효과(DCA)</strong>로 변동성은 기회로 바뀝니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="assets">
+      <h2 class="section-title">4대 지수 & 자산클래스</h2>
+      <p class="section-desc">커피챗이 추천하는 핵심 4가지. 각 카드의 ETF는 참고 예시이며 투자 권유가 아닙니다.</p>
+      <div class="asset-grid">
+        <a class="asset-card" id="assets-nasdaq100" href="#allocation-matrix" data-ga="click_asset_card" data-ga-text="nasdaq100" data-ga-loc="index_hub">
+          <span class="tag">Growth · 나스닥100</span>
+          <span class="ico">🚀</span>
+          <h3>나스닥100</h3>
+          <p>미국 테크 100대 기업. 장기 연 12~15% 기대수익. 공격 배분의 코어.</p>
+          <div class="etf-list">
+            <strong>국내상장:</strong> ACE 나스닥100 (367380)<br>
+            <strong>해외직투:</strong> QQQ · QQQM
+          </div>
+          <div class="disclaimer">⚠️ 참고 예시 · 투자 권유 아님</div>
+          <span class="card-cta">계좌 배치 보기 →</span>
+        </a>
+        <a class="asset-card" id="assets-sp500" href="#allocation-matrix" data-ga="click_asset_card" data-ga-text="sp500" data-ga-loc="index_hub">
+          <span class="tag">Core · S&P500</span>
+          <span class="ico">🏛️</span>
+          <h3>S&P500</h3>
+          <p>미국 500대 기업. 장기 연 10~12%. 모든 포폴의 앵커.</p>
+          <div class="etf-list">
+            <strong>국내상장:</strong> ACE 미국S&P500 (360200) · TIGER 미국S&P500<br>
+            <strong>해외직투:</strong> SPY · VOO
+          </div>
+          <div class="disclaimer">⚠️ 참고 예시 · 투자 권유 아님</div>
+          <span class="card-cta">계좌 배치 보기 →</span>
+        </a>
+        <a class="asset-card" id="assets-dividend" href="#allocation-matrix" data-ga="click_asset_card" data-ga-text="dividend" data-ga-loc="index_hub">
+          <span class="tag">Dividend · SCHD</span>
+          <span class="ico">💰</span>
+          <h3>미국배당다우존스</h3>
+          <p>배당 3~4% + 배당성장 연 10%. ISA 분리과세 9.9%와 찰떡궁합.</p>
+          <div class="etf-list">
+            <strong>국내상장:</strong> ACE 미국배당다우존스 (402970)<br>
+            <strong>월배당:</strong> KODEX 미국배당커버드콜 (441640)
+          </div>
+          <div class="disclaimer">⚠️ 참고 예시 · 투자 권유 아님</div>
+          <span class="card-cta">ISA 배치 가이드 →</span>
+        </a>
+        <a class="asset-card" id="assets-bond" href="#allocation-matrix" data-ga="click_asset_card" data-ga-text="bond" data-ga-loc="index_hub">
+          <span class="tag">Safety · 채권혼합</span>
+          <span class="ico">🛡️</span>
+          <h3>안전자산 혼합</h3>
+          <p>IRP 의무 30% 안전자산을 배당채혼합으로 — 연 2.5% 배당 덤.</p>
+          <div class="etf-list">
+            <strong>IRP용:</strong> SOL 미국배당미국채혼합50 (490490)
+          </div>
+          <div class="disclaimer">⚠️ 참고 예시 · 투자 권유 아님</div>
+          <span class="card-cta">IRP 구성 →</span>
+        </a>
+        <a class="asset-card" id="assets-gold" href="#allocation-matrix" data-ga="click_asset_card" data-ga-text="gold" data-ga-loc="index_hub">
+          <span class="tag">Hedge · Gold</span>
+          <span class="ico">🪙</span>
+          <h3>금 (매크로 헤지)</h3>
+          <p>20년 +433% (SPY 358%). 2008년 주식 -37%일 때 +25%. 포폴 10~15%.</p>
+          <div class="etf-list">
+            <strong>국내상장:</strong> TIGER 골드플러스 · KODEX 골드선물(H)
+          </div>
+          <div class="disclaimer">⚠️ 참고 예시 · 투자 권유 아님</div>
+          <span class="card-cta">헤지 전략 →</span>
+        </a>
+        <a class="asset-card" id="assets-value" href="#allocation-matrix" data-ga="click_asset_card" data-ga-text="value" data-ga-loc="index_hub">
+          <span class="tag">Tactical · KVI</span>
+          <span class="ico">🇰🇷</span>
+          <h3>코리아 밸류업</h3>
+          <p>일본 선례 3년. KVI +134.9% vs KOSPI +101.5% (2024.09~2026.01).</p>
+          <div class="etf-list">
+            <strong>대표:</strong> KODEX 코리아밸류업 · TIGER 코리아밸류업
+          </div>
+          <div class="disclaimer">⚠️ 참고 예시 · 투자 권유 아님</div>
+          <span class="card-cta">전술 배분 →</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section" id="segments">
+      <h2 class="section-title">투자 유형별 맞춤 포폴</h2>
+      <p class="section-desc">본인 상황과 가장 가까운 카드를 선택하세요. 필터를 적용하면 내 유형이 강조됩니다.</p>
+      <div class="segment-grid">
+        <a class="segment-card" data-segment="is1" href="#allocation-matrix" data-ga="click_index_segment_card" data-ga-text="is1" data-ga-loc="index_hub">
+          <span class="tag">IS1 Early Accumulator</span>
+          <h3>초기 축적 (자산 &lt; 1억)</h3>
+          <p>월 적립이 유일한 무기. 나스닥100 코어 70% + S&P500 20% + 금 10%. 연저펀·IRP 한도 우선.</p>
+          <span class="card-cta">구성 →</span>
+        </a>
+        <a class="segment-card" data-segment="is2" href="#allocation-matrix" data-ga="click_index_segment_card" data-ga-text="is2" data-ga-loc="index_hub">
+          <span class="tag">IS2 Aggressive Growth</span>
+          <h3>공격 성장 (1~5억)</h3>
+          <p>나스닥 50 + S&P 30 + 밸류업 10 + 드로다운 10. ISA 만기 연금전환으로 세액공제 300만 보너스.</p>
+          <span class="card-cta">구성 →</span>
+        </a>
+        <a class="segment-card" data-segment="is3" href="#allocation-matrix" data-ga="click_index_segment_card" data-ga-text="is3" data-ga-loc="index_hub">
+          <span class="tag">IS3 Family Balance</span>
+          <h3>가족 균형형</h3>
+          <p>가족 지출과 자녀 교육비를 감당하며 주식 60%/채권 20%/금 10%/현금 10%. 월배당 커버드콜 소량.</p>
+          <span class="card-cta">구성 →</span>
+        </a>
+        <a class="segment-card" data-segment="is4" href="#allocation-matrix" data-ga="click_index_segment_card" data-ga-text="is4" data-ga-loc="index_hub">
+          <span class="tag">IS4 FIRE Nearing</span>
+          <h3>FIRE 근접 (60~85%)</h3>
+          <p>성장형 비중 축소, 배당 30%로 확대. 급락대응 3단계 매수 준비. 인출 대비.</p>
+          <span class="card-cta">구성 →</span>
+        </a>
+        <a class="segment-card" data-segment="is5" href="#allocation-matrix" data-ga="click_index_segment_card" data-ga-text="is5" data-ga-loc="index_hub">
+          <span class="tag">IS5 Preservation</span>
+          <h3>보존 · 인출기</h3>
+          <p>배당 40 + 채권 30 + S&P 25 + 금 5. 연금소득세 3.3~5.5%로 종소세 분리.</p>
+          <span class="card-cta">구성 →</span>
+        </a>
+        <a class="segment-card" data-segment="is6" href="#allocation-matrix" data-ga="click_index_segment_card" data-ga-text="is6" data-ga-loc="index_hub">
+          <span class="tag">IS6 DC Heavy</span>
+          <h3>DC 중심 직장인</h3>
+          <p>회사 DC 계좌를 원리금보장 대신 나스닥·S&P 혼합 70/30으로. 우리사주 + DC + ISA 3축.</p>
+          <span class="card-cta">구성 →</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section" id="allocation-matrix">
+      <h2 class="section-title">계좌 배치 원칙 — 오래 거치할수록 공격적</h2>
+      <p class="section-desc">같은 자산도 어느 계좌에 담는지에 따라 연 수익률이 0.3~1.5%p 달라집니다. ★★★ 핵심 · ★★ 보조 · ★ 소량 · — 비권장.</p>
+      <div class="matrix-wrapper">
+        <table class="matrix-table" aria-label="계좌별 자산클래스 배치 매트릭스">
+          <thead>
+            <tr>
+              <th scope="col">계좌 \ 자산</th>
+              <th scope="col">나스닥100</th>
+              <th scope="col">S&P500</th>
+              <th scope="col">배당다우존스</th>
+              <th scope="col">채권·안전</th>
+              <th scope="col">금 헤지</th>
+              <th scope="col">밸류업·전술</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">IRP (가장 공격)</th>
+              <td class="star-3">★★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-3">★★★<br><small>(30% 의무)</small></td>
+              <td class="star-1">★</td>
+              <td class="star-0">—</td>
+            </tr>
+            <tr>
+              <th scope="row">연금저축펀드</th>
+              <td class="star-3">★★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-1">★</td>
+              <td class="star-2">★★</td>
+              <td class="star-2">★★</td>
+            </tr>
+            <tr>
+              <th scope="row">ISA (전환대기)</th>
+              <td class="star-1">★</td>
+              <td class="star-2">★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-1">★</td>
+              <td class="star-1">★</td>
+              <td class="star-3">★★★</td>
+            </tr>
+            <tr>
+              <th scope="row">일반 위탁</th>
+              <td class="star-2">★★<br><small>(양도세 250만)</small></td>
+              <td class="star-2">★★</td>
+              <td class="star-1">★</td>
+              <td class="star-0">—</td>
+              <td class="star-2">★★</td>
+              <td class="star-1">★</td>
+            </tr>
+            <tr>
+              <th scope="row">기업 DC</th>
+              <td class="star-3">★★★</td>
+              <td class="star-3">★★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-2">★★</td>
+              <td class="star-1">★</td>
+              <td class="star-0">—</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="matrix-legend">
+          <span><span class="star-3">★★★</span> 핵심 배치</span>
+          <span><span class="star-2">★★</span> 보조</span>
+          <span><span class="star-1">★</span> 소량</span>
+          <span><span class="star-0">—</span> 비권장</span>
+        </div>
+      </div>
+      <p style="margin-top:14px; font-size:13px; color:var(--medium-roast); line-height:1.8;">
+        🔑 <strong>핵심 원칙 3가지</strong> —
+        ① 오래 거치할수록 공격적 (IRP → 연저펀 → ISA → 일반 순)
+        ② 배당 ETF는 국내 분리과세 계좌(ISA) 우선
+        ③ 일반 위탁의 양도세 기본공제 250만원은 매년 매도해 리셋
+      </p>
+    </section>
+
+    <section class="section" id="drawdown">
+      <h2 class="section-title">급락대응 3단계 — ISA에서 실행</h2>
+      <p class="section-desc">나스닥100 기준 고점 대비 낙폭별 분할매수 플랜. Gemini/계산기로 DD 계산 자동화.</p>
+      <div class="drawdown-strip">
+        <div class="drawdown-step step-1">
+          <div class="level">-8%</div>
+          <div class="label">Step 1 · Watch</div>
+          <div class="desc">평소 현금의 <strong>30%</strong> 투입. 단기 조정 가능성. 월 적립은 유지.</div>
+        </div>
+        <div class="drawdown-step step-2">
+          <div class="level">-15%</div>
+          <div class="label">Step 2 · Buy</div>
+          <div class="desc">평소 현금의 <strong>40%</strong> 추가 투입. 약세장 진입 신호. 공포 국면.</div>
+        </div>
+        <div class="drawdown-step step-3">
+          <div class="level">-25%</div>
+          <div class="label">Step 3 · All-in</div>
+          <div class="desc">남은 현금 <strong>전액</strong> 투입. 역사적 바닥 영역. 3~5년 보유 전제.</div>
+        </div>
+      </div>
+      <p style="margin-top:14px; font-size:13px; color:var(--medium-roast); line-height:1.8;">
+        💡 <strong>왜 ISA에서 하나?</strong> — 매수·매도가 잦아도 분리과세(9.9%)로 과세이연. 단, 만기 3년 이전 해지 시 일반과세.
+      </p>
+    </section>
+
+    <section class="section" id="dc-strategy">
+      <h2 class="section-title">DC 가입자라면 이것부터 — ETF 전환</h2>
+      <p class="section-desc">많은 직장인이 DC 계좌를 원리금보장(연 2~3%)에 묶어둠. 나스닥·S&P 혼합으로 전환 시 장기 +6%p.</p>
+      <div class="why-grid">
+        <div class="why-card">
+          <span class="ico">1️⃣</span>
+          <h3>증권사 DC 계정 확인</h3>
+          <p>회사 계약사 (미래·한투·삼성·NH 등) 홈페이지/앱에서 DC 계좌 로그인. "운용지시" 메뉴.</p>
+        </div>
+        <div class="why-card">
+          <span class="ico">2️⃣</span>
+          <h3>ETF 혼합 70/30</h3>
+          <p>나스닥100 40% + S&P500 30% + 안전자산 30% (의무). 30대라면 공격 70/30, 50대라면 균형 50/50.</p>
+        </div>
+        <div class="why-card">
+          <span class="ico">3️⃣</span>
+          <h3>분기 1회 리밸런싱</h3>
+          <p>3개월마다 비중 체크. ±5%p 이탈 시 복귀. 자동 자산배분 상품도 존재 (DCP ETF 등).</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="next-step">
+      <h3>📊 FIRE 언제 달성할지 계산해보기</h3>
+      <p>현재 자산·월 적립액·목표 금액을 넣으면 달성 시점과 자산 곡선을 보여드려요.</p>
+      <div class="cta-row">
+        <a href="/index-simulation" class="cta-btn" data-ga="click_next_step_cta" data-ga-text="index→fire_sim" data-ga-loc="index_hub_footer">FIRE 시뮬레이터 →</a>
+        <a href="/tax-optimization" class="cta-btn secondary" data-ga="click_next_step_cta" data-ga-text="index→tax" data-ga-loc="index_hub_footer">세금 최적화 전략 →</a>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      <strong>업데이트:</strong> 2026-04 · 4대 지수 + 절세계좌 배치 + 급락대응 플랜 반영<br>
+      <strong>법적 고지:</strong> 본 자료는 공개된 제도·통계 정보를 바탕으로 한 일반 안내이며 투자 권유·자문이 아닙니다.
+      언급된 ETF 종목·티커는 예시이며 특정 상품 추천이 아닙니다. 과거 수익률이 미래 수익을 보장하지 않으며,
+      투자 결정 전 개별 상품 설명서·위험 고지를 확인하고 본인 책임 하에 결정하세요.
+      본 페이지의 이용으로 발생한 결과에 대해 운영자는 책임지지 않습니다.
+    </div>
+  </div>
+
+  <div class="toast" id="toast">링크가 복사되었어요</div>
+
+  <script>
+  document.addEventListener('click', function(e) {
+    var el = e.target.closest('[data-ga]');
+    if (!el) return;
+    if (typeof gtag !== 'function') return;
+    gtag('event', el.dataset.ga, {
+      click_text: el.dataset.gaText || el.textContent.trim().substring(0, 50),
+      click_location: el.dataset.gaLoc || 'unknown'
+    });
+  });
+  </script>
+  <script src="js/index-personalizer.js"></script>
+  <script src="js/index-personalizer-init.js"></script>
+</body>
+</html>

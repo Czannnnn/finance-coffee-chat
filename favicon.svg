@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Coffee cup body -->
+  <rect x="12" y="28" width="32" height="24" rx="4" fill="#C4853C"/>
+  <rect x="14" y="30" width="28" height="20" rx="3" fill="#6B3A2A"/>
+  <!-- Coffee liquid -->
+  <rect x="16" y="32" width="24" height="10" rx="2" fill="#3D2317"/>
+  <!-- Cup handle -->
+  <path d="M44 34 C52 34 52 48 44 48" fill="none" stroke="#C4853C" stroke-width="3.5" stroke-linecap="round"/>
+  <!-- Saucer -->
+  <ellipse cx="28" cy="54" rx="22" ry="4" fill="#C4853C" opacity="0.7"/>
+  <!-- Steam lines -->
+  <path d="M20 26 C20 20 24 22 24 16" fill="none" stroke="#C4853C" stroke-width="2" stroke-linecap="round" opacity="0.5">
+    <animate attributeName="d" values="M20 26 C20 20 24 22 24 16;M20 26 C20 18 16 20 16 14;M20 26 C20 20 24 22 24 16" dur="3s" repeatCount="indefinite"/>
+  </path>
+  <path d="M28 24 C28 18 32 20 32 14" fill="none" stroke="#C4853C" stroke-width="2" stroke-linecap="round" opacity="0.4">
+    <animate attributeName="d" values="M28 24 C28 18 32 20 32 14;M28 24 C28 16 24 18 24 12;M28 24 C28 18 32 20 32 14" dur="2.5s" repeatCount="indefinite"/>
+  </path>
+  <path d="M36 26 C36 20 40 22 40 16" fill="none" stroke="#C4853C" stroke-width="2" stroke-linecap="round" opacity="0.3">
+    <animate attributeName="d" values="M36 26 C36 20 40 22 40 16;M36 26 C36 18 32 20 32 14;M36 26 C36 20 40 22 40 16" dur="3.5s" repeatCount="indefinite"/>
+  </path>
+</svg>
