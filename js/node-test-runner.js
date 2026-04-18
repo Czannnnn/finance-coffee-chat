@@ -61,7 +61,9 @@ var sampleRule = { id: 'test-rule', conditions: { home: ['rent'], income: ['0-30
 assert('all conditions', P.ruleMatches(sampleRule, { home: 'rent', income: '30-50' }), true);
 assert('one mismatch', P.ruleMatches(sampleRule, { home: 'own', income: '30-50' }), false);
 assert('empty conditions', P.ruleMatches({ conditions: {} }, { s: 's1' }), true);
-assert('optional field skip', P.ruleMatches({ conditions: { region: ['metro'] } }, { s: 's1' }), true);
+// 변경: optional 필드 조건이 명시된 규칙은, 해당 필드를 사용자가 선택해야만 매칭 (dep 조건만 있는 규칙이 미선택 유저에게 매칭되던 버그 수정)
+assert('optional field required when conditioned', P.ruleMatches({ conditions: { region: ['metro'] } }, { s: 's1' }), false);
+assert('optional field matches when selected', P.ruleMatches({ conditions: { region: ['metro'] } }, { s: 's1', region: 'metro' }), true);
 
 console.log('[scoreRule]');
 var ruleA = { priority: 3, areaRef: '01-year-end-tax', conditions: { home: ['rent'] } };
@@ -83,7 +85,7 @@ assert('top3 ordering', classified.top3[0].id, 'r1');
 // Additional: verify against actual data/cost-recommendations.json
 console.log('[integration with data/cost-recommendations.json]');
 var realRules = JSON.parse(fs.readFileSync(__dirname + '/../data/cost-recommendations.json', 'utf8')).rules;
-assert('real rule count', realRules.length, 16);
+assert('real rule count', realRules.length, 18);
 
 // S1 청년 단독, 저소득, 월세, 수도권 — 예상: youth-rent-support TOP1
 var s1Result = P.classifyRules(realRules, { s: 's1', income: '0-30', home: 'rent', region: 'metro' });

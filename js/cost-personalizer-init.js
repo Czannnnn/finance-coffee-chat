@@ -13,15 +13,49 @@
   var state = P.parseFilterState(window.location.search);
   var recommendationsPromise = null;
 
+  // ── 완료 체크 상태 (URL 쿼리 done=id1,id2 기반, localStorage 사용 안 함) ──
+  function parseDoneSet() {
+    var params = new URLSearchParams(window.location.search);
+    var raw = params.get('done');
+    var set = {};
+    if (!raw) return set;
+    raw.split(',').forEach(function (id) {
+      var trimmed = id.trim();
+      if (trimmed) set[trimmed] = true;
+    });
+    return set;
+  }
+  var doneSet = parseDoneSet();
+
   // ── DOM 헬퍼 ──
   function $(sel, root) { return (root || document).querySelector(sel); }
   function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
 
-  // ── URL 갱신 ──
+  // ── URL 갱신 (필터 상태 + done 상태) ──
   function updateUrl() {
     var query = P.serializeFilterState(state);
+    var doneIds = Object.keys(doneSet);
+    if (doneIds.length > 0) {
+      query = query ? query + '&done=' + doneIds.join(',') : '?done=' + doneIds.join(',');
+    }
     var newUrl = window.location.pathname + query + window.location.hash;
     window.history.replaceState(null, '', newUrl);
+  }
+
+  function toggleDone(id) {
+    if (doneSet[id]) {
+      delete doneSet[id];
+    } else {
+      doneSet[id] = true;
+    }
+    updateUrl();
+    renderAll();
+    if (window.gtag) {
+      window.gtag('event', 'click_action_toggle', {
+        click_text: (doneSet[id] ? 'done:' : 'undo:') + id,
+        click_location: 'cost_hub_recommend'
+      });
+    }
   }
 
   // ── 필터 칩 렌더 ──
@@ -98,6 +132,7 @@
   // ── 초기화 버튼 ──
   function onResetClick() {
     state = {};
+    doneSet = {};
     updateUrl();
     renderChipSelection();
     renderAll();
@@ -173,7 +208,7 @@
     '0-30': '3천만원 이하', '30-50': '3천~5천', '50-70': '5천~7천',
     '70-100': '7천~1억', '100+': '1억 초과'
   };
-  var HOME_LABELS = { own: '자가', jeonse: '전세', rent: '월세' };
+  var HOME_LABELS = { own: '자가', jeonse: '전세', rent: '월세', family: '부모님 집' };
   var REGION_LABELS = { metro: '수도권', nonmetro: '비수도권' };
 
   function stateSummaryText() {
@@ -224,14 +259,25 @@
       }
 
       var topCardsHtml = classified.top3.map(function (rule) {
+        var isDone = !!doneSet[rule.id];
+        var doneClass = isDone ? ' done' : '';
+        var checkClass = isDone ? ' checked' : '';
+        var checkLabel = isDone ? '완료 취소' : '완료 표시';
+        var checkGlyph = isDone ? '✓' : '◯';
         return (
-          '<a class="recommend-card" href="' + escapeHtml(rule.linkHref) + '" ' +
+          '<div class="recommend-card-wrap" style="position:relative;">' +
+          '<a class="recommend-card' + doneClass + '" href="' + escapeHtml(rule.linkHref) + '" ' +
           'data-ga="click_recommendation" data-ga-text="' + escapeHtml(rule.id) + '" data-ga-loc="cost_hub_recommend">' +
           '<span class="recommend-card-area">' + escapeHtml(getAreaLabel(rule.areaRef)) + '</span>' +
           '<div class="recommend-card-title">' + escapeHtml(rule.title) + '</div>' +
           '<div class="recommend-card-saving">💰 ' + escapeHtml(rule.savingHint) + '</div>' +
           '<div class="recommend-card-link">' + escapeHtml(rule.linkLabel || '자세히 →') + '</div>' +
-          '</a>'
+          '</a>' +
+          '<button type="button" class="action-check' + checkClass + '" ' +
+          'data-action-done="' + escapeHtml(rule.id) + '" ' +
+          'title="' + checkLabel + '" aria-label="' + checkLabel + '" aria-pressed="' + (isDone ? 'true' : 'false') + '">' +
+          checkGlyph + '</button>' +
+          '</div>'
         );
       }).join('');
 
@@ -242,8 +288,9 @@
           '<div class="recommend-extended-title">💡 챙길 만한 것 ' + classified.extended.length + '개</div>' +
           '<div class="recommend-extended-list">' +
           classified.extended.map(function (rule) {
+            var doneClass = doneSet[rule.id] ? ' done' : '';
             return (
-              '<a class="recommend-extended-item" href="' + escapeHtml(rule.linkHref) + '" ' +
+              '<a class="recommend-extended-item' + doneClass + '" href="' + escapeHtml(rule.linkHref) + '" ' +
               'data-ga="click_recommendation" data-ga-text="' + escapeHtml(rule.id) + '" data-ga-loc="cost_hub_recommend">' +
               '<span>' + escapeHtml(rule.title) + '</span>' +
               '<span style="color: var(--green); font-size: 12px;">' + escapeHtml(rule.savingHint) + '</span>' +
@@ -374,6 +421,13 @@
 
   // ── 이벤트 바인딩 ──
   document.addEventListener('click', function (e) {
+    var doneBtn = e.target.closest('[data-action-done]');
+    if (doneBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleDone(doneBtn.getAttribute('data-action-done'));
+      return;
+    }
     if (e.target.closest('.filter-chips .chip')) {
       onChipClick(e);
     }

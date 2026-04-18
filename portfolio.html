@@ -198,6 +198,60 @@
       pointer-events: none; z-index: 100;
     }
     .save-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .simulate-card {
+      background: var(--white); border-radius: 16px; padding: 24px 20px;
+      border: 1px solid rgba(44,24,16,0.05); box-shadow: 0 2px 20px rgba(44,24,16,0.04);
+      margin-bottom: 24px;
+    }
+    .simulate-title {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 15px; font-weight: 700; color: var(--espresso); margin-bottom: 4px;
+    }
+    .simulate-desc { font-size: 12.5px; color: var(--medium-roast); margin-bottom: 16px; font-weight: 300; }
+    .simulate-inputs { margin-bottom: 18px; }
+    .simulate-slider-label {
+      display: flex; justify-content: space-between; align-items: baseline;
+      font-size: 13px; font-weight: 500; color: var(--espresso); margin-bottom: 8px;
+    }
+    .simulate-slider-label strong { color: var(--caramel); font-size: 15px; font-weight: 700; }
+    .simulate-slider {
+      -webkit-appearance: none; appearance: none; width: 100%; height: 6px;
+      background: var(--oat-milk); border-radius: 3px; outline: none;
+      border: 1px solid rgba(44,24,16,0.08);
+    }
+    .simulate-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 20px; height: 20px; border-radius: 50%; background: var(--caramel);
+      cursor: pointer; border: 2px solid var(--white); box-shadow: 0 1px 4px rgba(44,24,16,0.15);
+    }
+    .simulate-slider::-moz-range-thumb {
+      width: 20px; height: 20px; border-radius: 50%; background: var(--caramel);
+      cursor: pointer; border: 2px solid var(--white);
+    }
+    .simulate-preset-row {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px;
+    }
+    .simulate-preset {
+      padding: 5px 10px; border-radius: 16px; border: 1px solid rgba(44,24,16,0.12);
+      background: transparent; font-size: 11.5px; font-weight: 500; color: var(--medium-roast);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .simulate-preset:hover { border-color: var(--caramel); color: var(--caramel); }
+    .simulate-preset.active { background: var(--caramel); color: var(--white); border-color: var(--caramel); }
+    .simulate-result {
+      display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center;
+      padding: 16px 14px; background: var(--oat-milk); border-radius: 10px;
+    }
+    .simulate-item { text-align: center; }
+    .simulate-item .label { font-size: 11px; font-weight: 600; color: var(--medium-roast); letter-spacing: 0.5px; margin-bottom: 4px; }
+    .simulate-item .value { font-size: 16px; font-weight: 700; color: var(--espresso); }
+    .simulate-item.future .value { color: var(--caramel); font-size: 18px; }
+    .simulate-arrow { font-size: 18px; color: var(--medium-roast); }
+    .simulate-note {
+      font-size: 11.5px; color: var(--medium-roast); font-weight: 300;
+      margin-top: 12px; line-height: 1.6;
+    }
+    .simulate-note strong { color: var(--dark-roast); font-weight: 500; }
     @media (max-width: 480px) {
       .container { padding: 32px 16px 48px; }
       .header h1 { font-size: 26px; }
@@ -251,7 +305,7 @@
     <a href="/portfolio" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
     <a href="/asset" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
     <a href="/ipo" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
-    <a href="/cost-optimization" data-ga="click_gnb" data-ga-text="비용최적화" data-ga-loc="gnb">비용최적화</a>
+    <a href="/cost-optimization" data-ga="click_gnb" data-ga-text="생활비 줄이기" data-ga-loc="gnb">생활비 줄이기</a>
   </nav>
 
   <div class="container">
@@ -315,6 +369,30 @@
             <p class="talk-hint">새로운 자산군, 해외투자 등</p>
           </div>
         </div>
+      </div>
+
+      <div class="simulate-card" id="simulateCard">
+        <div class="simulate-title">⏳ 10년 뒤 자산 시뮬레이션</div>
+        <p class="simulate-desc">연평균 수익률을 조절해 복리로 자산이 어떻게 커지는지 미리 보세요 · 세전 명목</p>
+        <div class="simulate-inputs">
+          <div class="simulate-slider-label">
+            <span>연평균 수익률</span><strong id="simRateLabel">6.0%</strong>
+          </div>
+          <input id="simRate" class="simulate-slider" type="range" min="2" max="12" step="0.5" value="6"
+                 data-ga="click_simulate" data-ga-loc="portfolio_simulate">
+          <div class="simulate-preset-row">
+            <button type="button" class="simulate-preset" data-rate="3" data-ga="click_simulate" data-ga-text="preset:3" data-ga-loc="portfolio_simulate">예적금 3%</button>
+            <button type="button" class="simulate-preset active" data-rate="6" data-ga="click_simulate" data-ga-text="preset:6" data-ga-loc="portfolio_simulate">혼합 6%</button>
+            <button type="button" class="simulate-preset" data-rate="8" data-ga="click_simulate" data-ga-text="preset:8" data-ga-loc="portfolio_simulate">주식 장기 8%</button>
+            <button type="button" class="simulate-preset" data-rate="10" data-ga="click_simulate" data-ga-text="preset:10" data-ga-loc="portfolio_simulate">공격형 10%</button>
+          </div>
+        </div>
+        <div class="simulate-result">
+          <div class="simulate-item"><div class="label">지금</div><div class="value" id="simNow">0 원</div></div>
+          <div class="simulate-arrow">→</div>
+          <div class="simulate-item future"><div class="label">10년 뒤</div><div class="value" id="simFuture">0 원</div></div>
+        </div>
+        <div class="simulate-note" id="simNote">* 참고: 물가·세금·환율 미반영. 실제 수익률은 자산군별로 크게 다를 수 있습니다.</div>
       </div>
 
       <div class="save-hint">☕ 오른쪽 <strong>이미지로 저장</strong> 버튼으로 내 포트폴리오를 커피챗 공유용 이미지로 만들 수 있어요</div>
@@ -410,14 +488,19 @@
       return items;
     }
 
+    let currentTotal = 0;
+
     function generateChart() {
       const data = gatherData();
       if (data.length === 0) return;
       const total = data.reduce((s, d) => s + d.value, 0);
+      currentTotal = total;
 
       document.getElementById('inputView').classList.remove('active');
       document.getElementById('chartView').classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      updateSimulate();
 
       const ctx = document.getElementById('pieChart').getContext('2d');
       if (chartInstance) chartInstance.destroy();
@@ -484,6 +567,56 @@
       document.getElementById('chartView').classList.remove('active');
       document.getElementById('inputView').classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function formatKRW(n) {
+      if (!isFinite(n) || n <= 0) return '0 원';
+      if (n >= 1e8) return (n / 1e8).toFixed(n >= 1e9 ? 0 : 1) + ' 억원';
+      if (n >= 1e4) return Math.round(n / 1e4).toLocaleString() + ' 만원';
+      return Math.round(n).toLocaleString() + ' 원';
+    }
+
+    function updateSimulate() {
+      const slider = document.getElementById('simRate');
+      const rate = parseFloat(slider.value) / 100;
+      const future = currentTotal * Math.pow(1 + rate, 10);
+      document.getElementById('simRateLabel').textContent = (rate * 100).toFixed(1) + '%';
+      document.getElementById('simNow').textContent = formatKRW(currentTotal);
+      document.getElementById('simFuture').textContent = formatKRW(future);
+      const multiplier = currentTotal > 0 ? (future / currentTotal) : 0;
+      const noteEl = document.getElementById('simNote');
+      if (currentTotal > 0) {
+        noteEl.innerHTML = '<strong>' + multiplier.toFixed(2) + '배</strong>로 증가 (연 ' + (rate * 100).toFixed(1) + '% × 10년 복리) · 물가·세금·환율 미반영';
+      } else {
+        noteEl.textContent = '* 참고: 물가·세금·환율 미반영. 실제 수익률은 자산군별로 크게 다를 수 있습니다.';
+      }
+    }
+
+    let simulateDebounce;
+    function bindSimulate() {
+      const slider = document.getElementById('simRate');
+      if (!slider) return;
+      slider.addEventListener('input', function () {
+        document.querySelectorAll('.simulate-preset').forEach(b => b.classList.remove('active'));
+        clearTimeout(simulateDebounce);
+        updateSimulate();
+        simulateDebounce = setTimeout(function () {
+          if (window.gtag) {
+            window.gtag('event', 'click_simulate', {
+              click_text: 'rate:' + slider.value,
+              click_location: 'portfolio_simulate'
+            });
+          }
+        }, 600);
+      });
+      document.querySelectorAll('.simulate-preset').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          slider.value = btn.getAttribute('data-rate');
+          document.querySelectorAll('.simulate-preset').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          updateSimulate();
+        });
+      });
     }
 
     function saveChart() {
@@ -560,6 +693,7 @@
     }
 
     init();
+    bindSimulate();
   </script>
 <script>
 document.addEventListener('click', function(e) {

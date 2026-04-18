@@ -192,6 +192,32 @@
       },
       "linkHref": "cost/area-07-public-support.html",
       "linkLabel": "자세히 →"
+    },
+    {
+      "id": "family-home-savings-boost",
+      "title": "주거비 세이브분 ISA·연금저축에 이전",
+      "savingHint": "월 30~80만원 투자 여력 → 복리 효과",
+      "areaRef": "05-financial-fees",
+      "priority": 3,
+      "conditions": {
+        "home": ["family"]
+      },
+      "linkHref": "cost/area-05-financial-fees.html",
+      "linkLabel": "활용 전략 →"
+    },
+    {
+      "id": "family-home-youth-saving-account",
+      "title": "청년도약계좌·청년내일저축계좌",
+      "savingHint": "정부 매칭 최대 월 70만원",
+      "areaRef": "07-public-support",
+      "priority": 3,
+      "conditions": {
+        "s": ["s1"],
+        "home": ["family", "rent"],
+        "income": ["0-30", "30-50"]
+      },
+      "linkHref": "cost/area-07-public-support.html",
+      "linkLabel": "자격 확인 →"
     }
   ]
 }

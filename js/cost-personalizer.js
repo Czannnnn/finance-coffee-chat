@@ -9,7 +9,7 @@
   var FIELD_VALUES = {
     s: ['s1', 's2', 's3', 's4', 's5', 's6'],
     income: ['0-30', '30-50', '50-70', '70-100', '100+'],
-    home: ['own', 'jeonse', 'rent'],
+    home: ['own', 'jeonse', 'rent', 'family'],
     dep: ['0', '1', '2', '3'],
     region: ['metro', 'nonmetro']
   };
@@ -83,9 +83,10 @@
     return fields.every(function (field) {
       var allowedValues = conditions[field];
       if (!Array.isArray(allowedValues) || allowedValues.length === 0) return true;
-      // 사용자가 해당 필드를 선택하지 않았다면, 옵션 필드는 매칭 스킵
+      // 규칙이 특정 필드에 조건을 명시한 이상, 사용자가 해당 필드를 선택해야만 매칭 성립.
+      // (ex. dep 조건만 있는 '자녀 세액공제' 규칙이 dep 미선택 청년 단독에게 매칭되던 버그 방지)
       if (!state[field]) {
-        return OPTIONAL_FIELDS.indexOf(field) !== -1;
+        return false;
       }
       return allowedValues.indexOf(state[field]) !== -1;
     });
