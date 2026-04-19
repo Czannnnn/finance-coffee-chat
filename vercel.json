@@ -3,15 +3,15 @@
   "trailingSlash": false,
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "has": [{ "type": "host", "value": "finance-coffee-chat.vercel.app" }],
-      "destination": "https://www.financecoffeechat.com/:path*",
+      "destination": "https://www.financecoffeechat.com/$1",
       "permanent": true
     },
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "has": [{ "type": "host", "value": "financecoffeechat.com" }],
-      "destination": "https://www.financecoffeechat.com/:path*",
+      "destination": "https://www.financecoffeechat.com/$1",
       "permanent": true
     }
   ]
