@@ -1,0 +1,108 @@
+<h2>공모주 분석 페이지 — 최종 디자인</h2>
+<p class="subtitle">결정된 사항을 종합한 전체 페이지 설계입니다. 검토 후 승인해 주세요.</p>
+
+<div class="section">
+  <h3>📄 페이지 구조: ipo-analysis.html</h3>
+  <div style="background:#f8f5f0;border-radius:12px;padding:20px;margin:12px 0;">
+    <div style="font-family:monospace;font-size:13px;line-height:2.2;">
+      ┌─ 네비게이션 바 ────────────────────────────────┐<br>
+      │ Finance Coffee Chat │ 포트폴리오 │ 자산관리 │ 공모주 │ <strong>공모주분석</strong> │<br>
+      └──────────────────────────────────────────────────┘<br>
+      <br>
+      ┌─ 헤더 ─────────────────────────────────────────┐<br>
+      │ ☕ IPO Analysis &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+      │ <strong>공모주 분석</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+      │ 필승 전략 4대 조건 기반 종목 분석 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+      └──────────────────────────────────────────────────┘<br>
+      <br>
+      ┌─ 4대 조건 가이드 ──────────────────────────────┐<br>
+      │ ① 기관경쟁률 800:1↑ │ ② 공모가 상단초과 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+      │ ③ 의무확약 15%↑ &nbsp;&nbsp;&nbsp;│ ④ 유통물량 25%↓ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+      └──────────────────────────────────────────────────┘<br>
+      <br>
+      ┌─ 등급 가이드 ─────────────────────────────────┐<br>
+      │ S: 4조건 충족+확약50%↑ │ A: 3개↑+섹터양호 &nbsp;&nbsp;&nbsp;│<br>
+      │ B: 2개 충족 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│ C/D: 부진, 리스크 &nbsp;&nbsp;│<br>
+      └──────────────────────────────────────────────────┘<br>
+      <br>
+      ┌─ 필터 ─────────────────────────────────────────┐<br>
+      │ 등급: [전체] [S] [A] [B] [C/D] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+      │ 상태: [전체] [청약예정] [청약중] [상장완료] &nbsp;&nbsp;&nbsp;&nbsp;│<br>
+      └──────────────────────────────────────────────────┘<br>
+      <br>
+      ── <strong>S등급</strong> (4대 조건 충족) ─────────────────────────<br>
+      ┌─ 카드 ─────────────────────────────────────────┐<br>
+      │ <span style="background:#4A7C59;color:white;padding:2px 8px;border-radius:4px;font-size:11px;">S</span> <strong>AAA주식회사</strong> &nbsp;&nbsp; 코스닥 │ 청약중 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+      │───────────────────────────────────────────────│<br>
+      │ ① 기관경쟁률 &nbsp;&nbsp;│ ② 공모가 &nbsp;&nbsp;&nbsp;&nbsp;│ ③ 의무확약│ ④ 유통물량│<br>
+      │ &nbsp;&nbsp; 1,247:1 ✅ &nbsp;│ 15,000원 ✅ │ &nbsp;&nbsp;52.3% ✅│ &nbsp;&nbsp;18.2% ✅│<br>
+      │ &nbsp;&nbsp; (800↑) &nbsp;&nbsp;&nbsp;&nbsp;│ 상단 초과 &nbsp;&nbsp;&nbsp;│ &nbsp;&nbsp;(15↑) &nbsp;&nbsp;│ &nbsp;&nbsp;(25↓) &nbsp;&nbsp;│<br>
+      │───────────────────────────────────────────────│<br>
+      │ 📅 청약 4/7~4/8 │ 🏦 한국투자증권 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+      │ 💰 밴드 12,000~15,000원 │ 📊 공모주식수 2,500,000│<br>
+      └──────────────────────────────────────────────────┘<br>
+      <br>
+      ── <strong>B등급</strong> (2개 충족) ─────────────────────────────<br>
+      ┌─ 카드 ─────────────────────────────────────────┐<br>
+      │ <span style="background:#C4853C;color:white;padding:2px 8px;border-radius:4px;font-size:11px;">B</span> <strong>BBB테크</strong> &nbsp;&nbsp;&nbsp;&nbsp; 코스피 │ 청약예정 &nbsp;&nbsp;&nbsp;&nbsp;│<br>
+      │ &nbsp; ... &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+      └──────────────────────────────────────────────────┘<br>
+      <br>
+      ┌─ 면책 조항 ─────────────────────────────────────┐<br>
+      │ ⚠️ 본 페이지는 투자 참고용 자료이며, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+      │ 투자 판단의 책임은 본인에게 있습니다. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+      └──────────────────────────────────────────────────┘<br>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>🎨 디자인 규칙</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div style="background:#f0f7f0;border-radius:8px;padding:16px;">
+      <strong>등급별 색상</strong><br>
+      <span style="display:inline-block;background:#4A7C59;color:white;padding:2px 12px;border-radius:4px;margin:4px 2px;">S — Green</span>
+      <span style="display:inline-block;background:#3D5A80;color:white;padding:2px 12px;border-radius:4px;margin:4px 2px;">A — Blue</span>
+      <span style="display:inline-block;background:#C4853C;color:white;padding:2px 12px;border-radius:4px;margin:4px 2px;">B — Caramel</span>
+      <span style="display:inline-block;background:#C0564B;color:white;padding:2px 12px;border-radius:4px;margin:4px 2px;">C/D — Red</span>
+    </div>
+    <div style="background:#f0f7f0;border-radius:8px;padding:16px;">
+      <strong>조건 충족 표시</strong><br>
+      ✅ 충족 → 초록 텍스트<br>
+      ❌ 미충족 → 회색 텍스트<br>
+      기준값 작게 표시 (800↑, 15%↑ 등)
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>📱 반응형</h3>
+  <ul style="line-height:2;">
+    <li><strong>데스크톱:</strong> 4대 조건 4열 그리드, 하단 정보 2열</li>
+    <li><strong>모바일(600px↓):</strong> 4대 조건 2열 그리드, 하단 정보 1열, 필터 가로 스크롤</li>
+  </ul>
+</div>
+
+<div class="section">
+  <h3>🔗 네비게이션 연결</h3>
+  <ul style="line-height:2;">
+    <li>index.html 네비바에 "공모주 분석" 메뉴 추가</li>
+    <li>ipo.html 카드에 "분석 보기 →" 링크 추가</li>
+    <li>ipo-analysis.html ↔ ipo.html 상호 링크</li>
+  </ul>
+</div>
+
+<div class="options">
+  <div class="option" data-choice="approve" onclick="toggleSelect(this)">
+    <div class="letter">✓</div>
+    <div class="content">
+      <h3>디자인 승인 — 스펙 작성 진행</h3>
+    </div>
+  </div>
+  <div class="option" data-choice="adjust" onclick="toggleSelect(this)">
+    <div class="letter">✎</div>
+    <div class="content">
+      <h3>수정 필요 — 터미널에서 알려주세요</h3>
+    </div>
+  </div>
+</div>

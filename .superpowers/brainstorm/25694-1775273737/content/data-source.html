@@ -1,0 +1,36 @@
+<h2>데이터 소스 — 4대 조건 데이터를 어디서 가져올까?</h2>
+<p class="subtitle">기존 IPO 캘린더는 Google Sheets에서 데이터를 가져옵니다. 분석 데이터도 같은 방식으로?</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>기존 Google Sheets 확장</h3>
+      <p>현재 IPO데이터 시트에 4대 조건 컬럼(기관경쟁률, 확약비율, 유통물량 등)을 추가.<br>
+      캘린더와 분석 페이지가 동일 데이터소스를 공유.</p>
+      <div style="background:#f8f5f0;border-radius:12px;padding:16px;margin:8px 0;font-size:13px;">
+        기존 컬럼: 종목명, 시장, 상태, 공모가, 밴드, 청약일, 환불일, 상장일, 주관사, 경쟁률, 확약, 공모주식수<br>
+        <strong>+ 추가 컬럼: 공모가밴드하단, 공모가밴드상단, 유통물량비율, 등급</strong>
+      </div>
+      <div class="pros-cons">
+        <div class="pros"><h4>장점</h4><ul><li>단일 데이터소스 — 관리 간편</li><li>기존 스크래퍼(ipo-scraper.gs) 확장 가능</li><li>캘린더 데이터 재활용</li></ul></div>
+        <div class="cons"><h4>단점</h4><ul><li>스크래퍼 수정 필요</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>샘플 데이터로 먼저 구현 → 나중에 시트 연동</h3>
+      <p>페이지 UI를 샘플 데이터로 먼저 완성하고, Google Sheets 연동은 이후 단계에서 진행.<br>
+      기존 캘린더도 이 패턴(샘플 → 라이브)으로 구현됨.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>장점</h4><ul><li>빠른 프로토타이핑</li><li>UI를 먼저 검증</li><li>기존 패턴과 동일한 접근</li></ul></div>
+        <div class="cons"><h4>단점</h4><ul><li>실제 데이터 연동은 별도 작업</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p style="margin-top:24px;color:#666;font-size:14px;"><strong>추천:</strong> Option B — 기존 캘린더와 같은 패턴. UI 먼저 완성하고, 시트 스키마 확장은 별도 단계로.</p>
