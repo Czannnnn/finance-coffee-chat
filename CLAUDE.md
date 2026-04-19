@@ -37,10 +37,14 @@ robots.txt, sitemap.xml, favicon.svg, og-image.png → SEO 자산
 - 폰트: Noto Sans KR + Playfair Display
 - 반응형: 600px 브레이크포인트
 
-## SEO (2026-04-12 최적화 완료)
+## SEO (2026-04-19 Cycle 5 Q2 최신)
 - 전 페이지: meta description, OG tags, Twitter Card, canonical, JSON-LD, keywords
-- robots.txt + sitemap.xml + favicon.svg + og-image.png (1200x630)
-- Google Search Console / Naver Search Advisor 등록은 미완료
+- robots.txt + sitemap.xml + favicon.svg + og-image.png (새 브랜드 로고 반영) + logo.svg
+- Organization JSON-LD logo 필드 적용 (Knowledge Panel·AEO용)
+- Google Search Console 등록 완료 (도메인 Property: financecoffeechat.com, DNS TXT 검증)
+- Naver Search Advisor 등록 완료 (https://www.financecoffeechat.com, HTML 메타 태그 검증)
+- 도메인: https://www.financecoffeechat.com (Primary) · apex·vercel.app 301/308 리다이렉트
+- 푸터 contact: hello@financecoffeechat.com (Cloudflare Email Routing, click_contact_email GA 이벤트)
 
 ## IPO 분석 4대 조건
 1. 기관 경쟁률 (높을수록 유리)
