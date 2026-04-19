@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent.parent / "cost"
-BASE_URL = "https://finance-coffee-chat.vercel.app/cost/"
+BASE_URL = "https://www.financecoffeechat.com/cost/"
 
 FAQS = {
     "area-01-year-end-tax": [

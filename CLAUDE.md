@@ -2,7 +2,7 @@
 
 ## 프로젝트 개요
 투자 정보 플랫폼 — 공모주 청약 캘린더/분석, 포트폴리오 자산배분, 자산관리 교육 콘텐츠.
-URL: https://finance-coffee-chat.vercel.app
+URL: https://www.financecoffeechat.com
 
 ## 기술 스택
 - **프론트엔드:** Static HTML + vanilla JS + CSS (빌드 도구 없음, 프레임워크 없음)

@@ -33,4 +33,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://finance-coffee-chat.vercel.app/sitemap.xml
+Sitemap: https://www.financecoffeechat.com/sitemap.xml

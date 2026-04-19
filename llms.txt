@@ -2,36 +2,36 @@
 
 > 2026년 한국 FIRE 세대를 위한 공모주·지수투자·포트폴리오·절세·생활비 최적화 실전 가이드. 가입 없이 바로 쓰는 투자 도구 모음. 교육·정보 제공 목적이며 특정 종목 매수 권유나 투자 추천이 아닙니다.
 
-Site: https://finance-coffee-chat.vercel.app
+Site: https://www.financecoffeechat.com
 Language: ko
 Last updated: 2026-04-19
 
 ## Core pages
 
-- [홈 — 투자 커피챗](https://finance-coffee-chat.vercel.app/): 전체 도구 인덱스
-- [자산관리 101](https://finance-coffee-chat.vercel.app/asset): 투자 기초·자산배분·리밸런싱 이론
-- [포트폴리오 자산배분 차트](https://finance-coffee-chat.vercel.app/portfolio): 도넛 차트로 자산배분 시뮬레이션
+- [홈 — 투자 커피챗](https://www.financecoffeechat.com/): 전체 도구 인덱스
+- [자산관리 101](https://www.financecoffeechat.com/asset): 투자 기초·자산배분·리밸런싱 이론
+- [포트폴리오 자산배분 차트](https://www.financecoffeechat.com/portfolio): 도넛 차트로 자산배분 시뮬레이션
 
 ## IPO (공모주)
 
-- [공모주 캘린더](https://finance-coffee-chat.vercel.app/ipo): 청약 일정 월간 그리드 + 카드 리스트
-- [공모주 등급 분석](https://finance-coffee-chat.vercel.app/ipo-analysis): 4대 조건(기관 경쟁률·확정 공모가·의무보유확약·유통가능물량)으로 S~D 등급 산정
-- [공모주 청약 가이드](https://finance-coffee-chat.vercel.app/ipo-guide): 계좌 개설→일정 확인→청약→환불→상장일 매도 단계별 튜토리얼
+- [공모주 캘린더](https://www.financecoffeechat.com/ipo): 청약 일정 월간 그리드 + 카드 리스트
+- [공모주 등급 분석](https://www.financecoffeechat.com/ipo-analysis): 4대 조건(기관 경쟁률·확정 공모가·의무보유확약·유통가능물량)으로 S~D 등급 산정
+- [공모주 청약 가이드](https://www.financecoffeechat.com/ipo-guide): 계좌 개설→일정 확인→청약→환불→상장일 매도 단계별 튜토리얼
 
 ## Index investing (지수투자·FIRE)
 
-- [지수투자 FIRE 로드맵](https://finance-coffee-chat.vercel.app/index-investing): 4대 지수 ETF 기반 경제적 자유 달성 전략
-- [지수투자 시뮬레이터](https://finance-coffee-chat.vercel.app/index-simulation): 수익률·기간별 FIRE 목표 계산
+- [지수투자 FIRE 로드맵](https://www.financecoffeechat.com/index-investing): 4대 지수 ETF 기반 경제적 자유 달성 전략
+- [지수투자 시뮬레이터](https://www.financecoffeechat.com/index-simulation): 수익률·기간별 FIRE 목표 계산
 
 ## Tax (절세)
 
-- [절세 최적화](https://finance-coffee-chat.vercel.app/tax-optimization): ISA·연금저축·IRP·DC/DB 환급 극대화
-- [절세 시뮬레이터](https://finance-coffee-chat.vercel.app/tax-simulation): 계정별 한도·세액공제 계산
+- [절세 최적화](https://www.financecoffeechat.com/tax-optimization): ISA·연금저축·IRP·DC/DB 환급 극대화
+- [절세 시뮬레이터](https://www.financecoffeechat.com/tax-simulation): 계정별 한도·세액공제 계산
 
 ## Cost (생활비 최적화)
 
-- [생활비 최적화 허브](https://finance-coffee-chat.vercel.app/cost-optimization): 가구 유형별·영역별 절감 인덱스
-- [생활비 시뮬레이터](https://finance-coffee-chat.vercel.app/cost-simulation): 월 고정비 절감액 시뮬레이션
+- [생활비 최적화 허브](https://www.financecoffeechat.com/cost-optimization): 가구 유형별·영역별 절감 인덱스
+- [생활비 시뮬레이터](https://www.financecoffeechat.com/cost-simulation): 월 고정비 절감액 시뮬레이션
 - 가구 유형(s1~s6): 청년 1인, 신혼 맞벌이, 신혼 외벌이, 부모 1자녀, 부모 다자녀, 중년 1인
 - 절감 영역(area-01~08): 연말정산·신용카드·보험·통신비·금융수수료·공공요금·공공지원·교통
 
