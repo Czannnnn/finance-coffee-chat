@@ -1,4 +1,18 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "finance-coffee-chat.vercel.app" }],
+      "destination": "https://www.financecoffeechat.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "financecoffeechat.com" }],
+      "destination": "https://www.financecoffeechat.com/:path*",
+      "permanent": true
+    }
+  ]
 }
