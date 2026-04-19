@@ -11,13 +11,13 @@
   "lang": "ko",
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "/favicon.svg?v=2026-04-19b",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/apple-touch-icon.png",
+      "src": "/apple-touch-icon.png?v=2026-04-19b",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"
