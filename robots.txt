@@ -1,3 +1,35 @@
+# Finance Coffee Chat — robots policy
+# Last updated: 2026-04-19 (Cycle 5 Q2 W1)
+
+# AI crawlers (9 bots) — explicit Allow for AEO/GEO visibility
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+# All other crawlers
 User-agent: *
 Allow: /
 

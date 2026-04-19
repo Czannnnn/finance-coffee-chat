@@ -1,0 +1,26 @@
+{
+  "name": "Finance Coffee Chat",
+  "short_name": "커피챗",
+  "description": "공모주 캘린더·분석, 지수투자 FIRE, 포트폴리오, 절세·생활비 최적화 실전 가이드",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAF6F0",
+  "theme_color": "#2C1810",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
