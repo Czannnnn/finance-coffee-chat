@@ -131,29 +131,121 @@ function fetchFromDart_(apiKey) {
 }
 
 // ─── 원천 2: KIND 한국거래소 ───
+// KIND는 공식 상장공시를 제공하며, kind.krx.co.kr의 상장예정 리스트 페이지를 크롤링.
+// 공식 JSON API가 없어 HTML 파싱 사용.
 function fetchFromKind_() {
-  // TODO: KIND 상장공시 API 또는 HTML 크롤링 구현
-  // 당장은 스켈레톤만 유지하고 DART의 listing_date를 사용
-  return 0;
+  const url = 'https://kind.krx.co.kr/disclosureinfo/listedcmpdisclosure.do?method=searchListedCmpDisclosureMain';
+  const rows = [];
+  try {
+    const res = UrlFetchApp.fetch(url, {
+      muteHttpExceptions: true,
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; FinanceCoffeeChat/2.0)' },
+    });
+    const html = res.getContentText('UTF-8');
+
+    // KIND의 상장예정/신규상장 테이블 구조에서 종목명·시장·상장일을 추출
+    // 구조 변경 대응을 위해 관대한 정규식 사용
+    const tableRe = /<tr[^>]*>([\s\S]*?)<\/tr>/gi;
+    let match;
+    while ((match = tableRe.exec(html)) !== null) {
+      const tr = match[1];
+      if (!/(코스피|코스닥|KOSPI|KOSDAQ)/.test(tr)) continue;
+      const cells = [];
+      const cellRe = /<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/gi;
+      let cm;
+      while ((cm = cellRe.exec(tr)) !== null) {
+        cells.push(cm[1].replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim());
+      }
+      if (cells.length < 3) continue;
+      const name = cells.find(c => c && !/(코스피|코스닥)/.test(c) && c.length >= 2 && c.length <= 30);
+      const market = /(코스피|KOSPI)/.test(tr) ? 'kospi' : 'kosdaq';
+      const dateMatch = tr.match(/(\d{4})[-./](\d{1,2})[-./](\d{1,2})/);
+      if (name && dateMatch) {
+        rows.push({
+          name: name,
+          market: market,
+          listing_date: `${dateMatch[1]}-${String(dateMatch[2]).padStart(2, '0')}-${String(dateMatch[3]).padStart(2, '0')}`,
+        });
+      }
+    }
+  } catch (e) {
+    Logger.log(`KIND fetch 실패: ${e.message}`);
+  }
+
+  writeSheet_(V2_SHEETS.rawKind,
+    ['name', 'market', 'listing_date', 'fetched_at'],
+    rows.map(r => [r.name, r.market, r.listing_date, new Date().toISOString()]));
+  return rows.length;
 }
 
-// ─── 원천 3: 38.co.kr (기존 로직 축소 버전) ───
+// ─── 원천 3: 38.co.kr (DART 미제공 보조 지표) ───
+// 주 목적: 기관수요예측 경쟁률 + 의무보유확약 + 유통가능물량 보조.
+// 기존 ipo-scraper.gs의 parseListPage·parseDetailPage·fetchAsEucKr을 그대로 재사용.
+// Apps Script는 단일 프로젝트 내 파일들이 동일 네임스페이스를 공유하므로 직접 호출 가능.
 function fetchFrom38_v2_() {
-  // 기존 parseListPage·parseDetailPage (ipo-scraper.gs) 재사용
-  // 단 raw_38 시트에 '경쟁률' 필드 위주로 저장
-  // TODO: 기존 함수를 include 또는 복사해서 붙여넣기
-  return 0;
+  const rows = [];
+  if (typeof fetchAsEucKr !== 'function' || typeof parseListPage !== 'function' || typeof parseDetailPage !== 'function') {
+    Logger.log('38.co.kr 보조 파서 함수가 없음 (ipo-scraper.gs 필요)');
+    return 0;
+  }
+  try {
+    const ipos = [];
+    for (let page = 1; page <= 2; page++) {
+      const html = fetchAsEucKr(`http://www.38.co.kr/html/fund/index.htm?o=k&page=${page}`);
+      ipos.push(...parseListPage(html));
+    }
+    for (const ipo of ipos) {
+      let detail = { market: '', refundDate: '', listingDate: '', lockup: '', shares: '', floatRatio: '' };
+      if (ipo.detailUrl) {
+        try {
+          const html = fetchAsEucKr(ipo.detailUrl);
+          detail = parseDetailPage(html);
+          Utilities.sleep(400);
+        } catch (e) {
+          Logger.log(`38 상세 실패 (${ipo.name}): ${e.message}`);
+        }
+      }
+      rows.push({
+        name: ipo.name,
+        market: detail.market || '',
+        subscribe_start: ipo.subscribeStart || '',
+        subscribe_end: ipo.subscribeEnd || '',
+        refund_date: detail.refundDate || '',
+        listing_date: detail.listingDate || '',
+        confirmed_price: ipo.confirmedPrice || '',
+        expected_price: ipo.expectedPrice || '',
+        lead: ipo.lead || '',
+        demand_competition: ipo.competition || '',
+        lockup: detail.lockup || '',
+        float_ratio: detail.floatRatio || '',
+        shares: detail.shares || '',
+      });
+    }
+  } catch (e) {
+    Logger.log(`38 수집 실패: ${e.message}`);
+  }
+
+  writeSheet_(V2_SHEETS.raw38,
+    ['name', 'market', 'subscribe_start', 'subscribe_end', 'refund_date', 'listing_date',
+     'confirmed_price', 'expected_price', 'lead', 'demand_competition', 'lockup', 'float_ratio', 'shares', 'fetched_at'],
+    rows.map(r => [r.name, r.market, r.subscribe_start, r.subscribe_end, r.refund_date, r.listing_date,
+                   r.confirmed_price, r.expected_price, r.lead, r.demand_competition, r.lockup, r.float_ratio, r.shares,
+                   new Date().toISOString()]));
+  return rows.length;
 }
 
 // ─── 통합·정규화 ───
+// 전략: 종목명 기반 매칭 후 DART 우선, KIND로 listing_date 오버라이드, 38로 경쟁률·확약·유통 보조.
 function buildNormalized_() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const dartRows = readSheet_(ss.getSheetByName(V2_SHEETS.rawDart));
   const kindRows = readSheet_(ss.getSheetByName(V2_SHEETS.rawKind));
   const s38Rows  = readSheet_(ss.getSheetByName(V2_SHEETS.raw38));
 
-  // TODO: 교차 검증 로직 — DART 우선, KIND로 상장일 확정, 38로 경쟁률 보조
-  // 현재 MVP: DART 행을 그대로 normalized로 넘김 (공모가·확약·유통 컬럼은 placeholder)
+  const kindByName = {};
+  kindRows.forEach(r => { if (r.name) kindByName[normalizeName_(r.name)] = r; });
+  const s38ByName = {};
+  s38Rows.forEach(r => { if (r.name) s38ByName[normalizeName_(r.name)] = r; });
 
   const headers = [
     'corp_code', 'name', 'market', 'status',
@@ -164,25 +256,193 @@ function buildNormalized_() {
     'shares_total', 'shares_float',
     'confidence', 'sources', 'updated',
   ];
+
   const today = new Date();
-  const rows = dartRows.map(r => [
-    r.corp_code || '', r.corp_name || '', '', 'upcoming',
-    '', '', '', '',
-    '', '', '', '',
-    '', '', '',
-    '', '', '',
-    '', '',
-    'low', 'dart', Utilities.formatDate(today, 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss'),
-  ]);
+  const todayStr = Utilities.formatDate(today, 'Asia/Seoul', 'yyyy-MM-dd');
+
+  // DART 공시에서 "증권신고서" 계열만 선별하고 종목명 기준으로 중복 제거 (최신 rcept_dt 우선)
+  const byName = {};
+  dartRows.forEach(r => {
+    const nk = normalizeName_(r.corp_name);
+    if (!nk) return;
+    if (!byName[nk] || (r.rcept_dt > byName[nk].rcept_dt)) byName[nk] = r;
+  });
+
+  const rows = [];
+  Object.keys(byName).forEach(nk => {
+    const d = byName[nk];
+    const k = kindByName[nk] || {};
+    const s = s38ByName[nk] || {};
+
+    const market = k.market || s.market || '';
+    const subStart = s.subscribe_start || '';
+    const subEnd = s.subscribe_end || '';
+    const listing = k.listing_date || s.listing_date || '';
+    const refund = s.refund_date || '';
+
+    const status = computeStatusV2_(todayStr, subStart, subEnd, listing);
+
+    const bandLow = extractBandLow_(s.expected_price);
+    const bandHigh = extractBandHigh_(s.expected_price);
+    const confirmedNum = parsePrice_(s.confirmed_price);
+    const bandPos = computeBandPosition_(confirmedNum, bandLow, bandHigh);
+
+    const lockupPct = parsePercent_(s.lockup);
+    const floatPct = parsePercent_(s.float_ratio);
+
+    const sources = ['dart'];
+    if (k.name) sources.push('kind');
+    if (s.name) sources.push('38');
+    const confidence = sources.length >= 3 ? 'high' : (sources.length === 2 ? 'medium' : 'low');
+
+    rows.push([
+      d.corp_code || '',
+      d.corp_name || s.name || k.name || '',
+      market,
+      status,
+      s.confirmed_price || '',
+      bandLow || '',
+      bandHigh || '',
+      bandPos,
+      subStart,
+      subEnd,
+      refund,
+      listing,
+      s.lead || '',
+      s.demand_competition || '',
+      s.demand_competition ? '기관 수요예측' : '',
+      lockupPct != null ? `${lockupPct}%` : '',
+      '', // lockup_breakdown: document.xml 파싱 Phase 2에서 채움
+      floatPct != null ? `${floatPct}%` : '',
+      s.shares || '',
+      '', // shares_float: Phase 2
+      confidence,
+      sources.join(','),
+      Utilities.formatDate(today, 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss'),
+    ]);
+  });
+
   writeSheet_(V2_SHEETS.normalized, headers, rows);
   return rows.length;
 }
 
 // ─── 아카이브 ───
+// normalized에서 status='completed' + listing이 7일 이전인 행을 archive로 이관.
+// archive에 V2_ARCHIVE_KEEP_DAYS(180일) 경과 행은 삭제.
 function rollToArchive_() {
-  // TODO: normalized에서 status='completed' + listing_date가 7일 이전인 행을 archive로 이관
-  // archive에 V2_ARCHIVE_KEEP_DAYS 경과 행은 삭제
-  return 0;
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const normSheet = ss.getSheetByName(V2_SHEETS.normalized);
+  if (!normSheet || normSheet.getLastRow() < 2) return 0;
+
+  const values = normSheet.getDataRange().getValues();
+  const headers = values[0];
+  const listingIdx = headers.indexOf('listing');
+  const statusIdx = headers.indexOf('status');
+  if (listingIdx < 0 || statusIdx < 0) return 0;
+
+  const now = new Date();
+  const cutoffMove = new Date(now.getTime() - 7 * 86400000);
+  const cutoffDelete = new Date(now.getTime() - V2_ARCHIVE_KEEP_DAYS * 86400000);
+  const moveRows = [];
+  const keepRows = [values[0]]; // 헤더
+
+  for (let i = 1; i < values.length; i++) {
+    const row = values[i];
+    const listing = String(row[listingIdx] || '');
+    if (row[statusIdx] === 'completed' && /^\d{4}-\d{2}-\d{2}$/.test(listing)) {
+      if (new Date(listing) < cutoffMove) {
+        moveRows.push(row);
+        continue;
+      }
+    }
+    keepRows.push(row);
+  }
+
+  if (moveRows.length > 0) {
+    let archSheet = ss.getSheetByName(V2_SHEETS.archive);
+    if (!archSheet) {
+      archSheet = ss.insertSheet(V2_SHEETS.archive);
+      archSheet.getRange(1, 1, 1, headers.length).setValues([headers]).setFontWeight('bold');
+    }
+    const lastRow = archSheet.getLastRow();
+    archSheet.getRange(lastRow + 1, 1, moveRows.length, headers.length).setValues(moveRows);
+
+    // normalized 재구성
+    normSheet.clearContents();
+    normSheet.getRange(1, 1, keepRows.length, headers.length).setValues(keepRows);
+
+    // archive에서 180일 이전 행 삭제
+    const archValues = archSheet.getDataRange().getValues();
+    const archListingIdx = archValues[0].indexOf('listing');
+    const archKeep = [archValues[0]];
+    for (let i = 1; i < archValues.length; i++) {
+      const listing = String(archValues[i][archListingIdx] || '');
+      if (/^\d{4}-\d{2}-\d{2}$/.test(listing) && new Date(listing) < cutoffDelete) continue;
+      archKeep.push(archValues[i]);
+    }
+    if (archKeep.length !== archValues.length) {
+      archSheet.clearContents();
+      archSheet.getRange(1, 1, archKeep.length, headers.length).setValues(archKeep);
+    }
+  }
+  return moveRows.length;
+}
+
+// ─── 정규화 유틸 ───
+function normalizeName_(name) {
+  if (!name) return '';
+  return String(name)
+    .replace(/[\s\(\)\[\]㈜(주)]/g, '')
+    .replace(/주식회사/g, '')
+    .toLowerCase();
+}
+
+function computeStatusV2_(todayStr, subStart, subEnd, listing) {
+  if (!subStart) return 'upcoming';
+  if (todayStr < subStart) return 'upcoming';
+  if (subEnd && todayStr >= subStart && todayStr <= subEnd) return 'active';
+  if (listing && todayStr < listing) return 'pending_listing';
+  if (listing && todayStr >= listing) return 'completed';
+  return 'completed';
+}
+
+function parsePrice_(str) {
+  if (!str) return 0;
+  const m = String(str).replace(/,/g, '').match(/(\d+)/);
+  return m ? parseInt(m[1], 10) : 0;
+}
+
+function extractBandLow_(str) {
+  if (!str) return 0;
+  const m = String(str).replace(/,/g, '').match(/(\d+)\s*~/);
+  return m ? parseInt(m[1], 10) : 0;
+}
+
+function extractBandHigh_(str) {
+  if (!str) return 0;
+  const m = String(str).replace(/,/g, '').match(/~\s*(\d+)/);
+  return m ? parseInt(m[1], 10) : 0;
+}
+
+// 5단계 밴드 위치 산출: 초과/상단/중간/하단/하회
+function computeBandPosition_(fixed, low, high) {
+  if (!fixed || !low || !high || high <= low) return '';
+  if (fixed > high) return '초과';
+  if (fixed === high) return '상단';
+  if (fixed === low) return '하단';
+  if (fixed < low) return '하회';
+  const mid = (low + high) / 2;
+  if (Math.abs(fixed - mid) / mid <= 0.05) return '중간';
+  return fixed > mid ? '상단' : '하단';
+}
+
+function parsePercent_(str) {
+  if (!str) return null;
+  const m = String(str).match(/([\d.]+)\s*%/);
+  if (!m) return null;
+  let n = parseFloat(m[1]);
+  if (n > 0 && n < 1) n = Math.round(n * 10000) / 100; // 0.15 → 15.0
+  return n;
 }
 
 // ─── 시트 유틸 ───
