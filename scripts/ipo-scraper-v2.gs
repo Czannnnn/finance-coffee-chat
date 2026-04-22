@@ -88,7 +88,7 @@ function fetchFromDart_(apiKey) {
   const bgnStr = Utilities.formatDate(bgn, 'Asia/Seoul', 'yyyyMMdd');
   const endStr = Utilities.formatDate(today, 'Asia/Seoul', 'yyyyMMdd');
 
-  const rows = [];
+  const rawRows = [];
   let page = 1;
   while (page <= 20) {
     const url = `${DART_BASE}/list.json`
@@ -105,13 +105,14 @@ function fetchFromDart_(apiKey) {
     }
 
     (json.list || []).forEach(item => {
-      rows.push({
+      rawRows.push({
         corp_code: item.corp_code || '',
         corp_name: item.corp_name || '',
         rcept_no: item.rcept_no || '',
         rcept_dt: item.rcept_dt || '',
         report_nm: item.report_nm || '',
         stock_code: item.stock_code || '',
+        corp_cls: item.corp_cls || '',
       });
     });
 
@@ -120,12 +121,24 @@ function fetchFromDart_(apiKey) {
     Utilities.sleep(200);
   }
 
-  // TODO: 각 rcept_no에 대해 document.xml 세부 조회 → 공모가·청약일·확약·유통비율 추출
-  // MVP 단계에서는 list.json 기본 필드만 저장. Full 구현은 사용자 결정 후 추가.
+  // IPO 전용 필터 — 증권사 ELS/유상증자·채권·파생 공시 배제.
+  // 조건 (AND):
+  //   1) stock_code가 공란 (상장 전 기업은 종목코드 없음)
+  //   2) report_nm이 "[증권신고서(지분증권)]" 또는 "투자설명서" 계열로 시작
+  //   3) corp_cls != 'Y'/'K'/'N' (이미 상장된 유가·코스닥·코넥스 법인 제외)
+  const IPO_REPORT_RE = /^\[?(증권신고서\s*\(\s*지분증권|투자설명서)/;
+  const rows = rawRows.filter(r =>
+    (!r.stock_code || r.stock_code.trim() === '') &&
+    IPO_REPORT_RE.test(r.report_nm || '') &&
+    (!r.corp_cls || r.corp_cls === 'E' || r.corp_cls === '')
+  );
 
+  Logger.log(`DART: 원시 ${rawRows.length}건 → IPO 필터 후 ${rows.length}건`);
+
+  // TODO(Phase 2): 각 rcept_no에 대해 document.xml 세부 조회 → 공모가·청약일·확약·유통비율 추출
   writeSheet_(V2_SHEETS.rawDart,
-    ['corp_code', 'corp_name', 'rcept_no', 'rcept_dt', 'report_nm', 'stock_code', 'fetched_at'],
-    rows.map(r => [r.corp_code, r.corp_name, r.rcept_no, r.rcept_dt, r.report_nm, r.stock_code, new Date().toISOString()]));
+    ['corp_code', 'corp_name', 'rcept_no', 'rcept_dt', 'report_nm', 'stock_code', 'corp_cls', 'fetched_at'],
+    rows.map(r => [r.corp_code, r.corp_name, r.rcept_no, r.rcept_dt, r.report_nm, r.stock_code, r.corp_cls, new Date().toISOString()]));
 
   return rows.length;
 }
@@ -235,17 +248,31 @@ function fetchFrom38_v2_() {
 }
 
 // ─── 통합·정규화 ───
-// 전략: 종목명 기반 매칭 후 DART 우선, KIND로 listing_date 오버라이드, 38로 경쟁률·확약·유통 보조.
+// 전략: 3원천 union (종목명 정규화 키). 각 원천 내 최신 1건 유지.
+// 최종 출처 우선순위: DART (corp_code/corp_name) > KIND (상장일·시장 확정) > 38 (공모가·경쟁률·확약·유통).
 function buildNormalized_() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const dartRows = readSheet_(ss.getSheetByName(V2_SHEETS.rawDart));
   const kindRows = readSheet_(ss.getSheetByName(V2_SHEETS.rawKind));
   const s38Rows  = readSheet_(ss.getSheetByName(V2_SHEETS.raw38));
 
-  const kindByName = {};
-  kindRows.forEach(r => { if (r.name) kindByName[normalizeName_(r.name)] = r; });
-  const s38ByName = {};
-  s38Rows.forEach(r => { if (r.name) s38ByName[normalizeName_(r.name)] = r; });
+  const merged = {};
+  const upsert = (nk, src, row) => {
+    if (!nk) return;
+    if (!merged[nk]) merged[nk] = { sources: [] };
+    if (!merged[nk][src]) merged[nk].sources.push(src);
+    merged[nk][src] = row;
+  };
+  // DART: rcept_dt 최신 우선
+  dartRows.forEach(r => {
+    const nk = normalizeName_(r.corp_name);
+    if (!nk) return;
+    if (!merged[nk] || !merged[nk].dart || String(r.rcept_dt || '') > String(merged[nk].dart.rcept_dt || '')) {
+      upsert(nk, 'dart', r);
+    }
+  });
+  kindRows.forEach(r => upsert(normalizeName_(r.name), 'kind', r));
+  s38Rows.forEach(r => upsert(normalizeName_(r.name), 's38', r));
 
   const headers = [
     'corp_code', 'name', 'market', 'status',
@@ -260,20 +287,13 @@ function buildNormalized_() {
   const today = new Date();
   const todayStr = Utilities.formatDate(today, 'Asia/Seoul', 'yyyy-MM-dd');
 
-  // DART 공시에서 "증권신고서" 계열만 선별하고 종목명 기준으로 중복 제거 (최신 rcept_dt 우선)
-  const byName = {};
-  dartRows.forEach(r => {
-    const nk = normalizeName_(r.corp_name);
-    if (!nk) return;
-    if (!byName[nk] || (r.rcept_dt > byName[nk].rcept_dt)) byName[nk] = r;
-  });
+  const rows = Object.keys(merged).map(nk => {
+    const d = merged[nk].dart || {};
+    const k = merged[nk].kind || {};
+    const s = merged[nk].s38 || {};
+    const sources = merged[nk].sources;
 
-  const rows = [];
-  Object.keys(byName).forEach(nk => {
-    const d = byName[nk];
-    const k = kindByName[nk] || {};
-    const s = s38ByName[nk] || {};
-
+    const name = d.corp_name || s.name || k.name || '';
     const market = k.market || s.market || '';
     const subStart = s.subscribe_start || '';
     const subEnd = s.subscribe_end || '';
@@ -290,14 +310,13 @@ function buildNormalized_() {
     const lockupPct = parsePercent_(s.lockup);
     const floatPct = parsePercent_(s.float_ratio);
 
-    const sources = ['dart'];
-    if (k.name) sources.push('kind');
-    if (s.name) sources.push('38');
-    const confidence = sources.length >= 3 ? 'high' : (sources.length === 2 ? 'medium' : 'low');
+    // confidence: DART 있으면 최소 medium, 거기에 38 또는 KIND가 매칭되면 high, DART 없으면 low.
+    let confidence = 'low';
+    if (sources.indexOf('dart') >= 0) confidence = sources.length >= 2 ? 'high' : 'medium';
 
-    rows.push([
+    return [
       d.corp_code || '',
-      d.corp_name || s.name || k.name || '',
+      name,
       market,
       status,
       s.confirmed_price || '',
@@ -312,15 +331,18 @@ function buildNormalized_() {
       s.demand_competition || '',
       s.demand_competition ? '기관 수요예측' : '',
       lockupPct != null ? `${lockupPct}%` : '',
-      '', // lockup_breakdown: document.xml 파싱 Phase 2에서 채움
+      '',
       floatPct != null ? `${floatPct}%` : '',
       s.shares || '',
-      '', // shares_float: Phase 2
+      '',
       confidence,
       sources.join(','),
       Utilities.formatDate(today, 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss'),
-    ]);
-  });
+    ];
+  }).filter(row => row[1]); // name이 있는 것만
+
+  // 청약 시작일 역순 정렬 (upcoming/active 상단)
+  rows.sort((a, b) => String(b[8] || '').localeCompare(String(a[8] || '')));
 
   writeSheet_(V2_SHEETS.normalized, headers, rows);
   return rows.length;
