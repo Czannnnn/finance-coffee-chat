@@ -138,12 +138,19 @@ function fetchFromDart_(apiKey) {
   const EXCLUDE_BULK_RE = /일괄/;
   const EXCLUDE_ISSUER_RE = /(증권|은행|카드|캐피탈|저축은행|생명|화재|손보|보험|자산운용|투자신탁|리츠|인프라펀드)$/;
 
+  // corp_cls 필터 재도입: Y(코스피)·K(코스닥)·N(코넥스) = 기존 상장사 제외.
+  // SKC·한화솔루션·금호건설 등 기존 상장사의 유상증자 공시를 차단.
+  // E(기타)·공란 = IPO 이전 법인은 유지.
+  const ALLOWED_CORP_CLS = { 'E': true, '': true };
+
   const rows = rawRows.filter(r => {
     const rn = r.report_nm || '';
-    const cn = r.corp_name || '';
+    // 시장 접미를 제거한 corp_name으로 블랙리스트 매칭: "(주)BNK투자증권(유가)" → "BNK투자증권"
+    const cn = (r.corp_name || '').replace(/\(\s*(유가|코스닥|코스피|코넥스)\s*\)/g, '').trim();
     if (!INCLUDE_RE.test(rn)) return false;
     if (EXCLUDE_BULK_RE.test(rn)) return false;
     if (EXCLUDE_ISSUER_RE.test(cn)) return false;
+    if (!ALLOWED_CORP_CLS[r.corp_cls || '']) return false;
     return true;
   });
 
