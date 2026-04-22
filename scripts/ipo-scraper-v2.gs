@@ -323,10 +323,11 @@ function buildNormalized_() {
 
     const name = s.name || d.corp_name || k.name || '';
     const market = k.market || s.market || '';
-    const subStart = s.subscribe_start || '';
-    const subEnd = s.subscribe_end || '';
-    const listing = k.listing_date || s.listing_date || '';
-    const refund = s.refund_date || '';
+    // Google Sheets가 날짜 셀을 JS Date 객체로 반환하는 경우 대비: 모두 ISO 문자열로 정규화
+    const subStart = toIsoDate_(s.subscribe_start);
+    const subEnd = toIsoDate_(s.subscribe_end);
+    const listing = toIsoDate_(k.listing_date || s.listing_date);
+    const refund = toIsoDate_(s.refund_date);
 
     const status = computeStatusV2_(todayStr, subStart, subEnd, listing);
 
@@ -338,11 +339,12 @@ function buildNormalized_() {
     const lockupPct = parsePercent_(s.lockup);
     const floatPct = parsePercent_(s.float_ratio);
 
-    // 38 primary confidence:
-    //   38 + DART + KIND = high
-    //   38 + DART 또는 38 + KIND = medium
-    //   38 only = low (DART 매칭 안된 신규 IPO)
-    const confidence = sources.length >= 3 ? 'high' : (sources.length === 2 ? 'medium' : 'low');
+    // 38 primary confidence (KIND 수집이 best-effort로 0건인 현 상황 반영):
+    //   38 + DART = high (corp_code로 공식 소스 교차 확인됨)
+    //   38 only   = medium
+    //   DART only = low (이론상 발생 불가 — 38 primary이므로 38이 항상 있음)
+    let confidence = 'medium';
+    if (sources.indexOf('dart') >= 0) confidence = 'high';
 
     return [
       d.corp_code || '',
@@ -446,9 +448,25 @@ function normalizeName_(name) {
   return String(name)
     // 시장 접미 표기 제거: "티엠씨(유가)" → "티엠씨"
     .replace(/\(\s*(유가|코스닥|코스피|kospi|kosdaq|코넥스|konex)\s*\)/gi, '')
+    // 구 사명 표기 제거: "더핑크퐁컴퍼니(구.스마트스터디)" → "더핑크퐁컴퍼니"
+    .replace(/\(\s*구\.[^)]*\)/g, '')
     .replace(/[\s\(\)\[\]㈜(주)]/g, '')
     .replace(/주식회사/g, '')
     .toLowerCase();
+}
+
+// Google Sheets가 날짜 셀을 Date 객체로 반환하는 경우를 모두 ISO 문자열로 정규화.
+// 문자열로 이미 저장된 경우에도 YYYY.MM.DD·YYYY/MM/DD 등을 YYYY-MM-DD로 통일.
+function toIsoDate_(v) {
+  if (v == null || v === '') return '';
+  if (v instanceof Date && !isNaN(v.getTime())) {
+    return Utilities.formatDate(v, 'Asia/Seoul', 'yyyy-MM-dd');
+  }
+  const s = String(v).trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+  const m = s.match(/(\d{4})[-./](\d{1,2})[-./](\d{1,2})/);
+  if (m) return `${m[1]}-${String(m[2]).padStart(2, '0')}-${String(m[3]).padStart(2, '0')}`;
+  return '';
 }
 
 function computeStatusV2_(todayStr, subStart, subEnd, listing) {
