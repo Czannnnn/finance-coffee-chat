@@ -456,7 +456,12 @@
     // 아래 SHEET_ID를 본인의 Google Sheets ID로 교체하세요
     // 예: https://docs.google.com/spreadsheets/d/여기가_SHEET_ID/edit
     const SHEET_ID = '1_xXYdZ5d8COXBajVZ_tyd2p5JaOhQcQnNPQrS9-e-Jk';
-    const SHEET_NAME = 'IPO데이터';
+    // P2: 38.co.kr primary + DART corp_code enrichment 통합 시트
+    // 스키마: corp_code, name, market, status, confirmed_price, band_low, band_high,
+    //   band_position, subscribe_start, subscribe_end, refund, listing, lead,
+    //   demand_competition, competition_note, lockup_pct, lockup_breakdown, float_pct,
+    //   shares_total, shares_float, confidence, sources, updated
+    const SHEET_NAME = 'normalized';
 
     // ── 데이터 ──
     let IPO_DATA = [];
@@ -542,39 +547,52 @@
             return raw;
           };
 
-          const confirmedPrice = val(3);
-          const expectedPrice = val(4);
-
-          // 등급 계산용 숫자 파싱
-          const compStr = val(10);
+          // normalized 시트 컬럼 매핑 (23개):
+          //   0 corp_code, 1 name, 2 market, 3 status,
+          //   4 confirmed_price, 5 band_low, 6 band_high, 7 band_position,
+          //   8 subscribe_start, 9 subscribe_end, 10 refund, 11 listing,
+          //   12 lead, 13 demand_competition, 14 competition_note,
+          //   15 lockup_pct, 16 lockup_breakdown, 17 float_pct,
+          //   18 shares_total, 19 shares_float, 20 confidence, 21 sources, 22 updated
+          const confirmedPriceRaw = val(4);
+          const bandLow = val(5);
+          const bandHigh = val(6);
+          const bandPosition = val(7);
+          const compStr = val(13);
+          const competitionNote = val(14) || '기관 수요예측';
           const compMatch = compStr.match(/([\d,.]+)\s*:/);
           const competitionNum = compMatch ? parseFloat(compMatch[1].replace(/,/g, '')) : 0;
 
-          let lockupNum = parseFloat(val(11).replace(/[^0-9.]/g, '')) || 0;
+          let lockupNum = parseFloat(String(val(15) || '').replace(/[^0-9.]/g, '')) || 0;
           if (lockupNum > 0 && lockupNum < 1) lockupNum = Math.round(lockupNum * 10000) / 100;
 
-          let floatNum = parseFloat((val(13) || '').replace(/[^0-9.]/g, '')) || 0;
+          let floatNum = parseFloat(String(val(17) || '').replace(/[^0-9.]/g, '')) || 0;
           if (floatNum > 0 && floatNum < 1) floatNum = Math.round(floatNum * 10000) / 100;
 
-          const priceFixed = confirmedPrice ? parseInt(confirmedPrice.replace(/,/g, '')) || 0 : 0;
-          const priceNums = expectedPrice.replace(/[^0-9~,]/g, '').split('~');
-          const priceBandTop = priceNums.length >= 2 ? parseInt(priceNums[priceNums.length - 1].replace(/,/g, '')) || 0 : 0;
+          const priceFixed = confirmedPriceRaw ? parseInt(confirmedPriceRaw.replace(/,/g, '')) || 0 : 0;
+          const priceBandTop = bandHigh ? parseInt(String(bandHigh).replace(/,/g, '')) || 0 : 0;
+          const priceRange = (bandLow && bandHigh) ? `${bandLow}~${bandHigh}원` : (confirmedPriceRaw ? `${confirmedPriceRaw}원` : '-');
 
           return {
-            name: val(0),
-            market: val(1) || 'kosdaq',
-            status: val(2) || 'upcoming',
-            price: confirmedPrice ? `${confirmedPrice}원` : '-',
-            priceRange: expectedPrice ? `${expectedPrice}원` : '-',
-            shares: val(12) || '-',
-            lead: val(9),
+            corpCode: val(0),
+            name: val(1),
+            market: val(2) || 'kosdaq',
+            status: val(3) || 'upcoming',
+            price: confirmedPriceRaw ? `${confirmedPriceRaw}원` : '-',
+            priceRange,
+            bandPosition,
+            shares: val(18) || '-',
+            lead: val(12),
             competition: compStr || '-',
-            lockup: val(11) || '-',
-            subscribe: [dateVal(5), dateVal(6)],
-            refund: dateVal(7),
-            listing: dateVal(8),
-            updated: val(16),
-            // 등급 계산용
+            competitionNote,
+            lockup: val(15) || '-',
+            lockupBreakdown: val(16),
+            subscribe: [dateVal(8), dateVal(9)],
+            refund: dateVal(10),
+            listing: dateVal(11),
+            confidence: val(20) || 'low',
+            sources: val(21) || '',
+            updated: val(22),
             competitionNum, lockupNum, floatNum, priceFixed, priceBandTop,
           };
         }).filter(ipo => ipo.name && ipo.subscribe[0]);
@@ -998,19 +1016,19 @@
           <div class="ipo-info">
             <div class="info-item">
               <span class="info-label">공모가</span>
-              <span class="info-value">${ipo.price !== '-' ? ipo.price : ipo.priceRange}</span>
+              <span class="info-value">${ipo.price !== '-' ? ipo.price : ipo.priceRange}${ipo.bandPosition ? ` <small style="color:var(--medium-roast);font-weight:500;">[${ipo.bandPosition}]</small>` : ''}</span>
             </div>
             <div class="info-item">
               <span class="info-label">주관사</span>
               <span class="info-value">${ipo.lead}</span>
             </div>
             <div class="info-item">
-              <span class="info-label">경쟁률</span>
+              <span class="info-label">${ipo.competitionNote || '기관 수요예측 경쟁률'}</span>
               <span class="info-value">${ipo.competition}</span>
             </div>
             <div class="info-item">
-              <span class="info-label">확약비율</span>
-              <span class="info-value">${ipo.lockup}</span>
+              <span class="info-label">의무보유확약</span>
+              <span class="info-value">${ipo.lockup}${ipo.lockupBreakdown ? ` <small style="color:var(--medium-roast);font-weight:400;">(${ipo.lockupBreakdown})</small>` : ''}</span>
             </div>
           </div>
           ${ipo.status === 'upcoming' ? getCalendarBtn(ipo) : ''}
