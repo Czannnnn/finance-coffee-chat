@@ -308,13 +308,20 @@ function buildNormalized_() {
   const today = new Date();
   const todayStr = Utilities.formatDate(today, 'Asia/Seoul', 'yyyy-MM-dd');
 
-  const rows = Object.keys(merged).map(nk => {
-    const d = merged[nk].dart || {};
-    const k = merged[nk].kind || {};
-    const s = merged[nk].s38 || {};
-    const sources = merged[nk].sources;
+  // 38.co.kr PRIMARY 전환 (2026-04-22 4차 실행 후):
+  // DART corp_cls 필드가 일부 기존 상장사(SKC·한화솔루션·루닛 등)에 공란으로
+  // 반환되어 corp_cls 필터를 우회. 38.co.kr은 IPO 전용 DB라 커버리지 신뢰도 최고.
+  // → normalized = 38 rows만. DART·KIND는 매칭되는 경우에만 corp_code·상장일 attach.
+  const rows = s38Rows.map(s => {
+    const nk = normalizeName_(s.name);
+    const bucket = merged[nk] || {};
+    const d = bucket.dart || {};
+    const k = bucket.kind || {};
+    const sources = ['38'];
+    if (d.corp_name) sources.push('dart');
+    if (k.name) sources.push('kind');
 
-    const name = d.corp_name || s.name || k.name || '';
+    const name = s.name || d.corp_name || k.name || '';
     const market = k.market || s.market || '';
     const subStart = s.subscribe_start || '';
     const subEnd = s.subscribe_end || '';
@@ -331,9 +338,11 @@ function buildNormalized_() {
     const lockupPct = parsePercent_(s.lockup);
     const floatPct = parsePercent_(s.float_ratio);
 
-    // confidence: DART 있으면 최소 medium, 거기에 38 또는 KIND가 매칭되면 high, DART 없으면 low.
-    let confidence = 'low';
-    if (sources.indexOf('dart') >= 0) confidence = sources.length >= 2 ? 'high' : 'medium';
+    // 38 primary confidence:
+    //   38 + DART + KIND = high
+    //   38 + DART 또는 38 + KIND = medium
+    //   38 only = low (DART 매칭 안된 신규 IPO)
+    const confidence = sources.length >= 3 ? 'high' : (sources.length === 2 ? 'medium' : 'low');
 
     return [
       d.corp_code || '',
