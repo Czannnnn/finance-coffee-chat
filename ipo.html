@@ -264,6 +264,7 @@
     .ipo-badge.kosdaq { background: var(--green-light); color: var(--green); }
     .ipo-badge.upcoming { background: var(--caramel-light); color: var(--caramel); }
     .ipo-badge.active { background: var(--green-light); color: var(--green); }
+    .ipo-badge.pending_listing { background: var(--blue-light); color: var(--blue); }
     .ipo-badge.completed { background: rgba(44,24,16,0.06); color: var(--medium-roast); }
     .dday {
       font-size: 13px; font-weight: 700; color: var(--caramel); flex-shrink: 0;
@@ -376,89 +377,7 @@
     ]
   }
   </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Event",
-        "name": "바이오시냅스 공모주 청약",
-        "description": "코스닥 상장 예정 바이오시냅스 일반청약. 희망 공모가 20,000~25,000원, 주관사 삼성증권.",
-        "startDate": "2026-04-10",
-        "endDate": "2026-04-11",
-        "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
-        "eventStatus": "https://schema.org/EventScheduled",
-        "location": {
-          "@type": "VirtualLocation",
-          "url": "https://www.financecoffeechat.com/ipo"
-        },
-        "organizer": {
-          "@type": "Organization",
-        "logo": "https://www.financecoffeechat.com/logo.svg",
-          "name": "삼성증권"
-        },
-        "url": "https://www.financecoffeechat.com/ipo"
-      },
-      {
-        "@type": "Event",
-        "name": "스마트물류 공모주 청약",
-        "description": "코스닥 상장 예정 스마트물류 일반청약. 희망 공모가 8,000~10,000원, 주관사 KB증권.",
-        "startDate": "2026-04-14",
-        "endDate": "2026-04-15",
-        "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
-        "eventStatus": "https://schema.org/EventScheduled",
-        "location": {
-          "@type": "VirtualLocation",
-          "url": "https://www.financecoffeechat.com/ipo"
-        },
-        "organizer": {
-          "@type": "Organization",
-        "logo": "https://www.financecoffeechat.com/logo.svg",
-          "name": "KB증권"
-        },
-        "url": "https://www.financecoffeechat.com/ipo"
-      },
-      {
-        "@type": "Event",
-        "name": "코리아반도체 공모주 청약",
-        "description": "코스피 상장 예정 코리아반도체 일반청약. 희망 공모가 55,000~65,000원, 주관사 한국투자증권.",
-        "startDate": "2026-04-21",
-        "endDate": "2026-04-22",
-        "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
-        "eventStatus": "https://schema.org/EventScheduled",
-        "location": {
-          "@type": "VirtualLocation",
-          "url": "https://www.financecoffeechat.com/ipo"
-        },
-        "organizer": {
-          "@type": "Organization",
-        "logo": "https://www.financecoffeechat.com/logo.svg",
-          "name": "한국투자증권"
-        },
-        "url": "https://www.financecoffeechat.com/ipo"
-      },
-      {
-        "@type": "Event",
-        "name": "메디팜헬스 공모주 청약",
-        "description": "코스닥 상장 예정 메디팜헬스 일반청약. 희망 공모가 15,000~18,000원, 주관사 대신증권.",
-        "startDate": "2026-04-23",
-        "endDate": "2026-04-24",
-        "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
-        "eventStatus": "https://schema.org/EventScheduled",
-        "location": {
-          "@type": "VirtualLocation",
-          "url": "https://www.financecoffeechat.com/ipo"
-        },
-        "organizer": {
-          "@type": "Organization",
-        "logo": "https://www.financecoffeechat.com/logo.svg",
-          "name": "대신증권"
-        },
-        "url": "https://www.financecoffeechat.com/ipo"
-      }
-    ]
-  }
-  </script>
+  <!-- Event JSON-LD is injected dynamically after live data loads (see injectEventSchema in the script below). -->
 </head>
 <body>
   <nav>
@@ -509,6 +428,14 @@
       <span class="legend-item"><span class="legend-dot listing"></span>상장일</span>
     </div>
 
+    <!-- Sample fallback banner (shown only when live data load fails) -->
+    <div id="sampleBanner" style="display:none;background:var(--red-light);border:1px solid rgba(192,86,75,0.3);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:12.5px;color:var(--red-soft);text-align:center;font-weight:500;">
+      &#9888; 실시간 데이터 로드 실패 &mdash; 아래는 UI 미리보기용 샘플입니다. 실제 공모주 일정이 아닙니다.
+    </div>
+
+    <!-- Last updated badge (populated after Sheets load) -->
+    <div id="lastUpdated" style="display:none;text-align:center;margin-bottom:16px;font-size:11px;color:var(--medium-roast);letter-spacing:0.3px;"></div>
+
     <!-- Calendar -->
     <div class="calendar-card">
       <div class="cal-nav">
@@ -534,16 +461,39 @@
     // ── 데이터 ──
     let IPO_DATA = [];
 
-    // ── 샘플 데이터 (Sheets 연동 전 폴백) ──
-    const SAMPLE_DATA = [
-      { name: '에이치켐', market: 'kosdaq', status: 'completed', price: '15,000원', priceRange: '12,000~15,000원', shares: '2,500,000주', lead: '한국투자증권', competition: '1,247:1', lockup: '62.3%', subscribe: ['2026-04-01','2026-04-02'], refund: '2026-04-04', listing: '2026-04-10' },
-      { name: '퓨처로보틱스', market: 'kosdaq', status: 'completed', price: '32,000원', priceRange: '25,000~32,000원', shares: '1,800,000주', lead: 'NH투자증권', competition: '1,583:1', lockup: '71.5%', subscribe: ['2026-04-02','2026-04-03'], refund: '2026-04-07', listing: '2026-04-14' },
-      { name: '그린에너지솔루션', market: 'kospi', status: 'active', price: '48,000원', priceRange: '40,000~48,000원', shares: '5,000,000주', lead: '미래에셋증권', competition: '892:1', lockup: '58.7%', subscribe: ['2026-04-04','2026-04-07'], refund: '2026-04-09', listing: '2026-04-16' },
-      { name: '바이오시냅스', market: 'kosdaq', status: 'upcoming', price: '-', priceRange: '20,000~25,000원', shares: '3,200,000주', lead: '삼성증권', competition: '-', lockup: '-', subscribe: ['2026-04-10','2026-04-11'], refund: '2026-04-15', listing: '2026-04-22' },
-      { name: '스마트물류', market: 'kosdaq', status: 'upcoming', price: '-', priceRange: '8,000~10,000원', shares: '4,000,000주', lead: 'KB증권', competition: '-', lockup: '-', subscribe: ['2026-04-14','2026-04-15'], refund: '2026-04-17', listing: '2026-04-24' },
-      { name: '코리아반도체', market: 'kospi', status: 'upcoming', price: '-', priceRange: '55,000~65,000원', shares: '8,000,000주', lead: '한국투자증권', competition: '-', lockup: '-', subscribe: ['2026-04-21','2026-04-22'], refund: '2026-04-24', listing: '2026-04-30' },
-      { name: '메디팜헬스', market: 'kosdaq', status: 'upcoming', price: '-', priceRange: '15,000~18,000원', shares: '2,000,000주', lead: '대신증권', competition: '-', lockup: '-', subscribe: ['2026-04-23','2026-04-24'], refund: '2026-04-28', listing: '2026-05-07' },
+    // ── Placeholder fallback (displayed only when Sheets fetch fails) ──
+    // NOTE: intentionally anonymized to avoid leaking fake company names into the
+    // UI or search engines when live data is unavailable. Dates are rolled forward
+    // at load time so timelines always appear plausible relative to today.
+    const FALLBACK_OFFSET_DAYS = 7; // push all subscribe dates N days into the future from today
+    const PLACEHOLDER_TEMPLATES = [
+      { name: '샘플 종목 A', market: 'kosdaq', status: 'upcoming', price: '-', priceRange: '10,000~12,000원', shares: '3,000,000주', lead: '(샘플)',    competition: '-', lockup: '-', subscribeOffset: [0, 1],  refundOffset: 3,  listingOffset: 8  },
+      { name: '샘플 종목 B', market: 'kospi',  status: 'upcoming', price: '-', priceRange: '45,000~55,000원', shares: '6,000,000주', lead: '(샘플)',    competition: '-', lockup: '-', subscribeOffset: [4, 5],  refundOffset: 7,  listingOffset: 12 },
+      { name: '샘플 종목 C', market: 'kosdaq', status: 'upcoming', price: '-', priceRange: '8,000~10,000원',  shares: '2,500,000주', lead: '(샘플)',    competition: '-', lockup: '-', subscribeOffset: [8, 9],  refundOffset: 11, listingOffset: 16 },
     ];
+    function buildPlaceholderData() {
+      const today = new Date();
+      const addDays = (base, n) => {
+        const d = new Date(base);
+        d.setDate(d.getDate() + n);
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      };
+      return PLACEHOLDER_TEMPLATES.map(t => ({
+        name: t.name,
+        market: t.market,
+        status: t.status,
+        price: t.price,
+        priceRange: t.priceRange,
+        shares: t.shares,
+        lead: t.lead,
+        competition: t.competition,
+        lockup: t.lockup,
+        subscribe: [addDays(today, FALLBACK_OFFSET_DAYS + t.subscribeOffset[0]), addDays(today, FALLBACK_OFFSET_DAYS + t.subscribeOffset[1])],
+        refund: addDays(today, FALLBACK_OFFSET_DAYS + t.refundOffset),
+        listing: addDays(today, FALLBACK_OFFSET_DAYS + t.listingOffset),
+      }));
+    }
+    const SAMPLE_DATA = buildPlaceholderData();
 
     // ── Google Sheets에서 데이터 로드 ──
     async function loadFromSheets() {
@@ -623,36 +573,117 @@
             subscribe: [dateVal(5), dateVal(6)],
             refund: dateVal(7),
             listing: dateVal(8),
+            updated: val(16),
             // 등급 계산용
             competitionNum, lockupNum, floatNum, priceFixed, priceBandTop,
           };
         }).filter(ipo => ipo.name && ipo.subscribe[0]);
 
+        // P0-3/P0-4: 프론트에서 today 기준 status 재계산
+        IPO_DATA.forEach(ipo => { ipo.status = recomputeStatus(ipo); });
         // 등급 계산
         IPO_DATA.forEach(ipo => { ipo.grade = calcGrade(ipo); });
 
-        console.log(`Google Sheets에서 ${IPO_DATA.length}건 로드 완료`);
-        showDataSource('live');
+        const latestUpdate = IPO_DATA.reduce((acc, ipo) => (ipo.updated && ipo.updated > acc) ? ipo.updated : acc, '');
+        console.log(`Google Sheets에서 ${IPO_DATA.length}건 로드 완료 (최종 업데이트: ${latestUpdate || 'n/a'})`);
+        showDataSource('live', latestUpdate);
+        injectEventSchema();
       } catch (e) {
         console.error('Sheets 로드 실패, 샘플 데이터 사용:', e);
         IPO_DATA = SAMPLE_DATA;
+        IPO_DATA.forEach(ipo => { ipo.status = recomputeStatus(ipo); });
         showDataSource('sample');
       }
 
       renderAll();
     }
 
-    function showDataSource(type) {
+    function showDataSource(type, updateIso) {
       const badge = document.querySelector('.data-source');
+      const banner = document.getElementById('sampleBanner');
+      const updated = document.getElementById('lastUpdated');
       if (!badge) return;
       if (type === 'live') {
         badge.textContent = 'LIVE DATA';
         badge.style.background = 'var(--green-light)';
         badge.style.color = 'var(--green)';
         badge.style.borderColor = 'rgba(74,124,89,0.2)';
+        if (banner) banner.style.display = 'none';
+        if (updated && updateIso) renderFreshness(updated, updateIso);
       } else {
         badge.textContent = 'SAMPLE DATA';
+        badge.style.background = 'var(--red-light)';
+        badge.style.color = 'var(--red-soft)';
+        badge.style.borderColor = 'rgba(192,86,75,0.3)';
+        if (banner) banner.style.display = 'block';
+        if (updated) updated.style.display = 'none';
       }
+    }
+
+    // P0-3/P0-4: today 기준 status 재계산 (upcoming/active/pending_listing/completed)
+    function recomputeStatus(ipo) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const sStart = isValidDate(ipo.subscribe && ipo.subscribe[0]) ? parseDate(ipo.subscribe[0]) : null;
+      const sEnd   = isValidDate(ipo.subscribe && ipo.subscribe[1]) ? parseDate(ipo.subscribe[1]) : null;
+      const listing = isValidDate(ipo.listing) ? parseDate(ipo.listing) : null;
+      if (!sStart) return ipo.status || 'upcoming';
+      if (today < sStart) return 'upcoming';
+      if (sEnd && today >= sStart && today <= sEnd) return 'active';
+      // 청약 종료 이후
+      if (listing) {
+        if (today >= listing) return 'completed';
+        return 'pending_listing';
+      }
+      return 'completed';
+    }
+
+    // P0-1 후속: Sheets 로드 성공 후에만 Event JSON-LD 동적 주입
+    function injectEventSchema() {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const events = IPO_DATA
+        .filter(ipo => ipo.status === 'upcoming' || ipo.status === 'active')
+        .filter(ipo => isValidDate(ipo.subscribe[0]) && isValidDate(ipo.subscribe[1]))
+        .filter(ipo => parseDate(ipo.subscribe[1]) >= today)
+        .slice(0, 10)
+        .map(ipo => ({
+          '@type': 'Event',
+          name: `${ipo.name} 공모주 청약`,
+          description: `${ipo.market === 'kospi' ? '코스피' : '코스닥'} 상장 예정 ${ipo.name} 일반청약. 희망 공모가 ${ipo.priceRange}, 주관사 ${ipo.lead}.`,
+          startDate: ipo.subscribe[0],
+          endDate: ipo.subscribe[1],
+          eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+          eventStatus: 'https://schema.org/EventScheduled',
+          location: { '@type': 'VirtualLocation', url: 'https://www.financecoffeechat.com/ipo' },
+          organizer: { '@type': 'Organization', name: ipo.lead || 'N/A', logo: 'https://www.financecoffeechat.com/logo.svg' },
+          url: 'https://www.financecoffeechat.com/ipo',
+        }));
+      const existing = document.getElementById('dynamic-event-schema');
+      if (existing) existing.remove();
+      if (events.length === 0) return;
+      const script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = 'dynamic-event-schema';
+      script.textContent = JSON.stringify({ '@context': 'https://schema.org', '@graph': events });
+      document.head.appendChild(script);
+    }
+
+    // P1-1: 최종 업데이트 배지 + 신선도 색상
+    function renderFreshness(el, iso) {
+      const ts = new Date(iso.replace(' ', 'T'));
+      if (isNaN(ts.getTime())) { el.style.display = 'none'; return; }
+      const now = new Date();
+      const hours = (now - ts) / (1000 * 60 * 60);
+      let color = 'var(--medium-roast)';
+      let icon = '⏱';
+      if (hours > 72) { color = 'var(--red-soft)'; icon = '⚠'; }
+      else if (hours > 24) { color = 'var(--caramel)'; icon = '⏱'; }
+      const pad = n => String(n).padStart(2, '0');
+      const label = `${ts.getFullYear()}-${pad(ts.getMonth()+1)}-${pad(ts.getDate())} ${pad(ts.getHours())}:${pad(ts.getMinutes())}`;
+      el.textContent = `${icon} ${label} 업데이트 · ${Math.round(hours)}시간 전`;
+      el.style.color = color;
+      el.style.display = 'block';
     }
 
     // ── State ──
@@ -746,13 +777,21 @@
       const diff = daysBetween(TODAY, subStart);
       if (ipo.status === 'completed') return { text: '상장완료', cls: 'done' };
       if (ipo.status === 'active') return { text: '청약중', cls: 'imminent' };
+      if (ipo.status === 'pending_listing') {
+        if (isValidDate(ipo.listing)) {
+          const listDiff = daysBetween(TODAY, parseDate(ipo.listing));
+          if (listDiff > 0) return { text: `상장 D-${listDiff}`, cls: listDiff <= 3 ? 'imminent' : '' };
+          if (listDiff === 0) return { text: '상장 D-Day', cls: 'imminent' };
+        }
+        return { text: '상장대기', cls: '' };
+      }
       if (diff === 0) return { text: 'D-Day', cls: 'imminent' };
       if (diff > 0) return { text: `D-${diff}`, cls: diff <= 3 ? 'imminent' : '' };
       return { text: '완료', cls: 'done' };
     }
 
     function getStatusLabel(s) {
-      return { upcoming: '청약예정', active: '청약중', completed: '상장완료' }[s] || s;
+      return { upcoming: '청약예정', active: '청약중', pending_listing: '상장대기', completed: '상장완료' }[s] || s;
     }
 
     // ── Calendar Events for a given day ──

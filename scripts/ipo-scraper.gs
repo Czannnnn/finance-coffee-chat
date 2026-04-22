@@ -11,53 +11,141 @@
 
 // ─── 설정 ───
 const SHEET_NAME = 'IPO데이터';
+const LOG_SHEET_NAME = '실행로그';
 const LIST_URL = 'http://www.38.co.kr/html/fund/index.htm?o=k';
 const DETAIL_BASE = 'http://www.38.co.kr/html/fund/index.htm';
 const MAX_PAGES = 2; // 최근 2페이지만 (약 40건)
+const ALERT_EMAIL = 'hello@financecoffeechat.com'; // P1-2: 실패 알림 수신 주소
+const PARSE_FAILURE_THRESHOLD = 0.5; // 상세페이지 파싱 성공률이 50% 미만이면 경고
 
 // ─── 메인 함수 ───
 function fetchIPOData() {
-  const sheet = getOrCreateSheet();
-  const ipos = [];
+  const start = Date.now();
+  let status = 'ok';
+  let errorMessage = '';
+  let listCount = 0;
+  let detailSuccess = 0;
+  let detailAttempt = 0;
 
-  for (let page = 1; page <= MAX_PAGES; page++) {
-    const url = `${LIST_URL}&page=${page}`;
-    const html = fetchAsEucKr(url);
-    const pageIpos = parseListPage(html);
-    ipos.push(...pageIpos);
-  }
+  try {
+    const sheet = getOrCreateSheet();
+    const ipos = [];
 
-  // 상세 페이지에서 환불일, 상장일, 시장구분 가져오기
-  for (const ipo of ipos) {
-    if (ipo.detailUrl) {
-      try {
-        const detailHtml = fetchAsEucKr(ipo.detailUrl);
-        const detail = parseDetailPage(detailHtml);
-        ipo.market = detail.market || '';
-        ipo.refundDate = detail.refundDate || '';
-        ipo.listingDate = detail.listingDate || '';
-        ipo.lockup = detail.lockup || '';
-        ipo.shares = detail.shares || '';
-        ipo.floatRatio = detail.floatRatio || '';
-        Utilities.sleep(500); // 서버 부하 방지
-      } catch (e) {
-        Logger.log(`상세 페이지 오류 (${ipo.name}): ${e.message}`);
+    for (let page = 1; page <= MAX_PAGES; page++) {
+      const url = `${LIST_URL}&page=${page}`;
+      const html = fetchAsEucKr(url);
+      const pageIpos = parseListPage(html);
+      ipos.push(...pageIpos);
+    }
+    listCount = ipos.length;
+
+    // 상세 페이지에서 환불일, 상장일, 시장구분 가져오기
+    for (const ipo of ipos) {
+      if (ipo.detailUrl) {
+        detailAttempt++;
+        try {
+          const detailHtml = fetchAsEucKr(ipo.detailUrl);
+          const detail = parseDetailPage(detailHtml);
+          ipo.market = detail.market || '';
+          ipo.refundDate = detail.refundDate || '';
+          ipo.listingDate = detail.listingDate || '';
+          ipo.lockup = detail.lockup || '';
+          ipo.shares = detail.shares || '';
+          ipo.floatRatio = detail.floatRatio || '';
+          // P1-2: 최소 1개 필드라도 채워졌는지 확인 (전부 공란이면 파싱 실패로 간주)
+          if (detail.refundDate || detail.listingDate || detail.shares) {
+            detailSuccess++;
+          }
+          Utilities.sleep(500); // 서버 부하 방지
+        } catch (e) {
+          Logger.log(`상세 페이지 오류 (${ipo.name}): ${e.message}`);
+        }
       }
     }
-  }
 
-  // 신규상장 페이지에서 시초가 데이터 가져오기 (o=nw)
-  const listingData = fetchListingData();
-  for (const ipo of ipos) {
-    const match = listingData[ipo.name];
-    if (match) {
-      ipo.openPrice = match.openPrice || '';
-      ipo.openPriceRatio = match.openPriceRatio || '';
+    // 신규상장 페이지에서 시초가 데이터 가져오기 (o=nw)
+    const listingData = fetchListingData();
+    for (const ipo of ipos) {
+      const match = listingData[ipo.name];
+      if (match) {
+        ipo.openPrice = match.openPrice || '';
+        ipo.openPriceRatio = match.openPriceRatio || '';
+      }
     }
+
+    writeToSheet(sheet, ipos);
+    Logger.log(`${ipos.length}건의 공모주 데이터를 업데이트했습니다.`);
+
+    // P1-2: 파싱 성공률 저조 시 경고 상태
+    const successRate = detailAttempt > 0 ? detailSuccess / detailAttempt : 1;
+    if (successRate < PARSE_FAILURE_THRESHOLD) {
+      status = 'warn';
+      errorMessage = `상세 파싱 성공률 ${Math.round(successRate * 100)}% (${detailSuccess}/${detailAttempt})`;
+    }
+  } catch (e) {
+    status = 'error';
+    errorMessage = `${e.message}\n${e.stack || ''}`;
+    Logger.log(`fetchIPOData 실패: ${errorMessage}`);
   }
 
-  writeToSheet(sheet, ipos);
-  Logger.log(`${ipos.length}건의 공모주 데이터를 업데이트했습니다.`);
+  const elapsedSec = Math.round((Date.now() - start) / 1000);
+  writeRunLog_(status, listCount, detailSuccess, detailAttempt, elapsedSec, errorMessage);
+
+  if (status !== 'ok') {
+    notifyFailure_(status, listCount, detailSuccess, detailAttempt, elapsedSec, errorMessage);
+  }
+}
+
+// ─── P1-2: 실행 로그 기록 ───
+function writeRunLog_(status, listCount, detailSuccess, detailAttempt, elapsedSec, errorMessage) {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let logSheet = ss.getSheetByName(LOG_SHEET_NAME);
+    if (!logSheet) {
+      logSheet = ss.insertSheet(LOG_SHEET_NAME);
+      logSheet.getRange(1, 1, 1, 7).setValues([
+        ['실행시각', '상태', '목록건수', '상세성공', '상세시도', '소요(초)', '오류메시지'],
+      ]);
+      logSheet.getRange(1, 1, 1, 7).setFontWeight('bold');
+    }
+    logSheet.appendRow([
+      new Date().toISOString().slice(0, 19).replace('T', ' '),
+      status,
+      listCount,
+      detailSuccess,
+      detailAttempt,
+      elapsedSec,
+      (errorMessage || '').slice(0, 500),
+    ]);
+    // 로그 500행 초과 시 오래된 것 삭제
+    const lastRow = logSheet.getLastRow();
+    if (lastRow > 501) {
+      logSheet.deleteRows(2, lastRow - 501);
+    }
+  } catch (e) {
+    Logger.log(`writeRunLog_ 실패: ${e.message}`);
+  }
+}
+
+// ─── P1-2: 이메일 알림 ───
+function notifyFailure_(status, listCount, detailSuccess, detailAttempt, elapsedSec, errorMessage) {
+  try {
+    const subject = `[Finance Coffee Chat] IPO 스크래퍼 ${status === 'error' ? '실패' : '경고'} (${new Date().toISOString().slice(0, 10)})`;
+    const body = [
+      `상태: ${status}`,
+      `소요: ${elapsedSec}초`,
+      `목록 수집: ${listCount}건`,
+      `상세 파싱 성공: ${detailSuccess}/${detailAttempt}`,
+      ``,
+      `오류:`,
+      errorMessage || '(없음)',
+      ``,
+      `시트: https://docs.google.com/spreadsheets/d/${SpreadsheetApp.getActiveSpreadsheet().getId()}/edit`,
+    ].join('\n');
+    MailApp.sendEmail(ALERT_EMAIL, subject, body);
+  } catch (e) {
+    Logger.log(`notifyFailure_ 실패: ${e.message}`);
+  }
 }
 
 // ─── 신규상장 페이지에서 시초가 데이터 수집 ───
