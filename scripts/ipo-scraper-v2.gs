@@ -121,17 +121,31 @@ function fetchFromDart_(apiKey) {
     Utilities.sleep(200);
   }
 
-  // IPO 전용 필터 — 증권사 ELS/유상증자·채권·파생 공시 배제.
-  // 조건 (AND):
-  //   1) stock_code가 공란 (상장 전 기업은 종목코드 없음)
-  //   2) report_nm이 "[증권신고서(지분증권)]" 또는 "투자설명서" 계열로 시작
-  //   3) corp_cls != 'Y'/'K'/'N' (이미 상장된 유가·코스닥·코넥스 법인 제외)
-  const IPO_REPORT_RE = /^\[?(증권신고서\s*\(\s*지분증권|투자설명서)/;
-  const rows = rawRows.filter(r =>
-    (!r.stock_code || r.stock_code.trim() === '') &&
-    IPO_REPORT_RE.test(r.report_nm || '') &&
-    (!r.corp_cls || r.corp_cls === 'E' || r.corp_cls === '')
-  );
+  // IPO 전용 필터 v2 — 1차 실행에서 "투자설명서(일괄신고)" 계열이 통과해
+  // BNK투자증권·하나증권·하나카드 등 채권/MTN 공시가 대거 섞인 문제 대응.
+  //
+  // 관찰: DART 공시 체계상
+  //   · 순수 IPO → [증권신고서(지분증권)] + [투자설명서] (단독, 괄호 없음)
+  //   · 상장사 채권/MTN → [투자설명서(일괄신고)] — 제외해야 함
+  //   · 유상증자 → [증권신고서(지분증권)] + stock_code 존재 — 제외해야 함
+  //
+  // 필터 규칙:
+  //   INCLUDE = report_nm이 "(지분증권" 포함  OR  "[투자설명서]" 정확히 일치
+  //   EXCLUDE = report_nm에 "일괄" 포함 (채권/MTN 일괄신고)
+  //   EXCLUDE = corp_name에 증권·은행·카드·캐피탈 등 하드 블랙리스트 (안전망)
+  //   stock_code·corp_cls 필터는 증권사가 E로 분류되는 경우가 있어 역효과 — 제거
+  const INCLUDE_RE = /(지분증권)|(^\[투자설명서\]\s*$)/;
+  const EXCLUDE_BULK_RE = /일괄/;
+  const EXCLUDE_ISSUER_RE = /(증권|은행|카드|캐피탈|저축은행|생명|화재|손보|보험|자산운용|투자신탁|리츠|인프라펀드)$/;
+
+  const rows = rawRows.filter(r => {
+    const rn = r.report_nm || '';
+    const cn = r.corp_name || '';
+    if (!INCLUDE_RE.test(rn)) return false;
+    if (EXCLUDE_BULK_RE.test(rn)) return false;
+    if (EXCLUDE_ISSUER_RE.test(cn)) return false;
+    return true;
+  });
 
   Logger.log(`DART: 원시 ${rawRows.length}건 → IPO 필터 후 ${rows.length}건`);
 
@@ -414,6 +428,8 @@ function rollToArchive_() {
 function normalizeName_(name) {
   if (!name) return '';
   return String(name)
+    // 시장 접미 표기 제거: "티엠씨(유가)" → "티엠씨"
+    .replace(/\(\s*(유가|코스닥|코스피|kospi|kosdaq|코넥스|konex)\s*\)/gi, '')
     .replace(/[\s\(\)\[\]㈜(주)]/g, '')
     .replace(/주식회사/g, '')
     .toLowerCase();
