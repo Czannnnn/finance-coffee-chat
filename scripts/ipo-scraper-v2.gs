@@ -425,6 +425,25 @@ function fetchFrom38_v2_() {
   saveS38IdCache_(idCache);
   Logger.log(`38 목록: ${listIpos.length}건 노출 / 종목 ID 캐시 ${Object.keys(idCache).length}건`);
 
+  // Step 1.5 (2026-04-26 신규): 38 nw 페이지에서 시초가/시초공모% 수집 → nwMap.
+  // 상장 완료 종목의 시초가 데이터를 normalized로 흘려보내 등급별 평균 수익률 산출 가능하게 함.
+  const nwMap = {};
+  try {
+    const nwHtml = fetchAsEucKr('http://www.38.co.kr/html/fund/index.htm?o=nw');
+    const nwItems = parseNw38V2_(nwHtml);
+    for (const it of nwItems) {
+      nwMap[normalizeName_(it.name)] = it;
+      // nw에서도 종목 ID 캐시 보강 (?o=k에 없는 상장완료 종목)
+      if (it.no && !idCache[normalizeName_(it.name)]) {
+        idCache[normalizeName_(it.name)] = { no: it.no, name: it.name, last_seen: new Date().toISOString().slice(0, 10) };
+      }
+    }
+    saveS38IdCache_(idCache);
+    Logger.log(`38 nw: ${nwItems.length}건 (시초가 있는 상장완료 ${nwItems.filter(x => x.open_price).length}건)`);
+  } catch (e) {
+    Logger.log(`38 nw fetch 실패: ${e.message}`);
+  }
+
   // Step 2: 캐시된 모든 종목(청약 진행+완료) detail fetch
   const rows = [];
   const listMap = {};  // 목록에서 가져온 데이터 fallback (청약일 등)
@@ -445,30 +464,37 @@ function fetchFrom38_v2_() {
       detailFail++;
       Logger.log(`38 detail 실패 (${cached.name} no=${cached.no}): ${e.message}`);
     }
+    const nwItem = nwMap[nk] || {};
     rows.push({
       name: cached.name,
       market: d.market || listItem.market || '',
       subscribe_start: listItem.subscribeStart || '',
       subscribe_end: listItem.subscribeEnd || '',
       refund_date: d.refund_date || '',
-      listing_date: d.listing_date || '',
+      listing_date: d.listing_date || nwItem.listing_date || '',
       // detail 우선 (확정가는 detail이 더 정확) → 목록 fallback
-      confirmed_price: d.confirmed_price || listItem.confirmedPrice || '',
+      confirmed_price: d.confirmed_price || listItem.confirmedPrice || nwItem.public_price || '',
       expected_price: d.expected_price || listItem.expectedPrice || '',
       lead: d.lead || listItem.lead || '',
       demand_competition: d.demand_competition || listItem.competition || '',
       lockup: d.lockup || '',
       float_ratio: d.float_ratio || '',
       shares: d.shares || '',
+      // 신규 (2026-04-26): 38 nw에서 시초가/시초공모%/첫날종가
+      open_price: nwItem.open_price || '',
+      open_price_ratio: nwItem.open_price_ratio || '',
+      first_day_close: nwItem.first_day_close || '',
     });
   }
   Logger.log(`38 detail: ok=${detailOk} fail=${detailFail} (총 ${rows.length}건)`);
 
   writeSheet_(V2_SHEETS.raw38,
     ['name', 'market', 'subscribe_start', 'subscribe_end', 'refund_date', 'listing_date',
-     'confirmed_price', 'expected_price', 'lead', 'demand_competition', 'lockup', 'float_ratio', 'shares', 'fetched_at'],
+     'confirmed_price', 'expected_price', 'lead', 'demand_competition', 'lockup', 'float_ratio', 'shares',
+     'open_price', 'open_price_ratio', 'first_day_close', 'fetched_at'],
     rows.map(r => [r.name, r.market, r.subscribe_start, r.subscribe_end, r.refund_date, r.listing_date,
                    r.confirmed_price, r.expected_price, r.lead, r.demand_competition, r.lockup, r.float_ratio, r.shares,
+                   r.open_price, r.open_price_ratio, r.first_day_close,
                    new Date().toISOString()]));
   return rows.length;
 }
@@ -511,6 +537,45 @@ function parseDetail38V2_(html) {
     }
   }
   return out;
+}
+
+// ─── 38 nw (신규상장) 페이지 파서 (2026-04-26) ───
+// 컬럼: 기업명 | 신규상장일 | 현재가 | 전일비% | 공모가 | 공모대비% | 시초가 | 시초/공모% | 첫날종가 | 차트
+// 상장 예정 종목은 "-" 또는 "예정"; 상장 완료 종목만 유효 값.
+function parseNw38V2_(html) {
+  if (!html) return [];
+  const items = [];
+  // tbody 안의 <tr bgColor=...>...</tr> 추출
+  const trRe = /<tr[^>]*bgColor=[^>]*>([\s\S]*?)<\/tr>/gi;
+  let trMatch;
+  while ((trMatch = trRe.exec(html)) !== null) {
+    const tr = trMatch[1];
+    const cells = [];
+    const cellRe = /<td[^>]*>([\s\S]*?)<\/td>/gi;
+    let cm;
+    while ((cm = cellRe.exec(tr)) !== null) cells.push(cm[1]);
+    if (cells.length < 9) continue;
+    const noMatch = cells[0].match(/no=(\d+)/);
+    const name = cells[0].replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim();
+    if (!name || !noMatch) continue;
+    const clean = (s) => s.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, '').trim();
+    const listingRaw = clean(cells[1]); // "2026/05/20"
+    const listingDate = listingRaw.match(/(\d{4})\/(\d{2})\/(\d{2})/);
+    const publicPrice = clean(cells[4]).replace(/[^\d,]/g, '');
+    const openPrice = clean(cells[6]).replace(/[^\d,]/g, '');
+    const openRatio = clean(cells[7]).replace(/원|\s/g, ''); // "139.5%"
+    const firstClose = clean(cells[8]).replace(/[^\d,]/g, '');
+    items.push({
+      no: noMatch[1],
+      name: name,
+      listing_date: listingDate ? `${listingDate[1]}-${listingDate[2]}-${listingDate[3]}` : '',
+      public_price: publicPrice,
+      open_price: openPrice,
+      open_price_ratio: openRatio,
+      first_day_close: firstClose,
+    });
+  }
+  return items;
 }
 
 // ─── 38 종목 ID 영구 캐시 (s38_id_cache) ───
@@ -582,6 +647,8 @@ function buildNormalized_() {
     'lockup_pct', 'lockup_breakdown', 'float_pct',
     'shares_total', 'shares_float',
     'confidence', 'sources', 'updated',
+    // 2026-04-26 신규: 38 nw 페이지에서 시초가/시초공모% (등급별 평균 수익률 산출용)
+    'open_price', 'open_price_ratio',
   ];
 
   const today = new Date();
@@ -667,6 +734,9 @@ function buildNormalized_() {
       confidence,
       sources.join(','),
       Utilities.formatDate(today, 'Asia/Seoul', 'yyyy-MM-dd HH:mm:ss'),
+      // 2026-04-26 신규: 38 nw에서 시초가/시초공모%
+      s.open_price || '',
+      s.open_price_ratio || '',
     ];
   }).filter(row => row[1]); // name이 있는 것만
 

@@ -315,6 +315,16 @@
     .gcal-btn:hover {
       background: var(--blue-light); border-color: var(--blue);
     }
+    /* 2026-04-26 신규: 청약 D-1 06:00 알림 캘린더 버튼 (커피 카라멜 톤) */
+    .grade-alert-btn {
+      display: block; text-align: center; margin-top: 8px; padding: 10px 16px;
+      background: var(--caramel-light); border: 1px solid rgba(212,165,116,0.3);
+      border-radius: 10px; color: var(--caramel); font-size: 13px; font-weight: 500;
+      text-decoration: none; transition: all 0.15s;
+    }
+    .grade-alert-btn:hover {
+      background: var(--caramel); border-color: var(--caramel); color: var(--white);
+    }
 
     .empty-state {
       text-align: center; padding: 48px 24px;
@@ -813,6 +823,29 @@
       return `<a href="${url}" target="_blank" rel="noopener" class="gcal-btn" data-ga="click_google_calendar" data-ga-text="${ipo.name}" data-ga-loc="ipo_list_card">&#128197; 구글 캘린더에 청약일정 추가</a>`;
     }
 
+    // 2026-04-26 신규: 청약 D-1 06:00 KST에 최종 등급 확인 알림 캘린더 일정 추가.
+    // upcoming 상태 종목에만 표시. 사용자가 시스템 자동 갱신(D-1 06:00 트리거) 후 등급 확인 가능.
+    function getGradeAlertBtn(ipo) {
+      if (ipo.status !== 'upcoming') return '';
+      if (!isValidDate(ipo.subscribe[0])) return '';
+      const subDate = new Date(ipo.subscribe[0] + 'T00:00:00+09:00');
+      const alertDate = new Date(subDate);
+      alertDate.setDate(alertDate.getDate() - 1);
+      const yyyy = alertDate.getFullYear();
+      const mm = String(alertDate.getMonth() + 1).padStart(2, '0');
+      const dd = String(alertDate.getDate()).padStart(2, '0');
+      const start = `${yyyy}${mm}${dd}T060000`;
+      const end = `${yyyy}${mm}${dd}T070000`;
+      const title = encodeURIComponent(`[${ipo.name}] 최종 확정 등급 확인 (D-1)`);
+      const details = encodeURIComponent(
+        `청약 시작: ${ipo.subscribe[0]}\n주관사: ${ipo.lead}\n\n` +
+        `청약 1일 전 06시 이후 4대 팩터(경쟁률·확정공모가·확약·유통)에 따른 최종 등급이 사이트에 반영됩니다.\n\n` +
+        `https://www.financecoffeechat.com/ipo-analysis?name=${encodeURIComponent(ipo.name)}\n\n☕ Finance Coffee Chat`
+      );
+      const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&ctz=Asia/Seoul`;
+      return `<a href="${url}" target="_blank" rel="noopener" class="grade-alert-btn" data-ga="click_grade_alert_calendar" data-ga-text="${ipo.name}" data-ga-loc="ipo_list_card">&#9201; 최종 확정 등급 확인 일정 추가</a>`;
+    }
+
     function getDDay(ipo) {
       if (!isValidDate(ipo.subscribe[0])) {
         if (ipo.status === 'completed') return { text: '상장완료', cls: 'done' };
@@ -1060,6 +1093,7 @@
             </div>
           </div>
           ${ipo.status === 'upcoming' ? getCalendarBtn(ipo) : ''}
+          ${getGradeAlertBtn(ipo)}
           <a href="/ipo-analysis?name=${encodeURIComponent(ipo.name)}" class="detail-btn" data-ga="click_detail_analysis" data-ga-text="${ipo.name}" data-ga-loc="ipo_list_card">&#128270; 세부 분석 보러가기</a>
         </div>`;
       }).join('');

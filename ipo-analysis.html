@@ -690,8 +690,8 @@
           //   8 subscribe_start, 9 subscribe_end, 10 refund, 11 listing,
           //   12 lead, 13 demand_competition, 14 competition_note,
           //   15 lockup_pct, 16 lockup_breakdown, 17 float_pct,
-          //   18 shares_total, 19 shares_float, 20 confidence, 21 sources, 22 updated
-          // 시초가/시초가수익률은 v2에 없음 → '-' 표시.
+          //   18 shares_total, 19 shares_float, 20 confidence, 21 sources, 22 updated,
+          //   23 open_price, 24 open_price_ratio (2026-04-26 신규 — 38 nw에서)
           const confirmedPrice = val(4);
           const bandLow = val(5);
           const bandHigh = val(6);
@@ -737,9 +737,9 @@
             subscribe: [dateVal(8), dateVal(9)],
             refund: dateVal(10),
             listing: dateVal(11),
-            // 시초가 정보는 v2 normalized에 없음 (v1 IPO데이터의 14·15컬럼)
-            openPrice: '-',
-            openPriceRatio: '-',
+            // 2026-04-26: 38 nw에서 수집 → normalized col 23, 24
+            openPrice: val(23) || '-',
+            openPriceRatio: val(24) || '-',
             // P1-B verify-badge 노출용
             confidence: val(20) || 'low',
             updated: val(22),
@@ -1050,6 +1050,7 @@
               </div>
               ${getListingResult(ipo)}
               ${getAnalysisCalBtn(ipo)}
+              ${getGradeAlertBtn(ipo)}
             </div>`;
         });
 
@@ -1094,6 +1095,29 @@
       if (name) {
         filterName = decodeURIComponent(name);
       }
+    }
+
+    // 2026-04-26 신규: 청약 D-1 06:00 KST에 최종 등급 확인 알림 캘린더 일정 추가.
+    // upcoming 상태 종목만. 시스템 자동 갱신(D-1 06:00 트리거) 후 등급 확정.
+    function getGradeAlertBtn(ipo) {
+      if (ipo.status !== 'upcoming') return '';
+      if (!ipo.subscribe || !ipo.subscribe[0] || !/^\d{4}-\d{2}-\d{2}$/.test(ipo.subscribe[0])) return '';
+      const subDate = new Date(ipo.subscribe[0] + 'T00:00:00+09:00');
+      const alertDate = new Date(subDate);
+      alertDate.setDate(alertDate.getDate() - 1);
+      const yyyy = alertDate.getFullYear();
+      const mm = String(alertDate.getMonth() + 1).padStart(2, '0');
+      const dd = String(alertDate.getDate()).padStart(2, '0');
+      const start = `${yyyy}${mm}${dd}T060000`;
+      const end = `${yyyy}${mm}${dd}T070000`;
+      const title = encodeURIComponent(`[${ipo.name}] 최종 확정 등급 확인 (D-1)`);
+      const details = encodeURIComponent(
+        `청약 시작: ${ipo.subscribe[0]}\n주관사: ${ipo.lead}\n\n` +
+        `청약 1일 전 06시 이후 4대 팩터(경쟁률·확정공모가·확약·유통)에 따른 최종 등급이 사이트에 반영됩니다.\n\n` +
+        `https://www.financecoffeechat.com/ipo-analysis?name=${encodeURIComponent(ipo.name)}\n\n☕ Finance Coffee Chat`
+      );
+      const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&ctz=Asia/Seoul`;
+      return `<a href="${url}" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:8px;padding:9px 16px;background:var(--caramel-light);border:1px solid rgba(196,133,60,0.3);border-radius:10px;color:var(--caramel);font-size:13px;font-weight:500;text-decoration:none;transition:all 0.15s;" data-ga="click_grade_alert_calendar" data-ga-text="${ipo.name}" data-ga-loc="analysis_card">&#9201; 최종 확정 등급 확인 일정 추가</a>`;
     }
 
     function getAnalysisCalBtn(ipo) {
