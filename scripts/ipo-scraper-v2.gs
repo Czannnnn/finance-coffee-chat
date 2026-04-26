@@ -178,6 +178,7 @@ function fetchFromDart_(apiKey) {
       r.confirmed_price = cached.confirmed_price;
       r.band_low = cached.band_low;
       r.band_high = cached.band_high;
+      r.float_pct = cached.float_pct;
       docHit++;
     } else {
       docMiss++;
@@ -187,9 +188,9 @@ function fetchFromDart_(apiKey) {
 
   writeSheet_(V2_SHEETS.rawDart,
     ['corp_code', 'corp_name', 'rcept_no', 'rcept_dt', 'report_nm', 'stock_code', 'corp_cls',
-     'doc_confirmed_price', 'doc_band_low', 'doc_band_high', 'fetched_at'],
+     'doc_confirmed_price', 'doc_band_low', 'doc_band_high', 'doc_float_pct', 'fetched_at'],
     rows.map(r => [r.corp_code, r.corp_name, r.rcept_no, r.rcept_dt, r.report_nm, r.stock_code, r.corp_cls,
-                   r.confirmed_price || '', r.band_low || '', r.band_high || '',
+                   r.confirmed_price || '', r.band_low || '', r.band_high || '', r.float_pct || '',
                    new Date().toISOString()]));
 
   return rows.length;
@@ -244,6 +245,7 @@ function buildDartDocCache_v2() {
         confirmed_price: detail.confirmed_price,
         band_low: detail.band_low,
         band_high: detail.band_high,
+        float_pct: detail.float_pct,
         status: detail.status,
         fetched_at: new Date().toISOString(),
       };
@@ -264,7 +266,7 @@ function buildDartDocCache_v2() {
 // status: 'ok' (1개 이상 추출), 'empty' (status=014 데이터 없음, SPAC 등), 'fail' (예외)
 // 사양: docs/maintenance/2026-04-26-dart-document-xml-spec.md
 function fetchDartDocDetail_(apiKey, rcept_no) {
-  const result = { confirmed_price: null, band_low: null, band_high: null, status: 'fail' };
+  const result = { confirmed_price: null, band_low: null, band_high: null, float_pct: null, status: 'fail' };
   if (!rcept_no) return result;
   try {
     const url = `${DART_BASE}/document.xml?crtfc_key=${apiKey}&rcept_no=${rcept_no}`;
@@ -287,8 +289,9 @@ function fetchDartDocDetail_(apiKey, rcept_no) {
     if (!unzipped || unzipped.length === 0) return result;
     const fullXml = unzipped[0].getDataAsString('UTF-8');
     // 정규식 검색은 본문 첫 N자만 — XML 4MB 전체 스캔 시 17초/건이 0.5초/건으로 단축.
-    // 확정공모가·밴드 모두 본문 시작 30KB 이내 등장 (코스모로보틱스 실측: @15302, @32754).
-    const xml = fullXml.length > DART_DOC_SCAN_HEAD ? fullXml.substring(0, DART_DOC_SCAN_HEAD) : fullXml;
+    // 확정공모가·밴드는 본문 시작 30KB 이내, 유통가능물량 표는 ~430KB 부근 → 600KB까지 스캔.
+    const SCAN_LEN = Math.max(DART_DOC_SCAN_HEAD, 600000);
+    const xml = fullXml.length > SCAN_LEN ? fullXml.substring(0, SCAN_LEN) : fullXml;
 
     // ─── 확정공모가 (3가지 표기 패턴) ───
     // 발행조건확정 공시에서만 출현. 정정신고서는 미정(null).
@@ -313,7 +316,16 @@ function fetchDartDocDetail_(apiKey, rcept_no) {
       }
     }
 
-    if (result.confirmed_price || result.band_low) result.status = 'ok';
+    // ─── 상장일 유통가능 비율 (제미나이 21.8% 검증 시 발견 — 코스모 실측 32.43%) ───
+    // [발행조건확정] 본문 후반부의 "상장일 유통가능 N,NNN N.NN%" 행에서 추출.
+    // 첫 매치 = 상장일 시점 (그 후 1개월/2개월/.../3년 행 이어짐).
+    const fm = xml.match(/상장일\s*유통가능\s*([\d,]+)\s*([\d.]+)\s*%/);
+    if (fm) {
+      const pct = parseFloat(fm[2]);
+      if (!isNaN(pct) && pct > 0 && pct <= 100) result.float_pct = pct;
+    }
+
+    if (result.confirmed_price || result.band_low || result.float_pct) result.status = 'ok';
     else result.status = 'empty';
   } catch (e) {
     Logger.log(`fetchDartDocDetail_ ${rcept_no} 실패: ${e.message}`);
@@ -603,7 +615,10 @@ function buildNormalized_() {
     const bandPos = computeBandPosition_(confirmedNum, bandLow, bandHigh);
 
     const lockupPct = parsePercent_(s.lockup);
-    const floatPct = parsePercent_(s.float_ratio);
+    // P1-B 후속 (2026-04-26): DART [발행조건확정]의 "상장일 유통가능 N.NN%" (코스모 32.43%) 우선 사용.
+    // 38이 표시하는 21.04%는 최대주주 1인 지분율로 잘못된 값. 38 fallback은 경고용으로만 유지.
+    const dartFloatPct = (d.doc_float_pct === '' || d.doc_float_pct == null) ? null : Number(d.doc_float_pct);
+    const floatPct = (dartFloatPct != null && dartFloatPct > 0) ? dartFloatPct : parsePercent_(s.float_ratio);
 
     // P1-B (2026-04-26) confidence 재산정:
     //   38 + DART corp_code 매칭 + DART doc 값(확정가/밴드)과 38 값이 모두 일치 → high ("✓ 공식 교차확인")
@@ -845,6 +860,7 @@ function loadDartDocCache_() {
   const idx = (h) => headers.indexOf(h);
   const iRcept = idx('rcept_no'), iCp = idx('confirmed_price'),
         iBl = idx('band_low'), iBh = idx('band_high'),
+        iFp = idx('float_pct'),
         iSt = idx('status'), iFa = idx('fetched_at');
   const out = {};
   for (let i = 1; i < values.length; i++) {
@@ -855,6 +871,7 @@ function loadDartDocCache_() {
       confirmed_price: row[iCp] === '' ? null : Number(row[iCp]),
       band_low: row[iBl] === '' ? null : Number(row[iBl]),
       band_high: row[iBh] === '' ? null : Number(row[iBh]),
+      float_pct: (iFp < 0 || row[iFp] === '' || row[iFp] == null) ? null : Number(row[iFp]),
       status: row[iSt] || '',
       fetched_at: row[iFa] || '',
     };
@@ -863,10 +880,10 @@ function loadDartDocCache_() {
 }
 
 function saveDartDocCache_(cache) {
-  const headers = ['rcept_no', 'confirmed_price', 'band_low', 'band_high', 'status', 'fetched_at'];
+  const headers = ['rcept_no', 'confirmed_price', 'band_low', 'band_high', 'float_pct', 'status', 'fetched_at'];
   const rows = Object.keys(cache).sort().map(rcept => {
     const c = cache[rcept];
-    return [rcept, c.confirmed_price ?? '', c.band_low ?? '', c.band_high ?? '', c.status || '', c.fetched_at || ''];
+    return [rcept, c.confirmed_price ?? '', c.band_low ?? '', c.band_high ?? '', c.float_pct ?? '', c.status || '', c.fetched_at || ''];
   });
   writeSheet_(V2_SHEETS.dartDocCache, headers, rows);
 }
