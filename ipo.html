@@ -759,13 +759,15 @@
     // confidence='high' (DART corp_code 매칭 + 가격 일치) → ✓ 공식 교차확인
     // confidence='flag' (가격 1개 이상 불일치) → ⚠ DART 불일치 + tooltip(불일치 상세)
     // confidence='medium' (38 only) → 배지 없음 (기본 신뢰도)
+    // P6 (2026-04-26): tooltip에 마지막 교차확인 시각(ipo.updated) 노출 — 사용자 신뢰 시그널.
     function getVerifyBadge(ipo) {
+      const verifiedAt = ipo.updated ? `\n마지막 교차확인: ${ipo.updated}` : '';
       if (ipo.confidence === 'high') {
-        return `<span class="verify-badge high" aria-label="DART 공식 교차확인 완료" title="DART 증권신고서 공식치와 38.co.kr 값이 일치">&#10003; 공식 교차확인</span>`;
+        return `<span class="verify-badge high" aria-label="DART 공식 교차확인 완료" title="DART 증권신고서 공식치와 38.co.kr 값이 일치${verifiedAt}">&#10003; 공식 교차확인</span>`;
       }
       if (ipo.confidence === 'flag') {
-        const tip = ipo.verifyMismatch ? ipo.verifyMismatch.replace(/"/g, '&quot;') : 'DART 공식치와 38.co.kr 값이 일치하지 않음';
-        return `<span class="verify-badge flag" aria-label="DART 불일치" title="${tip}">&#9888; DART 불일치</span>`;
+        const note = ipo.verifyMismatch ? ipo.verifyMismatch.replace(/"/g, '&quot;') : 'DART 공식치와 38.co.kr 값이 일치하지 않음';
+        return `<span class="verify-badge flag" aria-label="DART 불일치" title="${note}${verifiedAt}">&#9888; DART 불일치</span>`;
       }
       return '';
     }
