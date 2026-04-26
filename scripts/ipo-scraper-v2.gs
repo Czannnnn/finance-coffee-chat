@@ -290,10 +290,14 @@ function fetchDartDocDetail_(apiKey, rcept_no) {
     // 확정공모가·밴드 모두 본문 시작 30KB 이내 등장 (코스모로보틱스 실측: @15302, @32754).
     const xml = fullXml.length > DART_DOC_SCAN_HEAD ? fullXml.substring(0, DART_DOC_SCAN_HEAD) : fullXml;
 
-    // ─── 확정공모가: "확정공모가액을 6,000원으로 최종 결정" 패턴 ───
+    // ─── 확정공모가 (3가지 표기 패턴) ───
     // 발행조건확정 공시에서만 출현. 정정신고서는 미정(null).
+    //   1) "확정공모가액을 6,000원으로 최종 결정" (코스모로보틱스)
+    //   2) "1주당 확정공모가액 6,000원"
+    //   3) "확정공모가액은 12,300원" (채비 — 2026-04-26 회귀 케이스로 추가)
     let m = xml.match(/확정\s*공모\s*가액[을이]?\s*([\d,]+)\s*원\s*으로\s*(?:최종\s*)?결정/);
     if (!m) m = xml.match(/1\s*주당\s*확정\s*공모\s*가액[을이]?\s*([\d,]+)\s*원/);
+    if (!m) m = xml.match(/확정\s*공모\s*가액?\s*[은인이]\s*([\d,]+)\s*원/);
     if (m) result.confirmed_price = parsePrice_(m[1]);
 
     // ─── 밴드: "공모희망가액인 5,300원 ~ 6,000원" 패턴 ───
