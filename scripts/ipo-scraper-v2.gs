@@ -876,9 +876,13 @@ function loadDartDocCache_() {
       status: row[iSt] || '',
       fetched_at: row[iFa] || '',
     };
-    // P1-B fix (2026-04-26): float_pct가 null인 ok 캐시는 구 schema 또는 정규식 미스 → 무효 처리.
-    // (band_low/band_high 추출 가능했던 종목은 유통가능 표도 있을 가능성 높음 → 다시 fetch)
-    if (out[rcept].status === 'ok' && out[rcept].float_pct == null && out[rcept].band_low != null) {
+    // P1-B fix (2026-04-26): float_pct가 null인 ok 캐시는 구 schema → 무효 처리.
+    // 단 "오늘 이전 fetched"만 — 오늘 fetch한 건은 정정신고서라 표 없음(영구 null) → 무한 루프 방지.
+    // [기재정정] 류는 "상장일 유통가능" 표가 없고 [발행조건확정]에만 있음.
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const fetchedDay = String(out[rcept].fetched_at || '').slice(0, 10);
+    if (out[rcept].status === 'ok' && out[rcept].float_pct == null
+        && out[rcept].band_low != null && fetchedDay && fetchedDay < todayStr) {
       delete out[rcept];
     }
   }
