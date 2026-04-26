@@ -29,7 +29,18 @@ const V2_SHEETS = {
   normalized: 'normalized',
   archive: 'archive',
   log: '실행로그_v2',
+  // P1-B (2026-04-26): rcept_no는 immutable이므로 document.xml 결과를 영구 캐시.
+  // 첫 실행은 신규 80건 일부만 처리(maxFetch), 다음 실행에서 나머지 누적 → 시간 초과 방지.
+  dartDocCache: 'dart_doc_cache',
 };
+// P1-B: 1회 실행에 새로 fetch할 document.xml 최대 건수 (Apps Script 6분 한도 보호).
+// 실측: 17건이 5분 (평균 17초/건, XML 4MB까지 큼) → 8건/회로 보수적 설정.
+// 신규 IPO는 평일 1~5건이라 일 2회 트리거로 충분히 누적됨.
+const MAX_DART_DOC_FETCH_PER_RUN = 8;
+// 정규식 검색 범위 — XML 전체 4MB 대신 본문 첫 N자만 검색 (확정공모가·밴드는 본문 시작 30KB 안에 등장).
+const DART_DOC_SCAN_HEAD = 200000;
+// 캐시 중간 저장 주기 (timeout 발생 시 부분 결과 보존용).
+const DART_CACHE_SAVE_INTERVAL = 5;
 
 const DART_BASE = 'https://opendart.fss.or.kr/api';
 const DART_IPO_TYPE = 'C';        // 발행공시
@@ -156,12 +167,154 @@ function fetchFromDart_(apiKey) {
 
   Logger.log(`DART: 원시 ${rawRows.length}건 → IPO 필터 후 ${rows.length}건`);
 
-  // TODO(Phase 2): 각 rcept_no에 대해 document.xml 세부 조회 → 공모가·청약일·확약·유통비율 추출
+  // P1-B (2026-04-26): 캐시에서만 document.xml 결과 사용. fetch는 buildDartDocCache_v2()로 분리.
+  // 분리 사유: doc fetch (15~60초/건) + buildNormalized + archive 합산 시 6분 한도 빈번 초과.
+  // 흐름: 06:00 buildDartDocCache_v2(캐시만 채움) → 08:00/18:00 fetchIPOData_v2(캐시만 읽음).
+  const cache = loadDartDocCache_();
+  let docHit = 0, docMiss = 0;
+  rows.forEach(r => {
+    const cached = cache[r.rcept_no];
+    if (cached) {
+      r.confirmed_price = cached.confirmed_price;
+      r.band_low = cached.band_low;
+      r.band_high = cached.band_high;
+      docHit++;
+    } else {
+      docMiss++;
+    }
+  });
+  Logger.log(`DART document.xml 캐시: hit=${docHit} miss=${docMiss} (미스는 buildDartDocCache_v2가 다음 실행에서 채움)`);
+
   writeSheet_(V2_SHEETS.rawDart,
-    ['corp_code', 'corp_name', 'rcept_no', 'rcept_dt', 'report_nm', 'stock_code', 'corp_cls', 'fetched_at'],
-    rows.map(r => [r.corp_code, r.corp_name, r.rcept_no, r.rcept_dt, r.report_nm, r.stock_code, r.corp_cls, new Date().toISOString()]));
+    ['corp_code', 'corp_name', 'rcept_no', 'rcept_dt', 'report_nm', 'stock_code', 'corp_cls',
+     'doc_confirmed_price', 'doc_band_low', 'doc_band_high', 'fetched_at'],
+    rows.map(r => [r.corp_code, r.corp_name, r.rcept_no, r.rcept_dt, r.report_nm, r.stock_code, r.corp_cls,
+                   r.confirmed_price || '', r.band_low || '', r.band_high || '',
+                   new Date().toISOString()]));
 
   return rows.length;
+}
+
+// ─── DART document.xml 캐시 빌더 (P1-B 2026-04-26) ───
+// 별도 트리거(매일 06:00)로 실행. fetchIPOData_v2와 분리된 책임:
+//   - 이 함수: rcept_no 캐시 채우기 (느림, 1회 실행 8건 한도, 최대 5분)
+//   - fetchIPOData_v2: 캐시에서 읽어 normalized 시트 빌드 (빠름, 6분 한도 안전)
+// 신규 IPO는 보통 청약 7일+ 전에 공시 → 1일 지연 OK.
+function buildDartDocCache_v2() {
+  const start = Date.now();
+  const apiKey = PropertiesService.getScriptProperties().getProperty('DART_API_KEY');
+  if (!apiKey) {
+    Logger.log('DART_API_KEY 미설정');
+    return;
+  }
+  // raw_dart 시트에서 현재 IPO 필터 통과한 rcept_no 목록 읽기.
+  // (fetchIPOData_v2가 먼저 한 번이라도 실행됐다는 전제. raw_dart 시트가 없으면 list.json 직접 호출)
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const rawDartSheet = ss.getSheetByName(V2_SHEETS.rawDart);
+  let rceptList = [];
+  if (rawDartSheet && rawDartSheet.getLastRow() >= 2) {
+    const values = rawDartSheet.getDataRange().getValues();
+    const headers = values[0].map(String);
+    const iRcept = headers.indexOf('rcept_no');
+    const iName = headers.indexOf('corp_name');
+    if (iRcept >= 0) {
+      for (let i = 1; i < values.length; i++) {
+        const r = String(values[i][iRcept] || '');
+        if (r) rceptList.push({ rcept_no: r, corp_name: String(values[i][iName] || '') });
+      }
+    }
+  }
+  Logger.log(`buildDartDocCache_v2: raw_dart에서 ${rceptList.length}건 rcept_no 로드`);
+
+  const cache = loadDartDocCache_();
+  let hit = 0, ok = 0, empty = 0, fail = 0, fetched = 0, skip = 0;
+  for (const r of rceptList) {
+    if (cache[r.rcept_no]) { hit++; continue; }
+    if (fetched >= MAX_DART_DOC_FETCH_PER_RUN) { skip++; continue; }
+    const t0 = Date.now();
+    const detail = fetchDartDocDetail_(apiKey, r.rcept_no);
+    const elapsed = Date.now() - t0;
+    Logger.log(`doc[${fetched + 1}] ${r.rcept_no} ${r.corp_name}: ${detail.status} ${elapsed}ms`);
+    fetched++;
+    if (detail.status === 'ok') ok++;
+    else if (detail.status === 'empty') empty++;
+    else fail++;
+    if (detail.status !== 'fail') {
+      cache[r.rcept_no] = {
+        confirmed_price: detail.confirmed_price,
+        band_low: detail.band_low,
+        band_high: detail.band_high,
+        status: detail.status,
+        fetched_at: new Date().toISOString(),
+      };
+    }
+    if (fetched % DART_CACHE_SAVE_INTERVAL === 0) {
+      saveDartDocCache_(cache);
+      Logger.log(`  ↳ 캐시 중간 저장 (${fetched}건)`);
+    }
+    Utilities.sleep(150);
+  }
+  saveDartDocCache_(cache);
+  const elapsedSec = Math.round((Date.now() - start) / 1000);
+  Logger.log(`buildDartDocCache_v2 완료: hit=${hit} ok=${ok} empty=${empty} fail=${fail} skip(다음실행대기)=${skip} (${elapsedSec}초)`);
+}
+
+// ─── DART document.xml 파서 (P1-B 2026-04-26) ───
+// 확정공모가·밴드(공모희망가 low/high) 추출. ZIP 응답 → XML 본문 → 정규식 파싱.
+// status: 'ok' (1개 이상 추출), 'empty' (status=014 데이터 없음, SPAC 등), 'fail' (예외)
+// 사양: docs/maintenance/2026-04-26-dart-document-xml-spec.md
+function fetchDartDocDetail_(apiKey, rcept_no) {
+  const result = { confirmed_price: null, band_low: null, band_high: null, status: 'fail' };
+  if (!rcept_no) return result;
+  try {
+    const url = `${DART_BASE}/document.xml?crtfc_key=${apiKey}&rcept_no=${rcept_no}`;
+    const res = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
+    const code = res.getResponseCode();
+    if (code !== 200) {
+      Logger.log(`document.xml ${rcept_no}: HTTP ${code}`);
+      return result;
+    }
+    const rawBlob = res.getBlob();
+    const bytes = rawBlob.getBytes();
+    // 첫 2바이트가 PK가 아니면 ZIP 아님 (status 014 등 짧은 XML) → empty 처리
+    if (bytes.length < 4 || bytes[0] !== 0x50 || bytes[1] !== 0x4B) {
+      result.status = 'empty';
+      return result;
+    }
+    // DART 응답은 Content-Type이 octet-stream이라 Utilities.unzip이 거부 → 명시적으로 application/zip 지정
+    const zipBlob = Utilities.newBlob(bytes, 'application/zip', `${rcept_no}.zip`);
+    const unzipped = Utilities.unzip(zipBlob);
+    if (!unzipped || unzipped.length === 0) return result;
+    const fullXml = unzipped[0].getDataAsString('UTF-8');
+    // 정규식 검색은 본문 첫 N자만 — XML 4MB 전체 스캔 시 17초/건이 0.5초/건으로 단축.
+    // 확정공모가·밴드 모두 본문 시작 30KB 이내 등장 (코스모로보틱스 실측: @15302, @32754).
+    const xml = fullXml.length > DART_DOC_SCAN_HEAD ? fullXml.substring(0, DART_DOC_SCAN_HEAD) : fullXml;
+
+    // ─── 확정공모가: "확정공모가액을 6,000원으로 최종 결정" 패턴 ───
+    // 발행조건확정 공시에서만 출현. 정정신고서는 미정(null).
+    let m = xml.match(/확정\s*공모\s*가액[을이]?\s*([\d,]+)\s*원\s*으로\s*(?:최종\s*)?결정/);
+    if (!m) m = xml.match(/1\s*주당\s*확정\s*공모\s*가액[을이]?\s*([\d,]+)\s*원/);
+    if (m) result.confirmed_price = parsePrice_(m[1]);
+
+    // ─── 밴드: "공모희망가액인 5,300원 ~ 6,000원" 패턴 ───
+    // 모든 정정/확정 신고서에 일관 등장.
+    const bm = xml.match(/(?:공모\s*희망\s*가액?|희망\s*공모\s*가액?|공모\s*희망\s*가)\s*인?\s*([\d,]+)\s*원\s*~\s*([\d,]+)\s*원/);
+    if (bm) {
+      const low = parsePrice_(bm[1]);
+      const high = parsePrice_(bm[2]);
+      // 단위 sanity: 표 셀 합쳐짐으로 인한 오타 방어 (예: "5,3000원" → 53000)
+      if (low > 0 && high > 0 && low < high && high < low * 10) {
+        result.band_low = low;
+        result.band_high = high;
+      }
+    }
+
+    if (result.confirmed_price || result.band_low) result.status = 'ok';
+    else result.status = 'empty';
+  } catch (e) {
+    Logger.log(`fetchDartDocDetail_ ${rcept_no} 실패: ${e.message}`);
+  }
+  return result;
 }
 
 // ─── 원천 2: KIND 한국거래소 ───
@@ -339,12 +492,26 @@ function buildNormalized_() {
     const lockupPct = parsePercent_(s.lockup);
     const floatPct = parsePercent_(s.float_ratio);
 
-    // 38 primary confidence (KIND 수집이 best-effort로 0건인 현 상황 반영):
-    //   38 + DART = high (corp_code로 공식 소스 교차 확인됨)
-    //   38 only   = medium
-    //   DART only = low (이론상 발생 불가 — 38 primary이므로 38이 항상 있음)
+    // P1-B (2026-04-26) confidence 재산정:
+    //   38 + DART corp_code 매칭 + DART doc 값(확정가/밴드)과 38 값이 모두 일치 → high ("✓ 공식 교차확인")
+    //   38 + DART corp_code 매칭 + DART doc 값과 38 값이 1개 이상 불일치(≥10원/≥10%) → flag ("⚠ DART 불일치")
+    //   38 + DART corp_code 매칭 + DART doc 값 추출 안 됨 (정정신고서 미확정 등) → high (corp_code 매칭만으로 신뢰)
+    //   38 only → medium
     let confidence = 'medium';
-    if (sources.indexOf('dart') >= 0) confidence = 'high';
+    let mismatchNote = '';
+    if (sources.indexOf('dart') >= 0) {
+      confidence = 'high';
+      // 가격 교차검증 (DART doc 값이 있는 항목만)
+      const cmp = compareDartVs38_(d, {
+        confirmed: confirmedNum,
+        band_low: bandLow,
+        band_high: bandHigh,
+      });
+      if (cmp.flag) {
+        confidence = 'flag';
+        mismatchNote = cmp.note;
+      }
+    }
 
     return [
       d.corp_code || '',
@@ -361,7 +528,8 @@ function buildNormalized_() {
       listing,
       s.lead || '',
       s.demand_competition || '',
-      s.demand_competition ? '기관 수요예측' : '',
+      // P1-B: 불일치 노트(mismatchNote)를 앞에, 기존 라벨을 뒤에 결합 (둘 다 있으면 ' · '로 연결)
+      [mismatchNote, s.demand_competition ? '기관 수요예측' : ''].filter(Boolean).join(' · '),
       lockupPct != null ? `${lockupPct}%` : '',
       '',
       floatPct != null ? `${floatPct}%` : '',
@@ -508,6 +676,25 @@ function computeBandPosition_(fixed, low, high) {
   return fixed > mid ? '상단' : '하단';
 }
 
+// P1-B (2026-04-26): DART document.xml 추출치(d.doc_*) vs 38.co.kr 파싱치 비교.
+// 일치 허용오차: ±10원 (가격 표기 반올림 차이 흡수).
+// flag=true 반환 시 buildNormalized_가 confidence를 'flag'로 설정 + competition_note에 노트 prepend.
+function compareDartVs38_(dartRow, vals38) {
+  const diffs = [];
+  const cmpPrice = (label, dartVal, val38) => {
+    const d = dartVal == null || dartVal === '' ? null : parseInt(dartVal, 10);
+    const s = val38 == null || val38 === '' ? null : parseInt(val38, 10);
+    if (!d || !s) return; // 한쪽이라도 비어있으면 비교 불가 (불일치 아님)
+    if (Math.abs(d - s) > 10) {
+      diffs.push(`${label}:DART${d.toLocaleString()}vs38${s.toLocaleString()}`);
+    }
+  };
+  cmpPrice('확정가', dartRow.doc_confirmed_price, vals38.confirmed);
+  cmpPrice('밴드하', dartRow.doc_band_low, vals38.band_low);
+  cmpPrice('밴드상', dartRow.doc_band_high, vals38.band_high);
+  return { flag: diffs.length > 0, note: diffs.length ? `⚠ ${diffs.join(' / ')}` : '' };
+}
+
 function parsePercent_(str) {
   if (!str) return null;
   const m = String(str).match(/([\d.]+)\s*%/);
@@ -525,6 +712,43 @@ function writeSheet_(sheetName, headers, rows) {
   sheet.clearContents();
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]).setFontWeight('bold');
   if (rows.length) sheet.getRange(2, 1, rows.length, headers.length).setValues(rows);
+}
+
+// P1-B (2026-04-26): DART document.xml 영구 캐시. rcept_no는 immutable이므로 한 번 추출한 결과는
+// 변하지 않음. 첫 실행에서 일부만 fetch하고 캐시 적재 → 이후 실행은 hit만 사용 + 신규만 fetch.
+function loadDartDocCache_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName(V2_SHEETS.dartDocCache);
+  if (!sheet || sheet.getLastRow() < 2) return {};
+  const values = sheet.getDataRange().getValues();
+  const headers = values[0].map(String);
+  const idx = (h) => headers.indexOf(h);
+  const iRcept = idx('rcept_no'), iCp = idx('confirmed_price'),
+        iBl = idx('band_low'), iBh = idx('band_high'),
+        iSt = idx('status'), iFa = idx('fetched_at');
+  const out = {};
+  for (let i = 1; i < values.length; i++) {
+    const row = values[i];
+    const rcept = String(row[iRcept] || '');
+    if (!rcept) continue;
+    out[rcept] = {
+      confirmed_price: row[iCp] === '' ? null : Number(row[iCp]),
+      band_low: row[iBl] === '' ? null : Number(row[iBl]),
+      band_high: row[iBh] === '' ? null : Number(row[iBh]),
+      status: row[iSt] || '',
+      fetched_at: row[iFa] || '',
+    };
+  }
+  return out;
+}
+
+function saveDartDocCache_(cache) {
+  const headers = ['rcept_no', 'confirmed_price', 'band_low', 'band_high', 'status', 'fetched_at'];
+  const rows = Object.keys(cache).sort().map(rcept => {
+    const c = cache[rcept];
+    return [rcept, c.confirmed_price ?? '', c.band_low ?? '', c.band_high ?? '', c.status || '', c.fetched_at || ''];
+  });
+  writeSheet_(V2_SHEETS.dartDocCache, headers, rows);
 }
 
 function readSheet_(sheet) {
@@ -584,9 +808,14 @@ function notifyV2Failure_(status, stats, elapsedSec, errorMessage) {
 function setupDailyTriggerV2() {
   const triggers = ScriptApp.getProjectTriggers();
   for (const t of triggers) {
-    if (t.getHandlerFunction() === 'fetchIPOData_v2') ScriptApp.deleteTrigger(t);
+    const fn = t.getHandlerFunction();
+    if (fn === 'fetchIPOData_v2' || fn === 'buildDartDocCache_v2') ScriptApp.deleteTrigger(t);
   }
+  // P1-B: doc 캐시 빌더를 fetchIPOData_v2 보다 먼저 실행 (06:00 / 16:00)
+  // → fetchIPOData_v2 (08:00 / 18:00)에서 캐시 hit 최대화
+  ScriptApp.newTrigger('buildDartDocCache_v2').timeBased().everyDays(1).atHour(6).create();
+  ScriptApp.newTrigger('buildDartDocCache_v2').timeBased().everyDays(1).atHour(16).create();
   ScriptApp.newTrigger('fetchIPOData_v2').timeBased().everyDays(1).atHour(8).create();
   ScriptApp.newTrigger('fetchIPOData_v2').timeBased().everyDays(1).atHour(18).create();
-  Logger.log('v2 트리거 설정 완료: 매일 08:00 / 18:00');
+  Logger.log('v2 트리거 설정 완료: doc 캐시 06:00/16:00, normalize 08:00/18:00');
 }

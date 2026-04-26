@@ -1,3 +1,10 @@
 .vercel
 .superpowers/
 docs/superpowers/
+
+# clasp (Apps Script CLI) — scriptId·OAuth 토큰 (향후 도입 시 활성)
+.clasp.json
+.clasprc.json
+scripts/.clasp.json
+scripts/.clasprc.json
+
