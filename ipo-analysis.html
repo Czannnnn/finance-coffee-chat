@@ -552,7 +552,9 @@
   <script>
     // ── Google Sheets 연동 설정 ──
     const SHEET_ID = '1_xXYdZ5d8COXBajVZ_tyd2p5JaOhQcQnNPQrS9-e-Jk';
-    const SHEET_NAME = 'IPO데이터';
+    // 2026-04-26: v1 IPO데이터 시트(트리거 해제됨) → v2 normalized 시트로 전환.
+    // 컬럼 23개로 확장 (P1-B 통합 결과 confidence 포함).
+    const SHEET_NAME = 'normalized';
 
     // ── 샘플 데이터 ──
     const SAMPLE_DATA = [
@@ -683,12 +685,21 @@
             return isNaN(n) ? 0 : n;
           };
 
-          // 컬럼: 0종목명, 1시장, 2상태, 3확정공모가, 4희망공모가, 5청약시작, 6청약종료, 7환불, 8상장, 9주관사, 10경쟁률, 11확약비율, 12공모주식수, 13유통비율, 14시초가, 15시초가수익률, 16업데이트
-          const confirmedPrice = val(3);
-          const expectedPrice = val(4);
-          const competitionStr = val(10);
-          const lockupStr = val(11);
-          const floatStr = val(13);
+          // v2 normalized 컬럼: 0 corp_code, 1 name, 2 market, 3 status,
+          //   4 confirmed_price, 5 band_low, 6 band_high, 7 band_position,
+          //   8 subscribe_start, 9 subscribe_end, 10 refund, 11 listing,
+          //   12 lead, 13 demand_competition, 14 competition_note,
+          //   15 lockup_pct, 16 lockup_breakdown, 17 float_pct,
+          //   18 shares_total, 19 shares_float, 20 confidence, 21 sources, 22 updated
+          // 시초가/시초가수익률은 v2에 없음 → '-' 표시.
+          const confirmedPrice = val(4);
+          const bandLow = val(5);
+          const bandHigh = val(6);
+          // 표시용 밴드 텍스트 ("5,300~6,000")
+          const expectedPrice = (bandLow && bandHigh) ? `${bandLow}~${bandHigh}` : '';
+          const competitionStr = val(13);
+          const lockupStr = val(15);
+          const floatStr = val(17);
 
           // 경쟁률 숫자 파싱 (예: "1,247.34:1" → 1247.34)
           const compMatch = competitionStr.match(/([\d,.]+)\s*:/);
@@ -702,15 +713,14 @@
           let floatRatioNum = parseFloat(floatStr.replace(/[^0-9.]/g, '')) || 0;
           if (floatRatioNum > 0 && floatRatioNum < 1) floatRatioNum = Math.round(floatRatioNum * 10000) / 100;
 
-          // 공모가 밴드 상단 파싱 (예: "12,000~15,000" → 15000)
-          const priceNums = expectedPrice.replace(/[^0-9~,]/g, '').split('~');
-          const priceBandTop = priceNums.length >= 2 ? parseInt(priceNums[priceNums.length - 1].replace(/,/g, '')) || 0 : 0;
-          const priceFixed = confirmedPrice ? parseInt(confirmedPrice.replace(/,/g, '')) || 0 : 0;
+          // 공모가 밴드 상단/확정가
+          const priceBandTop = bandHigh ? parseInt(String(bandHigh).replace(/,/g, '')) || 0 : 0;
+          const priceFixed = confirmedPrice ? parseInt(String(confirmedPrice).replace(/,/g, '')) || 0 : 0;
 
           const ipo = {
-            name: val(0),
-            market: val(1) || 'kosdaq',
-            status: val(2) || 'upcoming',
+            name: val(1),
+            market: val(2) || 'kosdaq',
+            status: val(3) || 'upcoming',
             grade: '', // 아래에서 자동 계산
             price: confirmedPrice ? `${confirmedPrice}원` : '-',
             priceRange: expectedPrice ? `${expectedPrice}원` : '-',
@@ -722,13 +732,17 @@
             lockupNum: lockupNum,
             floatRatio: floatRatioNum > 0 ? `${floatRatioNum}%` : '-',
             floatRatioNum: floatRatioNum,
-            shares: val(12) || '-',
-            lead: val(9),
-            subscribe: [dateVal(5), dateVal(6)],
-            refund: dateVal(7),
-            listing: dateVal(8),
-            openPrice: val(14) || '-',
-            openPriceRatio: val(15) || '-',
+            shares: val(18) || '-',
+            lead: val(12),
+            subscribe: [dateVal(8), dateVal(9)],
+            refund: dateVal(10),
+            listing: dateVal(11),
+            // 시초가 정보는 v2 normalized에 없음 (v1 IPO데이터의 14·15컬럼)
+            openPrice: '-',
+            openPriceRatio: '-',
+            // P1-B verify-badge 노출용
+            confidence: val(20) || 'low',
+            updated: val(22),
           };
           return ipo;
         }).filter(ipo => ipo.name && ipo.subscribe[0]);
