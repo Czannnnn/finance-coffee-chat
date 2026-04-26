@@ -370,51 +370,86 @@ function fetchFromKind_() {
 }
 
 // ─── 원천 3: 38.co.kr (DART 미제공 보조 지표) ───
-// 주 목적: 기관수요예측 경쟁률 + 의무보유확약 + 유통가능물량 보조.
-// 기존 ipo-scraper.gs의 parseListPage·parseDetailPage·fetchAsEucKr을 그대로 재사용.
-// Apps Script는 단일 프로젝트 내 파일들이 동일 네임스페이스를 공유하므로 직접 호출 가능.
+// 2026-04-26 개편: detail 페이지에서 4대 팩터 모두 직접 정규식 추출 + 종목 ID 영구 캐시.
+// 청약완료 종목도 detail 페이지를 통해 4대 팩터 영구 보존.
+//
+// 데이터 흐름:
+//   1) `?o=k` 목록 페이지 → 청약 진행/예정 종목 + 종목 ID(no=) 추출 → s38_id_cache 갱신
+//   2) s38_id_cache의 모든 종목(청약완료 포함) → detail 페이지 fetch → 4대 팩터 정밀 추출
+//   3) raw_38 시트에 통합 저장
+//
+// v1 parseDetailPage는 확정공모가·기관경쟁률 추출 누락 → v2 자체 parseDetail38V2_() 사용.
 function fetchFrom38_v2_() {
-  const rows = [];
-  if (typeof fetchAsEucKr !== 'function' || typeof parseListPage !== 'function' || typeof parseDetailPage !== 'function') {
-    Logger.log('38.co.kr 보조 파서 함수가 없음 (ipo-scraper.gs 필요)');
+  if (typeof fetchAsEucKr !== 'function') {
+    Logger.log('38.co.kr fetchAsEucKr 미정의 (ipo-scraper.gs 필요)');
     return 0;
   }
+
+  // Step 1: 목록 페이지 → 종목 ID 추출 + 캐시 갱신
+  const idCache = loadS38IdCache_();  // { normalized_name: { no, name, last_seen_subscribe_end } }
+  const listIpos = [];
   try {
-    const ipos = [];
     for (let page = 1; page <= 2; page++) {
       const html = fetchAsEucKr(`http://www.38.co.kr/html/fund/index.htm?o=k&page=${page}`);
-      ipos.push(...parseListPage(html));
-    }
-    for (const ipo of ipos) {
-      let detail = { market: '', refundDate: '', listingDate: '', lockup: '', shares: '', floatRatio: '' };
-      if (ipo.detailUrl) {
-        try {
-          const html = fetchAsEucKr(ipo.detailUrl);
-          detail = parseDetailPage(html);
-          Utilities.sleep(400);
-        } catch (e) {
-          Logger.log(`38 상세 실패 (${ipo.name}): ${e.message}`);
+      const items = (typeof parseListPage === 'function') ? parseListPage(html) : [];
+      for (const it of items) {
+        listIpos.push(it);
+        const noMatch = (it.detailUrl || '').match(/[?&]no=(\d+)/);
+        if (noMatch) {
+          const nk = normalizeName_(it.name);
+          idCache[nk] = {
+            no: noMatch[1],
+            name: it.name,
+            last_seen: new Date().toISOString().slice(0, 10),
+          };
         }
       }
-      rows.push({
-        name: ipo.name,
-        market: detail.market || '',
-        subscribe_start: ipo.subscribeStart || '',
-        subscribe_end: ipo.subscribeEnd || '',
-        refund_date: detail.refundDate || '',
-        listing_date: detail.listingDate || '',
-        confirmed_price: ipo.confirmedPrice || '',
-        expected_price: ipo.expectedPrice || '',
-        lead: ipo.lead || '',
-        demand_competition: ipo.competition || '',
-        lockup: detail.lockup || '',
-        float_ratio: detail.floatRatio || '',
-        shares: detail.shares || '',
-      });
+      Utilities.sleep(300);
     }
   } catch (e) {
-    Logger.log(`38 수집 실패: ${e.message}`);
+    Logger.log(`38 목록 fetch 실패: ${e.message}`);
   }
+  saveS38IdCache_(idCache);
+  Logger.log(`38 목록: ${listIpos.length}건 노출 / 종목 ID 캐시 ${Object.keys(idCache).length}건`);
+
+  // Step 2: 캐시된 모든 종목(청약 진행+완료) detail fetch
+  const rows = [];
+  const listMap = {};  // 목록에서 가져온 데이터 fallback (청약일 등)
+  listIpos.forEach(it => { listMap[normalizeName_(it.name)] = it; });
+
+  let detailOk = 0, detailFail = 0;
+  for (const nk of Object.keys(idCache)) {
+    const cached = idCache[nk];
+    const listItem = listMap[nk] || {};
+    let d = {};
+    try {
+      const url = `https://www.38.co.kr/html/fund/?o=v&no=${cached.no}&l=&page=1`;
+      const html = fetchAsEucKr(url);
+      d = parseDetail38V2_(html);
+      detailOk++;
+      Utilities.sleep(300);
+    } catch (e) {
+      detailFail++;
+      Logger.log(`38 detail 실패 (${cached.name} no=${cached.no}): ${e.message}`);
+    }
+    rows.push({
+      name: cached.name,
+      market: d.market || listItem.market || '',
+      subscribe_start: listItem.subscribeStart || '',
+      subscribe_end: listItem.subscribeEnd || '',
+      refund_date: d.refund_date || '',
+      listing_date: d.listing_date || '',
+      // detail 우선 (확정가는 detail이 더 정확) → 목록 fallback
+      confirmed_price: d.confirmed_price || listItem.confirmedPrice || '',
+      expected_price: d.expected_price || listItem.expectedPrice || '',
+      lead: d.lead || listItem.lead || '',
+      demand_competition: d.demand_competition || listItem.competition || '',
+      lockup: d.lockup || '',
+      float_ratio: d.float_ratio || '',
+      shares: d.shares || '',
+    });
+  }
+  Logger.log(`38 detail: ok=${detailOk} fail=${detailFail} (총 ${rows.length}건)`);
 
   writeSheet_(V2_SHEETS.raw38,
     ['name', 'market', 'subscribe_start', 'subscribe_end', 'refund_date', 'listing_date',
@@ -423,6 +458,80 @@ function fetchFrom38_v2_() {
                    r.confirmed_price, r.expected_price, r.lead, r.demand_competition, r.lockup, r.float_ratio, r.shares,
                    new Date().toISOString()]));
   return rows.length;
+}
+
+// ─── 38 상세 페이지 파서 v2 (2026-04-26 P1-B 후속) ───
+// v1 parseDetailPage(ipo-scraper.gs)는 확정공모가·기관경쟁률 추출 누락 → v2 자체 구현.
+// 정규식은 38 코스모로보틱스(no=2278) 실측 기반.
+function parseDetail38V2_(html) {
+  const out = {
+    market: '', refund_date: '', listing_date: '',
+    confirmed_price: '', expected_price: '',
+    demand_competition: '', lockup: '', float_ratio: '', shares: '', lead: '',
+  };
+  if (!html) return out;
+  const pick = (re, idx) => { const m = html.match(re); return m ? m[idx || 1] : ''; };
+  const dateFmt = (s) => s ? s.replace(/\./g, '-') : '';
+
+  out.confirmed_price = pick(/확정공모가[\s\S]{1,300}?<td[^>]*>[\s\S]{1,100}?<b>\s*([\d,]+)\s*<\/b>\s*원/);
+  const bm = html.match(/희망공모가액[\s\S]{1,300}?([\d,]+)\s*~\s*([\d,]+)\s*원/);
+  if (bm) out.expected_price = `${bm[1]}~${bm[2]}`;
+  out.demand_competition = pick(/기관경쟁률[\s\S]{1,300}?<td[^>]*>\s*([\d,.]+)\s*<\/td>/);
+  if (out.demand_competition) out.demand_competition = `${out.demand_competition}:1`;
+  // P1-B fix (2026-04-26): "의무보유확약" 키워드 직후 0.00%는 청약일정 표 빈자리.
+  // 진짜 확약비율은 "확약비율" 섹션의 "총 수량 대비 비율(%)" 후 값. (코스모로보틱스 73.03% 케이스)
+  out.lockup = pick(/총\s*수량\s*대비\s*비율\s*\(\s*%\s*\)[\s\S]{1,500}?([\d.]+)\s*%/);
+  if (out.lockup) out.lockup = `${out.lockup}%`;
+  out.shares = pick(/총공모주식수\s*<\/td>[\s\S]{1,200}?<td[^>]*>[\s\S]{1,30}?([\d,]+)\s*주/);
+  out.lead = pick(/주\s*간\s*사\s*<\/td>[\s\S]{1,300}?<b>\s*([^<]+?)\s*<\/b>/);
+  out.market = pick(/시장구분[\s\S]{1,300}?<td[^>]*>[\s\S]{1,100}?(코스닥|코스피|코넥스)/).toLowerCase();
+  out.refund_date = dateFmt(pick(/환불일\s*<\/td>[\s\S]{1,300}?<td[^>]*>[\s\S]{1,100}?(\d{4}\.\d{2}\.\d{2})/));
+  out.listing_date = dateFmt(pick(/상장일\s*<\/td>[\s\S]{1,300}?<td[^>]*>[\s\S]{1,100}?(\d{4}\.\d{2}\.\d{2})/));
+  // 유통가능물량 — "유통가능물량" 키워드 이후 최초 % 값 (단 1~99 범위만)
+  const fIdx = html.indexOf('유통가능물량');
+  if (fIdx >= 0) {
+    const after = html.substring(fIdx, fIdx + 5000);
+    const fm = after.match(/(\d+(?:\.\d+)?)\s*%/);
+    if (fm) {
+      const n = parseFloat(fm[1]);
+      if (n > 0 && n < 100) out.float_ratio = `${n}%`;
+    }
+  }
+  return out;
+}
+
+// ─── 38 종목 ID 영구 캐시 (s38_id_cache) ───
+// 청약완료 후 38 목록에서 사라진 종목도 detail 페이지를 fetch할 수 있도록 ID 영구 보존.
+function loadS38IdCache_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('s38_id_cache');
+  if (!sheet || sheet.getLastRow() < 2) return {};
+  const values = sheet.getDataRange().getValues();
+  const headers = values[0].map(String);
+  const iN = headers.indexOf('normalized_name');
+  const iNo = headers.indexOf('no');
+  const iName = headers.indexOf('name');
+  const iLs = headers.indexOf('last_seen');
+  const out = {};
+  for (let i = 1; i < values.length; i++) {
+    const nk = String(values[i][iN] || '');
+    if (!nk) continue;
+    out[nk] = {
+      no: String(values[i][iNo] || ''),
+      name: String(values[i][iName] || ''),
+      last_seen: String(values[i][iLs] || ''),
+    };
+  }
+  return out;
+}
+
+function saveS38IdCache_(cache) {
+  const headers = ['normalized_name', 'no', 'name', 'last_seen'];
+  const rows = Object.keys(cache).sort().map(nk => {
+    const c = cache[nk];
+    return [nk, c.no, c.name, c.last_seen];
+  });
+  writeSheet_('s38_id_cache', headers, rows);
 }
 
 // ─── 통합·정규화 ───
@@ -699,11 +808,18 @@ function compareDartVs38_(dartRow, vals38) {
   return { flag: diffs.length > 0, note: diffs.length ? `⚠ ${diffs.join(' / ')}` : '' };
 }
 
+// 2026-04-26 fix: number 형식 직접 입력 지원.
+// Sheets가 "21.04%"를 percentage cell로 저장하면 read 시 0.2104 (number)로 반환됨 → 기존 정규식 매치 실패 → null.
 function parsePercent_(str) {
-  if (!str) return null;
-  const m = String(str).match(/([\d.]+)\s*%/);
+  if (str == null || str === '') return null;
+  if (typeof str === 'number') {
+    if (str > 0 && str < 1) return Math.round(str * 10000) / 100;  // 0.2104 → 21.04
+    return str;
+  }
+  const m = String(str).match(/([\d.]+)\s*%?/);
   if (!m) return null;
   let n = parseFloat(m[1]);
+  if (isNaN(n)) return null;
   if (n > 0 && n < 1) n = Math.round(n * 10000) / 100; // 0.15 → 15.0
   return n;
 }
