@@ -317,11 +317,12 @@ function fetchDartDocDetail_(apiKey, rcept_no) {
     }
 
     // ─── 상장일 유통가능 비율 (제미나이 21.8% 검증 시 발견 — 코스모 실측 32.43%) ───
-    // [발행조건확정] 본문 후반부의 "상장일 유통가능 N,NNN N.NN%" 행에서 추출.
-    // 첫 매치 = 상장일 시점 (그 후 1개월/2개월/.../3년 행 이어짐).
-    const fm = xml.match(/상장일\s*유통가능\s*([\d,]+)\s*([\d.]+)\s*%/);
+    // [발행조건확정] 본문 후반부의 "상장일 유통가능</TD><TD>N,NNN</TD><TD>N.NN%</TD>" 표.
+    // 셀이 HTML 태그로 분리되어 있어 [\s\S]{1,1500}? 비탐욕 매치로 키워드 후 첫 % 추출.
+    // (그 다음 행은 "상장후 1개월뒤 유통가능"이라 "상장일 유통가능" 정확 매칭으로 회피)
+    const fm = xml.match(/상장일\s+유통가능[\s\S]{1,1500}?(\d+(?:\.\d+)?)\s*%/);
     if (fm) {
-      const pct = parseFloat(fm[2]);
+      const pct = parseFloat(fm[1]);
       if (!isNaN(pct) && pct > 0 && pct <= 100) result.float_pct = pct;
     }
 
@@ -875,6 +876,11 @@ function loadDartDocCache_() {
       status: row[iSt] || '',
       fetched_at: row[iFa] || '',
     };
+    // P1-B fix (2026-04-26): float_pct가 null인 ok 캐시는 구 schema 또는 정규식 미스 → 무효 처리.
+    // (band_low/band_high 추출 가능했던 종목은 유통가능 표도 있을 가능성 높음 → 다시 fetch)
+    if (out[rcept].status === 'ok' && out[rcept].float_pct == null && out[rcept].band_low != null) {
+      delete out[rcept];
+    }
   }
   return out;
 }
