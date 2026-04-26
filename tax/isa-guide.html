@@ -10,7 +10,7 @@
   <link rel="canonical" href="https://www.financecoffeechat.com/tax/isa-guide">
   <meta property="og:title" content="ISA계좌 완벽 가이드 — 일반·서민·농어민형 한도 비교 | 투자 커피챗">
   <meta property="og:description" content="ISA 3가지 유형 한도·비과세·세제혜택을 한 페이지에. 연봉별 추천과 연금 전환까지.">
-  <meta property="og:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-04-26">
+  <meta property="og:image" content="https://www.financecoffeechat.com/og-isa-guide.png?v=2026-04-26">
   <meta property="og:url" content="https://www.financecoffeechat.com/tax/isa-guide">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="ko_KR">
@@ -18,7 +18,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="ISA계좌 완벽 가이드 — 일반·서민·농어민형 한도 비교 | 투자 커피챗">
   <meta name="twitter:description" content="ISA 3가지 유형 한도·비과세·세제혜택을 한 페이지에.">
-  <meta name="twitter:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-04-26">
+  <meta name="twitter:image" content="https://www.financecoffeechat.com/og-isa-guide.png?v=2026-04-26">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2026-04-19b">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2026-04-19b">
   <link rel="manifest" href="/manifest.webmanifest">
@@ -91,6 +91,14 @@
     .related .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 1.4px; color: var(--caramel); margin-bottom: 6px; text-transform: uppercase; }
     .related h4 { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--espresso); margin-bottom: 4px; }
     .related p { font-size: 12.5px; color: var(--medium-roast); line-height: 1.6; }
+    .faq-list { margin-top: 12px; }
+    .faq-item { background: var(--white); border-radius: 10px; border: 1px solid rgba(44,24,16,0.08); margin-bottom: 10px; padding: 14px 20px; box-shadow: 0 2px 10px rgba(44,24,16,0.03); }
+    .faq-item summary { cursor: pointer; font-weight: 600; color: var(--espresso); font-size: 14.5px; list-style: none; padding-right: 24px; position: relative; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; position: absolute; right: 0; top: 0; color: var(--caramel); font-weight: 700; font-size: 18px; line-height: 1; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-item p { margin-top: 12px; color: var(--dark-roast); font-size: 13.5px; line-height: 1.8; }
+    .faq-item p strong { color: var(--espresso); }
     .disclaimer { margin-top: 48px; padding: 16px 20px; background: var(--white); border: 1px dashed rgba(44,24,16,0.15); border-radius: 10px; font-size: 12px; color: var(--medium-roast); line-height: 1.7; }
     @media (max-width: 600px) { .container { padding: 32px 16px 48px; } .header h1 { font-size: 26px; } .section-title { font-size: 20px; } .compare-table th, .compare-table td { padding: 10px; font-size: 12.5px; } }
   </style>
@@ -107,7 +115,7 @@
     "dateModified": "2026-04-26",
     "author": { "@type": "Organization", "name": "투자 커피챗", "url": "https://www.financecoffeechat.com/", "logo": "https://www.financecoffeechat.com/logo.svg" },
     "publisher": { "@type": "Organization", "name": "투자 커피챗", "url": "https://www.financecoffeechat.com/", "logo": "https://www.financecoffeechat.com/logo.svg" },
-    "image": "https://www.financecoffeechat.com/og-image.png"
+    "image": "https://www.financecoffeechat.com/og-isa-guide.png"
   }
   </script>
   <script type="application/ld+json">
@@ -118,6 +126,44 @@
       { "@type": "ListItem", "position": 1, "name": "홈", "item": "https://www.financecoffeechat.com/" },
       { "@type": "ListItem", "position": 2, "name": "절세 최적화", "item": "https://www.financecoffeechat.com/tax-optimization" },
       { "@type": "ListItem", "position": 3, "name": "ISA계좌 가이드", "item": "https://www.financecoffeechat.com/tax/isa-guide" }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "ISA는 1인 1계좌가 원칙인가요? 여러 금융사에 나눠 가입할 수 없나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "ISA는 전 금융기관 통틀어 1인 1계좌만 보유할 수 있습니다. 증권사·은행·저축은행 어디든 이미 ISA가 있으면 다른 곳에 추가 개설이 불가합니다. 가입 전 본인 보유 여부를 먼저 확인하세요." }
+      },
+      {
+        "@type": "Question",
+        "name": "일반형으로 가입했다가 서민형으로 변경할 수 있나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "같은 계좌 안에서 일반형 ↔ 서민형 유형 변경은 불가합니다. 기존 ISA를 해지한 뒤 자격 요건을 충족할 때 서민형으로 새로 가입해야 하며, 이 경우 의무 3년 잠금이 처음부터 다시 시작됩니다." }
+      },
+      {
+        "@type": "Question",
+        "name": "ISA에서 미국 주식이나 해외 ETF를 직접 매매할 수 있나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "ISA 계좌에서는 해외 거래소에 상장된 종목을 직접 매매할 수 없습니다. 다만 국내 거래소에 상장된 미국지수 ETF(예: KODEX 미국S&P500, TIGER 미국나스닥100 등)는 자유롭게 거래 가능해 사실상 동일한 효과를 누릴 수 있습니다." }
+      },
+      {
+        "@type": "Question",
+        "name": "비과세 한도 200만원(서민형 400만원)을 초과하면 세금은 어떻게 부과되나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "초과 이익에는 9.9% 분리과세가 적용됩니다. 일반 금융소득종합과세(15.4% 또는 누진세율)에서 빠지므로 고소득자일수록 절세 효과가 큽니다. 단 면세는 아니고 9.9% 자체는 부과됩니다." }
+      },
+      {
+        "@type": "Question",
+        "name": "ISA 만기 후 자금을 어떻게 활용해야 절세 효과가 가장 큰가요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "만기 60일 이내에 연금계좌(IRP 또는 연금저축)로 전환하면 전환금액의 10%(최대 300만원)에 대해 추가 세액공제 한도가 부여됩니다. 일반계좌로 그대로 출금하면 이 혜택이 사라지므로 만기 시점에 절차를 미리 준비해 두세요." }
+      },
+      {
+        "@type": "Question",
+        "name": "ISA 의무 3년 이내 중도 해지하면 어떻게 되나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "의무 가입기간 3년 이내 해지하면 그동안 받은 비과세·분리과세 혜택이 전액 소멸되고 일반과세(15.4%)로 환산되어 추징됩니다. 단기 자금은 ISA에 넣지 말고 별도 계좌로 분리해 운용하세요." }
+      }
     ]
   }
   </script>
@@ -263,6 +309,37 @@
         <p style="margin-top:10px;"><strong>실수 2.</strong> 누적 1억원 한도를 1년에 모두 채우려 함 — 연 2,000만원 한도는 미사용분 이월되지 않습니다. 5년에 나눠 분산 납입이 정석.</p>
         <p style="margin-top:10px;"><strong>실수 3.</strong> 만기 후 일반계좌로 그대로 출금 — 연금 전환 시 추가 300만원 공제 한도(전환금액의 10%)가 사라집니다. 만기 60일 이내 절차 진행 필수.</p>
         <p style="margin-top:10px;"><strong>실수 4.</strong> 비과세 한도 초과 시 0% 과세로 착각 — 200만(또는 400만) 초과분은 9.9% 분리과세이며 종합과세에서 빠질 뿐 면제는 아닙니다.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">자주 묻는 질문</h2>
+      <p class="section-desc">ISA 가입 전후 가장 많이 받는 질문 6가지를 정리했습니다.</p>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>ISA는 1인 1계좌가 원칙인가요? 여러 금융사에 나눠 가입할 수 없나요?</summary>
+          <p>ISA는 전 금융기관 통틀어 <strong>1인 1계좌</strong>만 보유할 수 있습니다. 증권사·은행·저축은행 어디든 이미 ISA가 있으면 다른 곳에 추가 개설이 불가합니다. 가입 전 본인 보유 여부를 먼저 확인하세요.</p>
+        </details>
+        <details class="faq-item">
+          <summary>일반형으로 가입했다가 서민형으로 변경할 수 있나요?</summary>
+          <p>같은 계좌 안에서 일반형 ↔ 서민형 유형 변경은 <strong>불가</strong>합니다. 기존 ISA를 해지한 뒤 자격 요건을 충족할 때 서민형으로 새로 가입해야 하며, 이 경우 의무 3년 잠금이 처음부터 다시 시작됩니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>ISA에서 미국 주식이나 해외 ETF를 직접 매매할 수 있나요?</summary>
+          <p>ISA 계좌에서는 해외 거래소에 상장된 종목을 <strong>직접 매매할 수 없습니다</strong>. 다만 국내 거래소에 상장된 미국지수 ETF(예: KODEX 미국S&amp;P500, TIGER 미국나스닥100 등)는 자유롭게 거래 가능해 사실상 동일한 효과를 누릴 수 있습니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>비과세 한도(일반형 200만·서민형 400만) 초과분은 세금이 어떻게 부과되나요?</summary>
+          <p>초과 이익에는 <strong>9.9% 분리과세</strong>가 적용됩니다. 일반 금융소득종합과세(15.4% 또는 누진세율)에서 빠지므로 고소득자일수록 절세 효과가 큽니다. 단 면세는 아니며 9.9% 자체는 부과됩니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>ISA 만기 후 자금을 어떻게 활용해야 절세 효과가 가장 큰가요?</summary>
+          <p>만기 60일 이내에 <strong>연금계좌(IRP·연금저축)로 전환</strong>하면 전환금액의 10%(최대 300만원)에 대해 추가 세액공제 한도가 부여됩니다. 일반계좌로 그대로 출금하면 이 혜택이 사라지므로 만기 시점에 절차를 미리 준비해 두세요.</p>
+        </details>
+        <details class="faq-item">
+          <summary>ISA 의무 3년 이내 중도 해지하면 어떻게 되나요?</summary>
+          <p>의무 가입기간 3년 이내 해지하면 그동안 받은 비과세·분리과세 혜택이 <strong>전액 소멸</strong>되고 일반과세(15.4%)로 환산되어 추징됩니다. 단기 자금은 ISA에 넣지 말고 별도 계좌로 분리해 운용하세요.</p>
+        </details>
       </div>
     </section>
 

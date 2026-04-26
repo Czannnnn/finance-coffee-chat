@@ -10,7 +10,7 @@
   <link rel="canonical" href="https://www.financecoffeechat.com/tax/irp-refund-guide">
   <meta property="og:title" content="IRP 연말정산 환급 가이드 — 한도 900만 · 최대 148.5만 환급 | 투자 커피챗">
   <meta property="og:description" content="IRP·연저펀 세액공제 한도와 총급여별 환급액. 13월의 월급 챙기기 완전 가이드.">
-  <meta property="og:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-04-26">
+  <meta property="og:image" content="https://www.financecoffeechat.com/og-irp-refund-guide.png?v=2026-04-26">
   <meta property="og:url" content="https://www.financecoffeechat.com/tax/irp-refund-guide">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="ko_KR">
@@ -18,7 +18,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="IRP 연말정산 환급 가이드 — 한도 900만 · 최대 148.5만 환급 | 투자 커피챗">
   <meta name="twitter:description" content="IRP·연저펀 세액공제 한도와 총급여별 환급액 시뮬레이션.">
-  <meta name="twitter:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-04-26">
+  <meta name="twitter:image" content="https://www.financecoffeechat.com/og-irp-refund-guide.png?v=2026-04-26">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2026-04-19b">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2026-04-19b">
   <link rel="manifest" href="/manifest.webmanifest">
@@ -97,6 +97,14 @@
     .related .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 1.4px; color: var(--caramel); margin-bottom: 6px; text-transform: uppercase; }
     .related h4 { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--espresso); margin-bottom: 4px; }
     .related p { font-size: 12.5px; color: var(--medium-roast); line-height: 1.6; }
+    .faq-list { margin-top: 12px; }
+    .faq-item { background: var(--white); border-radius: 10px; border: 1px solid rgba(44,24,16,0.08); margin-bottom: 10px; padding: 14px 20px; box-shadow: 0 2px 10px rgba(44,24,16,0.03); }
+    .faq-item summary { cursor: pointer; font-weight: 600; color: var(--espresso); font-size: 14.5px; list-style: none; padding-right: 24px; position: relative; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; position: absolute; right: 0; top: 0; color: var(--caramel); font-weight: 700; font-size: 18px; line-height: 1; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-item p { margin-top: 12px; color: var(--dark-roast); font-size: 13.5px; line-height: 1.8; }
+    .faq-item p strong { color: var(--espresso); }
     .disclaimer { margin-top: 48px; padding: 16px 20px; background: var(--white); border: 1px dashed rgba(44,24,16,0.15); border-radius: 10px; font-size: 12px; color: var(--medium-roast); line-height: 1.7; }
     @media (max-width: 600px) { .container { padding: 32px 16px 48px; } .header h1 { font-size: 26px; } .section-title { font-size: 20px; } .compare-table th, .compare-table td, .num-table th, .num-table td { padding: 10px; font-size: 12.5px; } }
   </style>
@@ -113,7 +121,7 @@
     "dateModified": "2026-04-26",
     "author": { "@type": "Organization", "name": "투자 커피챗", "url": "https://www.financecoffeechat.com/", "logo": "https://www.financecoffeechat.com/logo.svg" },
     "publisher": { "@type": "Organization", "name": "투자 커피챗", "url": "https://www.financecoffeechat.com/", "logo": "https://www.financecoffeechat.com/logo.svg" },
-    "image": "https://www.financecoffeechat.com/og-image.png"
+    "image": "https://www.financecoffeechat.com/og-irp-refund-guide.png"
   }
   </script>
   <script type="application/ld+json">
@@ -124,6 +132,44 @@
       { "@type": "ListItem", "position": 1, "name": "홈", "item": "https://www.financecoffeechat.com/" },
       { "@type": "ListItem", "position": 2, "name": "절세 최적화", "item": "https://www.financecoffeechat.com/tax-optimization" },
       { "@type": "ListItem", "position": 3, "name": "IRP 연말정산 환급 가이드", "item": "https://www.financecoffeechat.com/tax/irp-refund-guide" }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "IRP에 900만원을 다 넣어도 되나요? 한도가 어떻게 되나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "IRP 단독 세액공제 한도는 900만원이지만, 연금저축펀드와 합산해서 적용되므로 연저펀에 600만 넣었다면 IRP는 추가 300만까지만 공제됩니다. IRP 단독으로 900만 채워도 한도는 동일합니다." }
+      },
+      {
+        "@type": "Question",
+        "name": "총급여 5,500만원이 살짝 넘으면 환급률이 16.5%에서 13.2%로 떨어지나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "네, 단 1원이라도 5,500만원(또는 종합소득 4,500만원)을 초과하면 세액공제율이 16.5%에서 13.2%로 줄어듭니다. 900만원 풀납입 기준 환급액 차이는 148.5만 → 118.8만원으로 약 30만원입니다." }
+      },
+      {
+        "@type": "Question",
+        "name": "IRP 환급은 언제 받을 수 있나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "근로소득자는 다음 해 1월 연말정산 후 2~3월 급여에 환급액이 합산되어 입금됩니다. 자영업자·프리랜서는 5월 종합소득세 신고 후 환급 처리됩니다. 결정세액이 환급 한도보다 적으면 결정세액 한도까지만 환급됩니다." }
+      },
+      {
+        "@type": "Question",
+        "name": "1월에 한 번에 입금하는 게 좋을까요, 매월 분산이 좋을까요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "매월 자동이체로 분산 납입을 권장합니다. 운용 평균단가가 안정되고 12월 막판 캐시 부담이 사라집니다. 단 12월 31일까지 입금 완료된 금액만 당해 연도 공제 대상이며, 다음 해 1월 입금분은 다음 해 귀속으로 처리됩니다." }
+      },
+      {
+        "@type": "Question",
+        "name": "IRP 중도 해지 시 환급받은 돈을 다 토해내야 하나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "법정 사유(무주택자 주택 구입, 6개월 이상 요양, 천재지변 등) 외 만 55세 미만 중도 해지 시 그동안 받은 환급액과 운용수익에 16.5% 기타소득세가 추징됩니다. 단기 자금은 절대 IRP에 넣지 마세요." }
+      },
+      {
+        "@type": "Question",
+        "name": "자영업자도 IRP에 가입할 수 있나요? 환급은 어떻게 받나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "사업소득이 있는 자영업자·프리랜서는 IRP 가입이 가능합니다. 5월 종합소득세 신고 시 동일하게 세액공제(16.5% 또는 13.2%)가 적용되며 결정세액 한도 안에서 환급됩니다. 무소득자는 IRP 가입 불가." }
+      }
     ]
   }
   </script>
@@ -308,6 +354,37 @@
         <p style="margin-top:10px;"><strong>실수 2.</strong> 연봉이 약간 5,500만을 초과해 환급률이 낮다고 가입을 미룸 — 13.2%여도 풀납입 환급 118.8만원은 여전히 큰 알파입니다. 노후 자산 적립 효과까지 합치면 가입을 미루는 손해가 더 큼.</p>
         <p style="margin-top:10px;"><strong>실수 3.</strong> 1월에 일시 납입 — 자동이체로 매월 분산하면 운용 평균단가가 안정되고 12월 막판 캐시 부담도 사라집니다.</p>
         <p style="margin-top:10px;"><strong>실수 4.</strong> ISA와 혼동해 단기 자금까지 IRP에 넣음 — IRP는 만 55세 전 해지 시 16.5% 추징. 단기 절세는 ISA, 노후 적립은 IRP·연저펀으로 분리해야 합니다.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">자주 묻는 질문</h2>
+      <p class="section-desc">IRP 환급 신청 전후 가장 많이 받는 질문 6가지.</p>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>IRP에 900만원을 다 넣어도 되나요? 한도가 어떻게 되나요?</summary>
+          <p>IRP 단독 세액공제 한도는 900만원이지만, <strong>연금저축펀드와 합산</strong>해서 적용됩니다. 연저펀에 600만 넣었다면 IRP는 추가 300만까지만 공제되며, IRP 단독으로 900만 채워도 한도는 동일합니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>총급여 5,500만원이 살짝 넘으면 환급률이 16.5%에서 13.2%로 떨어지나요?</summary>
+          <p>네, 단 1원이라도 <strong>5,500만원(또는 종합소득 4,500만원)을 초과</strong>하면 세액공제율이 16.5% → 13.2%로 줄어듭니다. 900만원 풀납입 기준 환급액 차이는 148.5만 → 118.8만원으로 약 30만원입니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>IRP 환급은 언제 받을 수 있나요?</summary>
+          <p>근로소득자는 다음 해 1월 연말정산 후 <strong>2~3월 급여에 환급액 합산</strong>되어 입금됩니다. 자영업자·프리랜서는 5월 종합소득세 신고 후 환급 처리. 결정세액이 환급 한도보다 적으면 결정세액 한도까지만 환급됩니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>1월에 한 번에 입금하는 게 좋을까요, 매월 분산이 좋을까요?</summary>
+          <p><strong>매월 자동이체 분산 납입</strong>을 권장합니다. 운용 평균단가가 안정되고 12월 막판 캐시 부담이 사라집니다. 단 12월 31일까지 입금 완료된 금액만 당해 연도 공제 대상이며, 다음 해 1월 입금분은 다음 해 귀속으로 처리됩니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>IRP 중도 해지 시 환급받은 돈을 다 토해내야 하나요?</summary>
+          <p>법정 사유(무주택자 주택 구입, 6개월 이상 요양, 천재지변 등) 외 만 55세 미만 중도 해지 시 그동안 받은 환급액과 운용수익에 <strong>16.5% 기타소득세 추징</strong>. 단기 자금은 절대 IRP에 넣지 마세요.</p>
+        </details>
+        <details class="faq-item">
+          <summary>자영업자도 IRP에 가입할 수 있나요? 환급은 어떻게 받나요?</summary>
+          <p>사업소득이 있는 자영업자·프리랜서는 <strong>IRP 가입 가능</strong>. 5월 종합소득세 신고 시 동일한 세액공제(16.5% 또는 13.2%)가 적용되며 결정세액 한도 안에서 환급됩니다. 무소득자는 IRP 가입 불가.</p>
+        </details>
       </div>
     </section>
 
