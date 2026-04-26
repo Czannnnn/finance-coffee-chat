@@ -4,7 +4,7 @@
 
 Site: https://www.financecoffeechat.com
 Language: ko
-Last updated: 2026-04-19
+Last updated: 2026-04-26
 
 ## Core pages
 
@@ -25,8 +25,11 @@ Last updated: 2026-04-19
 
 ## Tax (절세)
 
-- [절세 최적화](https://www.financecoffeechat.com/tax-optimization): ISA·연금저축·IRP·DC/DB 환급 극대화
+- [절세 최적화 허브](https://www.financecoffeechat.com/tax-optimization): ISA·연금저축·IRP·DC/DB 환급 극대화
 - [절세 시뮬레이터](https://www.financecoffeechat.com/tax-simulation): 계정별 한도·세액공제 계산
+- [ISA계좌 완벽 가이드](https://www.financecoffeechat.com/tax/isa-guide): 일반·서민·농어민형 한도 비교, 연봉별 추천, 만기 후 연금 전환
+- [IRP 연말정산 환급 가이드](https://www.financecoffeechat.com/tax/irp-refund-guide): 한도 900만·총급여별 환급액(최대 148.5만원) 시뮬레이션
+- [연금저축 vs IRP 차이](https://www.financecoffeechat.com/tax/pension-irp-comparison): 가입자격·한도·중도인출 6항목 비교, 직장인·자영업자·무소득자별 추천 조합
 
 ## Cost (생활비 최적화)
 
