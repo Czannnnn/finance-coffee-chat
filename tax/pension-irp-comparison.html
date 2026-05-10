@@ -102,21 +102,55 @@
     .faq-item p strong { color: var(--espresso); }
     .disclaimer { margin-top: 48px; padding: 16px 20px; background: var(--white); border: 1px dashed rgba(44,24,16,0.15); border-radius: 10px; font-size: 12px; color: var(--medium-roast); line-height: 1.7; }
     @media (max-width: 600px) { .container { padding: 32px 16px 48px; } .header h1 { font-size: 26px; } .section-title { font-size: 20px; } .compare-table th, .compare-table td { padding: 10px; font-size: 12.5px; } }
+    .answer-box { max-width: 760px; margin: 24px auto 0; background: linear-gradient(180deg, var(--white) 0%, var(--cream) 100%); border: 1px solid var(--caramel); border-radius: 12px; padding: 18px 22px; box-shadow: 0 4px 16px rgba(196,133,60,0.10); position: relative; }
+    .answer-box::before { content: 'A.'; position: absolute; left: -12px; top: -12px; background: var(--caramel); color: var(--white); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-weight: 700; font-size: 14px; box-shadow: 0 2px 8px rgba(196,133,60,0.3); }
+    .answer-box .answer-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-bottom: 6px; }
+    .answer-box .answer-text { font-size: 16px; font-weight: 600; color: var(--espresso); line-height: 1.65; letter-spacing: -0.2px; }
+    .answer-box .answer-text strong { color: var(--medium-roast); }
+    .byline { max-width: 760px; margin: 14px auto 0; display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--medium-roast); }
+    .byline .avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--caramel-light); display: flex; align-items: center; justify-content: center; color: var(--caramel); font-weight: 700; font-size: 13px; border: 1px solid rgba(196,133,60,0.3); }
+    .byline .meta { line-height: 1.5; }
+    .byline .meta strong { color: var(--dark-roast); font-weight: 600; }
+    .byline .updated { color: var(--caramel); font-weight: 600; }
+    @media (max-width: 600px) { .answer-box { padding: 16px 18px; } .answer-box .answer-text { font-size: 15px; } }
   </style>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "연금저축 vs IRP 차이 — 6가지 항목 한눈에 비교",
-    "description": "연금저축펀드와 IRP의 가입자격·한도·투자제한·중도인출·수수료·연금수령 6항목 비교. 직장인·자영업자·무소득자별 추천 조합.",
+    "headline": "연금저축 vs IRP 차이 + 퇴직연금 DB DC 비교 — 6가지 항목 한눈에",
+    "description": "연금저축펀드와 IRP의 가입자격·한도·투자제한·중도인출·수수료·연금수령 6항목 비교 + 퇴직연금 DB·DC 차이. 직장인·자영업자·무소득자별 추천 조합.",
     "url": "https://www.financecoffeechat.com/tax/pension-irp-comparison",
     "mainEntityOfPage": "https://www.financecoffeechat.com/tax/pension-irp-comparison",
     "inLanguage": "ko",
     "datePublished": "2026-04-26",
-    "dateModified": "2026-04-26",
-    "author": { "@type": "Organization", "name": "투자 커피챗", "url": "https://www.financecoffeechat.com/", "logo": "https://www.financecoffeechat.com/logo.svg" },
-    "publisher": { "@type": "Organization", "name": "투자 커피챗", "url": "https://www.financecoffeechat.com/", "logo": "https://www.financecoffeechat.com/logo.svg" },
-    "image": "https://www.financecoffeechat.com/og-pension-irp-comparison.png"
+    "dateModified": "2026-05-10",
+    "author": {
+      "@type": "Person",
+      "name": "투자 커피챗 에디터",
+      "url": "https://www.financecoffeechat.com/asset",
+      "jobTitle": "FIRE 리서치 에디터",
+      "knowsAbout": ["연금저축", "IRP", "퇴직연금", "DB형", "DC형", "세액공제", "절세계좌", "노후 자산"],
+      "worksFor": { "@type": "Organization", "name": "투자 커피챗", "url": "https://www.financecoffeechat.com/" }
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "투자 커피챗",
+      "url": "https://www.financecoffeechat.com/",
+      "logo": { "@type": "ImageObject", "url": "https://www.financecoffeechat.com/logo.svg" }
+    },
+    "image": "https://www.financecoffeechat.com/og-pension-irp-comparison.png",
+    "isAccessibleForFree": true,
+    "speakable": {
+      "@type": "SpeakableSpecification",
+      "cssSelector": [".answer-box", ".intro"]
+    },
+    "about": [
+      { "@type": "Thing", "name": "연금저축펀드 IRP 차이" },
+      { "@type": "Thing", "name": "퇴직연금 DB DC 비교" },
+      { "@type": "Thing", "name": "노후 절세계좌 조합" }
+    ],
+    "keywords": "연금저축, IRP, 퇴직연금, DB형, DC형, 세액공제 900만, 위험자산 70%, 중도인출"
   }
   </script>
   <script type="application/ld+json">
@@ -204,6 +238,16 @@
       <h1>연금저축 <em>vs</em> IRP 차이</h1>
       <div class="subtitle">2026년 세법 기준 · 6가지 항목 비교 · 직장인·자영업자·무소득자별 추천</div>
       <div class="divider"></div>
+      <div class="answer-box" role="region" aria-label="연저펀 vs IRP 핵심 답변">
+        <div class="answer-label">한 줄 답변</div>
+        <p class="answer-text">두 계좌 합산 세액공제 한도 <strong>900만원</strong>. 연저펀 600만 우선 + IRP 추가 300만 조합이 정석. 연저펀은 <strong>위험자산 100%·중도인출 가능</strong>, IRP는 <strong>위험자산 70%·근로소득자 한정</strong>.</p>
+      </div>
+      <div class="byline">
+        <div class="avatar" aria-hidden="true">투</div>
+        <div class="meta">
+          <strong>투자 커피챗 에디터</strong> · FIRE·절세 리서치 · <span class="updated">2026-05-10 갱신</span>
+        </div>
+      </div>
       <p class="intro">
         연금저축(연저펀)과 IRP는 <strong>세액공제 한도를 합산해서 900만원까지 공유</strong>하지만,
         가입 자격·투자 제한·중도 인출 가능 여부에서 결정적인 차이가 납니다.
