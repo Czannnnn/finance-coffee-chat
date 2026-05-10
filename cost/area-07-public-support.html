@@ -8,6 +8,9 @@
   <meta name="description" content="2026 월세 세액공제 한도(최대 17%·연 1,000만원)와 전세보증금 소득공제(40%·연 400만원), 청년월세 한시지원, 근로장려금·디딤돌·버팀목·부모급여까지 가구별 정리.">
   <meta name="keywords" content="월세 세액공제, 월세 세액공제 한도, 전세보증금 소득공제, 주택임차차입금, 근로장려금, 청년도약계좌, 디딤돌대출, 버팀목대출, 부모급여, 아동수당, 경정청구, 결혼세액공제, 청년월세, 공공지원금, 2026">
   <link rel="canonical" href="https://www.financecoffeechat.com/cost/area-07-public-support">
+  <link rel="alternate" hreflang="ko-KR" href="https://www.financecoffeechat.com/cost/area-07-public-support">
+  <link rel="alternate" hreflang="x-default" href="https://www.financecoffeechat.com/cost/area-07-public-support">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="국가·지자체 지원금 + 환급 가이드 | Finance Coffee Chat">
   <meta property="og:description" content="근로장려금·청년도약계좌·디딤돌/버팀목·부모급여·경정청구까지 모든 지원 프로그램 세그먼트별 정리.">
   <meta property="og:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-04-19">
@@ -446,6 +449,21 @@
     @media (max-width: 600px) {
       .subnav a { font-size: 12px; margin: 0 4px; }
     }
+  
+    /* === A13 mobile a11y (사이클 6-8) === */
+    /* 본문 16px·행간 1.7, 터치 타겟 44px(Apple HIG·KWCAG 2.2), compare-table 14px */
+    @media (max-width: 768px) {
+      body { font-size: 16px !important; line-height: 1.7 !important; }
+      nav a { min-height: 44px; padding: 11px 12px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .subnav a { min-height: 40px; padding: 9px 10px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .faq-item summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; display: flex; align-items: center; }
+      .compare-table { font-size: 14px !important; }
+      .compare-table th, .compare-table td { font-size: 14px !important; padding: 14px 12px !important; }
+      details summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; }
+      a, button { min-height: 44px; }
+      a.tag, span.tag, .badge { min-height: auto; }
+    }
+    /* === /A13 === */
   </style>
 </head>
 <body>

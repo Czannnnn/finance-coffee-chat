@@ -8,6 +8,9 @@
   <meta name="description" content="[2026 최신] 공모주 4대 조건(기관 경쟁률·확정 공모가·의무보유확약·유통가능물량)으로 S~D 등급 산정 [등급표 포함]. 균등배정 예상·주관사·수익률 전망까지 [3분 분석]으로 종목별 핵심을 빠르게 확인하세요.">
   <meta name="keywords" content="공모주 분석, IPO 분석, 공모가, 경쟁률, 균등배정, 수익률, 공모주 투자, 공모주 등급">
   <link rel="canonical" href="https://www.financecoffeechat.com/ipo-analysis">
+  <link rel="alternate" hreflang="ko-KR" href="https://www.financecoffeechat.com/ipo-analysis">
+  <link rel="alternate" hreflang="x-default" href="https://www.financecoffeechat.com/ipo-analysis">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="[2026] 공모주 종목 S~D 등급 분석">
   <meta property="og:description" content="[2026 최신] 공모주 4대 조건으로 S~D 등급 산정 [등급표 포함]. 기관 경쟁률·공모가·의무보유확약·유통가능물량과 균등배정 예상까지 [3분 분석].">
   <meta property="og:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-04-19">
@@ -352,6 +355,21 @@
       .filter-bar { gap: 6px; }
       .grade-row { padding: 8px 10px; }
     }
+  
+    /* === A13 mobile a11y (사이클 6-8) === */
+    /* 본문 16px·행간 1.7, 터치 타겟 44px(Apple HIG·KWCAG 2.2), compare-table 14px */
+    @media (max-width: 768px) {
+      body { font-size: 16px !important; line-height: 1.7 !important; }
+      nav a { min-height: 44px; padding: 11px 12px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .subnav a { min-height: 40px; padding: 9px 10px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .faq-item summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; display: flex; align-items: center; }
+      .compare-table { font-size: 14px !important; }
+      .compare-table th, .compare-table td { font-size: 14px !important; padding: 14px 12px !important; }
+      details summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; }
+      a, button { min-height: 44px; }
+      a.tag, span.tag, .badge { min-height: auto; }
+    }
+    /* === /A13 === */
   </style>
   <script type="application/ld+json">
   {

@@ -8,6 +8,9 @@
   <meta name="description" content="[2026 최신] 공모주 청약 일정 확인부터 증거금 50%·환불 절차, 균등배정 vs 비례배정 차이까지 [표 포함]. 증권사 계좌 개설→청약→상장일 매도 전략을 [3분 가이드]로 한 번에 정리했습니다.">
   <meta name="keywords" content="공모주 가이드, 청약 증거금, 청약 증거금 환불, 균등배정, 비례배정, 균등배정 비례배정 차이, 공모주 청약 방법, 공모주 청약 일정, 공모주 투자 방법, 증권사 계좌">
   <link rel="canonical" href="https://www.financecoffeechat.com/ipo-guide">
+  <link rel="alternate" hreflang="ko-KR" href="https://www.financecoffeechat.com/ipo-guide">
+  <link rel="alternate" hreflang="x-default" href="https://www.financecoffeechat.com/ipo-guide">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="[2026] 공모주 청약 일정·방법 가이드">
   <meta property="og:description" content="[2026 최신] 공모주 청약 일정 확인부터 증거금 50%·환불, 균등배정 vs 비례배정 차이까지 [표 포함]. 청약→상장일 매도 전략을 [3분 가이드]로 정리.">
   <meta property="og:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-04-19">
@@ -227,6 +230,21 @@
       .step-card { flex-direction: column; gap: 10px; }
       .cta-btns { flex-direction: column; align-items: center; }
     }
+  
+    /* === A13 mobile a11y (사이클 6-8) === */
+    /* 본문 16px·행간 1.7, 터치 타겟 44px(Apple HIG·KWCAG 2.2), compare-table 14px */
+    @media (max-width: 768px) {
+      body { font-size: 16px !important; line-height: 1.7 !important; }
+      nav a { min-height: 44px; padding: 11px 12px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .subnav a { min-height: 40px; padding: 9px 10px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .faq-item summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; display: flex; align-items: center; }
+      .compare-table { font-size: 14px !important; }
+      .compare-table th, .compare-table td { font-size: 14px !important; padding: 14px 12px !important; }
+      details summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; }
+      a, button { min-height: 44px; }
+      a.tag, span.tag, .badge { min-height: auto; }
+    }
+    /* === /A13 === */
   </style>
   <script type="application/ld+json">
   {

@@ -8,6 +8,9 @@
   <meta name="description" content="현재 자산·월 적립·수익률·목표만 넣으면 FIRE 달성 시점과 자산 곡선을 즉시 계산. 100% 로컬 시뮬레이션.">
   <meta name="keywords" content="FIRE 계산기, 경제적 자유 시뮬레이터, 복리 계산, 월 적립 시뮬, 자산 프로젝션, 지수투자 시뮬">
   <link rel="canonical" href="https://www.financecoffeechat.com/index-simulation">
+  <link rel="alternate" hreflang="ko-KR" href="https://www.financecoffeechat.com/index-simulation">
+  <link rel="alternate" hreflang="x-default" href="https://www.financecoffeechat.com/index-simulation">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="FIRE 시뮬레이터 | 언제 경제적 자유?">
   <meta property="og:description" content="현재 자산·월 적립·수익률·목표만 넣으면 FIRE 달성 시점과 자산 곡선 즉시 계산.">
   <meta property="og:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-04-19">
@@ -215,6 +218,21 @@
       color: var(--medium-roast); line-height: 1.7;
     }
     .footer-note strong { color: var(--dark-roast); }
+  
+    /* === A13 mobile a11y (사이클 6-8) === */
+    /* 본문 16px·행간 1.7, 터치 타겟 44px(Apple HIG·KWCAG 2.2), compare-table 14px */
+    @media (max-width: 768px) {
+      body { font-size: 16px !important; line-height: 1.7 !important; }
+      nav a { min-height: 44px; padding: 11px 12px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .subnav a { min-height: 40px; padding: 9px 10px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .faq-item summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; display: flex; align-items: center; }
+      .compare-table { font-size: 14px !important; }
+      .compare-table th, .compare-table td { font-size: 14px !important; padding: 14px 12px !important; }
+      details summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; }
+      a, button { min-height: 44px; }
+      a.tag, span.tag, .badge { min-height: auto; }
+    }
+    /* === /A13 === */
   </style>
   <script type="application/ld+json">
   {

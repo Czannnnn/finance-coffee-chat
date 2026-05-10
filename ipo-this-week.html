@@ -8,6 +8,9 @@
   <meta name="description" content="이번 주(월~일) 청약 가능한 공모주 7일 캘린더 그리드. 요일별 종목 분포 + 등급(S/A/B/C) 도넛 + 자금 일정(증거금 입금일·환불일·납입일) [표 포함]. DART OpenDart 공시 기반 일 4회 자동 갱신.">
   <meta name="keywords" content="이번 주 공모주, 이번 주 공모주 청약, 공모주 청약 일정, 공모주 일정, 7일 청약 캘린더, 주간 공모주, IPO 청약 캘린더, 공모주 등급 분포, 공모주 자금 일정">
   <link rel="canonical" href="https://www.financecoffeechat.com/ipo-this-week">
+  <link rel="alternate" hreflang="ko-KR" href="https://www.financecoffeechat.com/ipo-this-week">
+  <link rel="alternate" hreflang="x-default" href="https://www.financecoffeechat.com/ipo-this-week">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="이번 주 공모주 청약 — 7일 캘린더·등급 분포 [실시간]">
   <meta property="og:description" content="이번 주 7일 캘린더 그리드 + 요일별 종목 분포 + 등급 도넛 + 자금 일정.">
   <meta property="og:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-05-10">
@@ -123,6 +126,21 @@
     .related p { font-size:12.5px; color:var(--medium-roast); line-height:1.6; }
     .disclaimer { margin-top:48px; padding:16px 20px; background:var(--white); border:1px dashed rgba(44,24,16,0.15); border-radius:10px; font-size:12px; color:var(--medium-roast); line-height:1.7; }
     @media (max-width:600px) { .container { padding:32px 16px 48px; } .header h1 { font-size:26px; } }
+  
+    /* === A13 mobile a11y (사이클 6-8) === */
+    /* 본문 16px·행간 1.7, 터치 타겟 44px(Apple HIG·KWCAG 2.2), compare-table 14px */
+    @media (max-width: 768px) {
+      body { font-size: 16px !important; line-height: 1.7 !important; }
+      nav a { min-height: 44px; padding: 11px 12px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .subnav a { min-height: 40px; padding: 9px 10px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .faq-item summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; display: flex; align-items: center; }
+      .compare-table { font-size: 14px !important; }
+      .compare-table th, .compare-table td { font-size: 14px !important; padding: 14px 12px !important; }
+      details summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; }
+      a, button { min-height: 44px; }
+      a.tag, span.tag, .badge { min-height: auto; }
+    }
+    /* === /A13 === */
   </style>
   <script type="application/ld+json">
   {

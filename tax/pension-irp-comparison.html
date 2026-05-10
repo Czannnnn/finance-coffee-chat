@@ -8,6 +8,9 @@
   <meta name="description" content="연금저축펀드·IRP·퇴직연금 DB·DC 4종을 한 페이지에. 가입자격·한도·투자제한·중도인출·수수료·연금수령 비교 + 직장인·자영업자·무소득자별 추천 조합 가이드.">
   <meta name="keywords" content="연금저축 IRP 차이, 퇴직연금 DB DC 비교, DB형 DC형 차이, 연금저축펀드, IRP, IRP 가입자격, 중도인출, 위험자산 70%, 연금저축 IRP 합산 한도, 노후 절세계좌, 확정급여형, 확정기여형">
   <link rel="canonical" href="https://www.financecoffeechat.com/tax/pension-irp-comparison">
+  <link rel="alternate" hreflang="ko-KR" href="https://www.financecoffeechat.com/tax/pension-irp-comparison">
+  <link rel="alternate" hreflang="x-default" href="https://www.financecoffeechat.com/tax/pension-irp-comparison">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="연금저축 vs IRP + 퇴직연금 DB DC 비교 — 직장인 가이드 2026">
   <meta property="og:description" content="연금저축·IRP·퇴직연금 DB·DC 4종 비교 + 직장인·자영업자·무소득자별 추천 조합.">
   <meta property="og:image" content="https://www.financecoffeechat.com/og-pension-irp-comparison.png?v=2026-04-26">
@@ -113,6 +116,21 @@
     .byline .meta strong { color: var(--dark-roast); font-weight: 600; }
     .byline .updated { color: var(--caramel); font-weight: 600; }
     @media (max-width: 600px) { .answer-box { padding: 16px 18px; } .answer-box .answer-text { font-size: 15px; } }
+  
+    /* === A13 mobile a11y (사이클 6-8) === */
+    /* 본문 16px·행간 1.7, 터치 타겟 44px(Apple HIG·KWCAG 2.2), compare-table 14px */
+    @media (max-width: 768px) {
+      body { font-size: 16px !important; line-height: 1.7 !important; }
+      nav a { min-height: 44px; padding: 11px 12px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .subnav a { min-height: 40px; padding: 9px 10px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .faq-item summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; display: flex; align-items: center; }
+      .compare-table { font-size: 14px !important; }
+      .compare-table th, .compare-table td { font-size: 14px !important; padding: 14px 12px !important; }
+      details summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; }
+      a, button { min-height: 44px; }
+      a.tag, span.tag, .badge { min-height: auto; }
+    }
+    /* === /A13 === */
   </style>
   <script type="application/ld+json">
   {

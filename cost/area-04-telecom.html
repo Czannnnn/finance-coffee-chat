@@ -8,6 +8,9 @@
   <meta name="description" content="[2026 최신] 알뜰폰(MVNO) 전환·선택약정 25%·결합할인 시나리오 비교 [표 포함]. 1인·신혼·유자녀·맞벌이·중장년 6 가구 통신비 최적화 [3분 요약]. 자급제·eSIM·해외 로밍 절감까지.">
   <meta name="keywords" content="통신비 최적화, 알뜰폰 추천, MVNO, 선택약정 25%, 결합할인, 자급제 eSIM, 5G 요금제 비교, 가구별 통신비 우선순위, 가족결합, 통신비 세금 환급">
   <link rel="canonical" href="https://www.financecoffeechat.com/cost/area-04-telecom">
+  <link rel="alternate" hreflang="ko-KR" href="https://www.financecoffeechat.com/cost/area-04-telecom">
+  <link rel="alternate" hreflang="x-default" href="https://www.financecoffeechat.com/cost/area-04-telecom">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="[2026] 통신비 최적화 — 알뜰폰·선택약정 25%·결합할인 [3분]">
   <meta property="og:description" content="[2026 최신] 알뜰폰·선택약정·결합할인 비교 [표 포함] + 6 가구 시나리오 [3분 요약].">
   <meta property="og:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-05-10">
@@ -319,6 +322,21 @@
     .byline .meta strong { color: var(--dark-roast); font-weight: 600; }
     .byline .updated { color: var(--caramel); font-weight: 600; }
     @media (max-width: 600px) { .answer-box { padding: 16px 18px; } .answer-box .answer-text { font-size: 15px; } }
+  
+    /* === A13 mobile a11y (사이클 6-8) === */
+    /* 본문 16px·행간 1.7, 터치 타겟 44px(Apple HIG·KWCAG 2.2), compare-table 14px */
+    @media (max-width: 768px) {
+      body { font-size: 16px !important; line-height: 1.7 !important; }
+      nav a { min-height: 44px; padding: 11px 12px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .subnav a { min-height: 40px; padding: 9px 10px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .faq-item summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; display: flex; align-items: center; }
+      .compare-table { font-size: 14px !important; }
+      .compare-table th, .compare-table td { font-size: 14px !important; padding: 14px 12px !important; }
+      details summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; }
+      a, button { min-height: 44px; }
+      a.tag, span.tag, .badge { min-height: auto; }
+    }
+    /* === /A13 === */
   </style>
 </head>
 <body>
