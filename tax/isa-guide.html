@@ -8,6 +8,9 @@
   <meta name="description" content="[2026 최신] ISA계좌 비과세 한도 일반 200만·서민·농어민 400만 [표 포함]. 연 2,000만 납입·5년 누적 1억, 초과 9.9% 분리과세까지 [3분 요약]. 자격 기준·만기 연금 전환 절세 전략을 한눈에 비교하세요.">
   <meta name="keywords" content="ISA계좌, ISA 한도, ISA 서민형 5000만원, ISA 비과세 400만원, ISA 9.9% 분리과세, 개인종합자산관리계좌, ISA 일반형 200만원, ISA 농어민형 3800만원, ISA 만기 연금 전환, ISA 의무 3년">
   <link rel="canonical" href="https://www.financecoffeechat.com/tax/isa-guide">
+  <link rel="alternate" hreflang="ko-KR" href="https://www.financecoffeechat.com/tax/isa-guide">
+  <link rel="alternate" hreflang="x-default" href="https://www.financecoffeechat.com/tax/isa-guide">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="[2026] ISA계좌 비과세 한도 3분 정리">
   <meta property="og:description" content="[2026 최신] ISA계좌 비과세 한도 일반 200만·서민·농어민 400만 [표 포함]. 연 2,000만 납입·5년 누적 1억, 초과 9.9% 분리과세까지 [3분 요약]. 만기 연금 전환 절세 전략까지 한눈에.">
   <meta property="og:image" content="https://www.financecoffeechat.com/og-isa-guide.png?v=2026-04-30">
@@ -111,6 +114,21 @@
     .byline .meta strong { color: var(--dark-roast); font-weight: 600; }
     .byline .updated { color: var(--caramel); font-weight: 600; }
     @media (max-width: 600px) { .container { padding: 32px 16px 48px; } .header h1 { font-size: 26px; } .section-title { font-size: 20px; } .compare-table th, .compare-table td { padding: 10px; font-size: 12.5px; } .answer-box { padding: 16px 18px; } .answer-box .answer-text { font-size: 15px; } }
+  
+    /* === A13 mobile a11y (사이클 6-8) === */
+    /* 본문 16px·행간 1.7, 터치 타겟 44px(Apple HIG·KWCAG 2.2), compare-table 14px */
+    @media (max-width: 768px) {
+      body { font-size: 16px !important; line-height: 1.7 !important; }
+      nav a { min-height: 44px; padding: 11px 12px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .subnav a { min-height: 40px; padding: 9px 10px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .faq-item summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; display: flex; align-items: center; }
+      .compare-table { font-size: 14px !important; }
+      .compare-table th, .compare-table td { font-size: 14px !important; padding: 14px 12px !important; }
+      details summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; }
+      a, button { min-height: 44px; }
+      a.tag, span.tag, .badge { min-height: auto; }
+    }
+    /* === /A13 === */
   </style>
   <script type="application/ld+json">
   {

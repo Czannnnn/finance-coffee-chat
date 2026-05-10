@@ -8,6 +8,9 @@
   <meta name="description" content="가구 유형별 연 비용 절감 시뮬레이션. 연말정산·카드·보험·통신비·금융수수료·공과금·지원금·교통비 8개 영역 인터랙티브 계산. 브라우저 내 로컬 실행, 데이터 저장·전송 없음.">
   <meta name="keywords" content="생활비 줄이기 시뮬레이션, 절감 계산기, 연말정산 계산, 통신비 절감, K-패스, 카드 혜택, 보험료 진단, 수수료 계산">
   <link rel="canonical" href="https://www.financecoffeechat.com/cost-simulation">
+  <link rel="alternate" hreflang="ko-KR" href="https://www.financecoffeechat.com/cost-simulation">
+  <link rel="alternate" hreflang="x-default" href="https://www.financecoffeechat.com/cost-simulation">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="생활비 줄이기 시뮬레이터 - Finance Coffee Chat">
   <meta property="og:description" content="가구 유형과 영역별 입력값으로 예상 절감액을 실시간 계산. 100% 로컬, 서버 전송 없음.">
   <meta property="og:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-04-19">
@@ -343,6 +346,21 @@
       .subnav a { font-size: 12px; margin: 0 4px; }
       nav a { margin: 0 8px; font-size: 13px; }
     }
+  
+    /* === A13 mobile a11y (사이클 6-8) === */
+    /* 본문 16px·행간 1.7, 터치 타겟 44px(Apple HIG·KWCAG 2.2), compare-table 14px */
+    @media (max-width: 768px) {
+      body { font-size: 16px !important; line-height: 1.7 !important; }
+      nav a { min-height: 44px; padding: 11px 12px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .subnav a { min-height: 40px; padding: 9px 10px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .faq-item summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; display: flex; align-items: center; }
+      .compare-table { font-size: 14px !important; }
+      .compare-table th, .compare-table td { font-size: 14px !important; padding: 14px 12px !important; }
+      details summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; }
+      a, button { min-height: 44px; }
+      a.tag, span.tag, .badge { min-height: auto; }
+    }
+    /* === /A13 === */
   </style>
   <script type="application/ld+json">
   {

@@ -8,6 +8,9 @@
   <meta name="description" content="연봉·납입액만 입력하면 절세계좌 환급액, 연말정산 종합 환급, DC vs DB 퇴직급여 비교를 즉시 계산. 100% 로컬.">
   <meta name="keywords" content="절세 시뮬레이터, 연말정산 계산기, 세액공제 계산기, DC DB 비교, 퇴직연금 계산기, 환급액 계산">
   <link rel="canonical" href="https://www.financecoffeechat.com/tax-simulation">
+  <link rel="alternate" hreflang="ko-KR" href="https://www.financecoffeechat.com/tax-simulation">
+  <link rel="alternate" hreflang="x-default" href="https://www.financecoffeechat.com/tax-simulation">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="절세 시뮬레이터 (환급·DC/DB 계산) | 투자 커피챗">
   <meta property="og:description" content="연봉·납입액만으로 환급액·DC/DB 비교 즉시 계산. 3/5/10년 누적 효과까지.">
   <meta property="og:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-04-19">
@@ -206,6 +209,21 @@
     }
     .next-step .cta-btn:hover { background: var(--medium-roast); }
     .next-step .cta-btn.secondary { background: var(--white); color: var(--caramel); border: 1px solid var(--caramel); }
+  
+    /* === A13 mobile a11y (사이클 6-8) === */
+    /* 본문 16px·행간 1.7, 터치 타겟 44px(Apple HIG·KWCAG 2.2), compare-table 14px */
+    @media (max-width: 768px) {
+      body { font-size: 16px !important; line-height: 1.7 !important; }
+      nav a { min-height: 44px; padding: 11px 12px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .subnav a { min-height: 40px; padding: 9px 10px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .faq-item summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; display: flex; align-items: center; }
+      .compare-table { font-size: 14px !important; }
+      .compare-table th, .compare-table td { font-size: 14px !important; padding: 14px 12px !important; }
+      details summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; }
+      a, button { min-height: 44px; }
+      a.tag, span.tag, .badge { min-height: auto; }
+    }
+    /* === /A13 === */
   </style>
   <script type="application/ld+json">
   {

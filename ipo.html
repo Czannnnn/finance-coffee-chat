@@ -8,6 +8,9 @@
   <meta name="description" content="[2026 최신] 공모주 일정·공모주 청약 일정·환불일·상장일을 [캘린더 표] 한 장에 정리. 주관 증권사·균등/비례 배정·예상 경쟁률까지 [가입 불필요], 다운로드 가능. 이번 주 청약 종목을 3분 안에 확인하세요.">
   <meta name="keywords" content="공모주 일정, 공모주 청약 일정, ipo 일정, 공모주 캘린더, ipo 캘린더, 청약 일정, 상장일, 주관사, 균등배정, 비례배정, 환불일">
   <link rel="canonical" href="https://www.financecoffeechat.com/ipo">
+  <link rel="alternate" hreflang="ko-KR" href="https://www.financecoffeechat.com/ipo">
+  <link rel="alternate" hreflang="x-default" href="https://www.financecoffeechat.com/ipo">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="[2026] 공모주 일정 캘린더 - 청약·상장일">
   <meta property="og:description" content="[2026 최신] 공모주 일정·청약 일정·환불일·상장일을 [캘린더 표] 한 장에 정리. 주관사·균등/비례 배정·예상 경쟁률까지 [가입 불필요]. 이번 주 청약 종목을 3분 안에.">
   <meta property="og:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-04-19">
@@ -352,6 +355,21 @@
       .filter-bar { gap: 6px; }
       .legend { gap: 10px; }
     }
+  
+    /* === A13 mobile a11y (사이클 6-8) === */
+    /* 본문 16px·행간 1.7, 터치 타겟 44px(Apple HIG·KWCAG 2.2), compare-table 14px */
+    @media (max-width: 768px) {
+      body { font-size: 16px !important; line-height: 1.7 !important; }
+      nav a { min-height: 44px; padding: 11px 12px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .subnav a { min-height: 40px; padding: 9px 10px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .faq-item summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; display: flex; align-items: center; }
+      .compare-table { font-size: 14px !important; }
+      .compare-table th, .compare-table td { font-size: 14px !important; padding: 14px 12px !important; }
+      details summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; }
+      a, button { min-height: 44px; }
+      a.tag, span.tag, .badge { min-height: auto; }
+    }
+    /* === /A13 === */
   </style>
   <script type="application/ld+json">
   {
@@ -473,7 +491,8 @@
     <div class="answer-box" role="region" aria-label="공모주 일정 핵심 답변" style="position:relative;max-width:760px;margin:8px auto 28px;background:linear-gradient(180deg,var(--white) 0%,var(--cream) 100%);border:1px solid var(--caramel);border-radius:12px;padding:20px 22px 18px;box-shadow:0 4px 16px rgba(196,133,60,0.10);">
       <div aria-hidden="true" style="position:absolute;left:-12px;top:-12px;background:var(--caramel);color:var(--white);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:14px;box-shadow:0 2px 8px rgba(196,133,60,0.3);">A.</div>
       <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--caramel);margin-bottom:8px;">한 줄 답변</div>
-      <p style="font-size:16px;font-weight:600;color:var(--espresso);line-height:1.65;letter-spacing:-0.2px;margin:0;">2026 <strong style="color:var(--medium-roast);">공모주 일정·청약·환불·상장일</strong>을 가입 없이 캘린더로. 매일 오전 8시 DART 공시 자동 갱신, <strong style="color:var(--medium-roast);">균등 50%·비례 50%</strong> 배정과 주관사를 한 화면에.</p>
+      <p style="font-size:16px;font-weight:600;color:var(--espresso);line-height:1.65;letter-spacing:-0.2px;margin:0;">2026 <strong style="color:var(--medium-roast);">공모주 일정·청약·환불·상장일</strong>을 가입 없이 캘린더 한 화면에. 매일 오전 8시 자동 갱신.</p>
+      <p style="font-size:13.5px;color:var(--medium-roast);line-height:1.6;margin:10px 0 0;"><strong>균등 50%·비례 50%</strong> 배정 비율과 주관사·확정공모가 위치까지 즉시 비교.</p>
     </div>
 
     <!-- Filters -->

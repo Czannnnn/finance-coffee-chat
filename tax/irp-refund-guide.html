@@ -8,6 +8,9 @@
   <meta name="description" content="IRP·연금저축 세액공제 한도 900만원, 총급여 5,500만 이하 16.5%·초과 13.2% 환급률. 연봉별 환급액 시뮬레이션과 가입 시점 체크리스트.">
   <meta name="keywords" content="IRP 연말정산, IRP 환급, IRP 세액공제, 연금저축 세액공제, 13월의 월급, 세액공제 한도, 연저펀 IRP 합산, 퇴직연금 환급">
   <link rel="canonical" href="https://www.financecoffeechat.com/tax/irp-refund-guide">
+  <link rel="alternate" hreflang="ko-KR" href="https://www.financecoffeechat.com/tax/irp-refund-guide">
+  <link rel="alternate" hreflang="x-default" href="https://www.financecoffeechat.com/tax/irp-refund-guide">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="IRP 연말정산 환급 가이드 — 한도 900만 · 최대 148.5만 환급 | 투자 커피챗">
   <meta property="og:description" content="IRP·연저펀 세액공제 한도와 총급여별 환급액. 13월의 월급 챙기기 완전 가이드.">
   <meta property="og:image" content="https://www.financecoffeechat.com/og-irp-refund-guide.png?v=2026-04-26">
@@ -107,6 +110,21 @@
     .faq-item p strong { color: var(--espresso); }
     .disclaimer { margin-top: 48px; padding: 16px 20px; background: var(--white); border: 1px dashed rgba(44,24,16,0.15); border-radius: 10px; font-size: 12px; color: var(--medium-roast); line-height: 1.7; }
     @media (max-width: 600px) { .container { padding: 32px 16px 48px; } .header h1 { font-size: 26px; } .section-title { font-size: 20px; } .compare-table th, .compare-table td, .num-table th, .num-table td { padding: 10px; font-size: 12.5px; } }
+  
+    /* === A13 mobile a11y (사이클 6-8) === */
+    /* 본문 16px·행간 1.7, 터치 타겟 44px(Apple HIG·KWCAG 2.2), compare-table 14px */
+    @media (max-width: 768px) {
+      body { font-size: 16px !important; line-height: 1.7 !important; }
+      nav a { min-height: 44px; padding: 11px 12px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .subnav a { min-height: 40px; padding: 9px 10px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .faq-item summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; display: flex; align-items: center; }
+      .compare-table { font-size: 14px !important; }
+      .compare-table th, .compare-table td { font-size: 14px !important; padding: 14px 12px !important; }
+      details summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; }
+      a, button { min-height: 44px; }
+      a.tag, span.tag, .badge { min-height: auto; }
+    }
+    /* === /A13 === */
   </style>
   <script type="application/ld+json">
   {

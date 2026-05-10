@@ -8,6 +8,9 @@
   <meta name="description" content="자녀 2명 이상 가구의 다자녀 특례 혜택 총정리. 자동차세·교통·주택·교육 최대 수혜.">
   <meta name="keywords" content="다자녀 혜택, 자녀세액공제, 다자녀 특별공급, 고속도로 통행료, 자동차 취득세 감면, 생활비 줄이기">
   <link rel="canonical" href="https://www.financecoffeechat.com/cost/s5-parent-multichild">
+  <link rel="alternate" hreflang="ko-KR" href="https://www.financecoffeechat.com/cost/s5-parent-multichild">
+  <link rel="alternate" hreflang="x-default" href="https://www.financecoffeechat.com/cost/s5-parent-multichild">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="S5 유자녀 다자녀 - 생활비 줄이기 가이드">
   <meta property="og:description" content="자녀 2명 이상 가구의 다자녀 특례 혜택 총정리. 자동차세·교통·주택·교육 최대 수혜.">
   <meta property="og:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-04-19">
@@ -222,6 +225,21 @@
     @media (max-width: 600px) {
       .subnav a { font-size: 12px; margin: 0 4px; }
     }
+  
+    /* === A13 mobile a11y (사이클 6-8) === */
+    /* 본문 16px·행간 1.7, 터치 타겟 44px(Apple HIG·KWCAG 2.2), compare-table 14px */
+    @media (max-width: 768px) {
+      body { font-size: 16px !important; line-height: 1.7 !important; }
+      nav a { min-height: 44px; padding: 11px 12px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .subnav a { min-height: 40px; padding: 9px 10px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .faq-item summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; display: flex; align-items: center; }
+      .compare-table { font-size: 14px !important; }
+      .compare-table th, .compare-table td { font-size: 14px !important; padding: 14px 12px !important; }
+      details summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; }
+      a, button { min-height: 44px; }
+      a.tag, span.tag, .badge { min-height: auto; }
+    }
+    /* === /A13 === */
   </style>
 </head>
 <body>

@@ -8,6 +8,9 @@
   <meta name="description" content="[2026 최신] 코스피200·코스닥150·S&P500·나스닥100 4대 지수 ETF 비교 [표 포함]. 보수·추적오차·환헤지 차이 + 절세계좌(연저펀·IRP·ISA) 배치 우선순위 [3분 요약]. 연령·DC 가입별 맞춤 포폴.">
   <meta name="keywords" content="지수투자, 4대 지수 ETF 비교, KODEX 200, 코스피200 ETF, 나스닥100 ETF, S&P500 ETF, 추적오차, ETF 보수, 환헤지 H, 패시브 투자, FIRE 로드맵, 연저펀 ETF 운용, IRP ETF 운용, DC 운용">
   <link rel="canonical" href="https://www.financecoffeechat.com/index-investing">
+  <link rel="alternate" hreflang="ko-KR" href="https://www.financecoffeechat.com/index-investing">
+  <link rel="alternate" hreflang="x-default" href="https://www.financecoffeechat.com/index-investing">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta property="og:title" content="[2026] 지수투자 FIRE 로드맵 — 4대 지수 ETF·절세계좌 [3분]">
   <meta property="og:description" content="[2026 최신] 4대 지수 ETF 비교 [표 포함] + 절세계좌 배치 우선순위 [3분 요약]. 연령·DC 가입별 맞춤 포폴.">
   <meta property="og:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-05-10">
@@ -453,6 +456,21 @@
     .index-compare-table thead th { background: var(--cream); color: var(--espresso); font-size: 13px; font-weight: 700; }
     .index-compare-table tbody th { background: var(--oat-milk); color: var(--dark-roast); font-weight: 600; white-space: nowrap; }
     @media (max-width: 600px) { .answer-box { padding: 16px 18px; } .answer-box .answer-text { font-size: 15px; } .index-compare-table th, .index-compare-table td { padding: 10px; font-size: 12.5px; } }
+  
+    /* === A13 mobile a11y (사이클 6-8) === */
+    /* 본문 16px·행간 1.7, 터치 타겟 44px(Apple HIG·KWCAG 2.2), compare-table 14px */
+    @media (max-width: 768px) {
+      body { font-size: 16px !important; line-height: 1.7 !important; }
+      nav a { min-height: 44px; padding: 11px 12px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .subnav a { min-height: 40px; padding: 9px 10px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
+      .faq-item summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; display: flex; align-items: center; }
+      .compare-table { font-size: 14px !important; }
+      .compare-table th, .compare-table td { font-size: 14px !important; padding: 14px 12px !important; }
+      details summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; }
+      a, button { min-height: 44px; }
+      a.tag, span.tag, .badge { min-height: auto; }
+    }
+    /* === /A13 === */
   </style>
   <script type="application/ld+json">
   {
