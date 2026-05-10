@@ -386,20 +386,30 @@
         </div>`;
     }
 
+    // /ipo-analysis와 동일한 4대 조건 통과 개수 기반 등급 산출
+    // (수요예측 전 종목은 데이터 부족으로 잠정 C/D로 표기, 청약 하루 전 최종 등급 갱신)
     function gradeFor(it) {
-      let s = 0;
-      const c = parseFloat(String(it.competition).replace(/[^0-9.]/g, ''));
-      if (c >= 1500) s += 3; else if (c >= 1000) s += 2; else if (c >= 500) s += 1;
-      const lk = parseFloat(String(it.lockup).replace(/[^0-9.]/g, ''));
-      if (lk >= 60) s += 3; else if (lk >= 40) s += 2; else if (lk >= 20) s += 1;
-      const fl = parseFloat(String(it.float).replace(/[^0-9.]/g, ''));
-      if (fl > 0 && fl <= 25) s += 3; else if (fl > 0 && fl <= 35) s += 2; else if (fl > 0 && fl <= 50) s += 1;
-      if (it.bandPosition === '초과' || it.bandPosition === '상단') s += 2;
-      else if (it.bandPosition === '중간') s += 1;
-      if (s >= 9) return 'S';
-      if (s >= 6) return 'A';
-      if (s >= 3) return 'B';
-      return 'C';
+      const compNum = parseFloat(String(it.competition || '').replace(/[^0-9.]/g, '')) || 0;
+      const priceFixed = parseInt(String(it.confirmedPrice || '').replace(/[^0-9]/g, '')) || 0;
+      const bandHigh = parseInt(String(it.bandHigh || '').replace(/[^0-9]/g, '')) || 0;
+      let lockupNum = parseFloat(String(it.lockup || '').replace(/[^0-9.]/g, '')) || 0;
+      if (lockupNum > 0 && lockupNum < 1) lockupNum = lockupNum * 100;
+      let floatNum = parseFloat(String(it.float || '').replace(/[^0-9.]/g, '')) || 0;
+      if (floatNum > 0 && floatNum < 1) floatNum = floatNum * 100;
+
+      // 4대 조건 (ipo-analysis evaluate() 동일)
+      const c1 = compNum >= 800;
+      const c2 = priceFixed > 0 && bandHigh > 0 && priceFixed >= bandHigh;
+      const c3 = lockupNum >= 15;
+      const c4 = floatNum > 0 && floatNum <= 25;
+      const passCount = [c1, c2, c3, c4].filter(Boolean).length;
+
+      // calcGrade 동일
+      if (passCount === 4 && lockupNum >= 50) return 'S';
+      if (passCount >= 3) return 'A';
+      if (passCount >= 2) return 'B';
+      if (passCount >= 1) return 'C';
+      return 'D';
     }
 
     function renderItems(items) {
