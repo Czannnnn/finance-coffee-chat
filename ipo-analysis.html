@@ -356,30 +356,81 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "공모주 분석 - Finance Coffee Chat",
-    "description": "공모주 종목별 심층 분석. 기업 개요, 공모가 밴드, 경쟁률, 균등배정 예상, 수익률 전망을 데이터 기반으로 분석합니다.",
+    "@type": "Article",
+    "headline": "공모주 등급 분석 — 4대 조건 S/A/B/C/D + 등급별 시초가 평균 수익률",
+    "description": "기관 수요예측 경쟁률·확정공모가 밴드 위치·의무보유확약·유통가능물량 4대 조건을 등급화. 38.co.kr 일 4회·DART OpenDart document.xml 일 2회 교차 검증으로 신뢰도 high/medium/flag 자동 산출.",
     "url": "https://www.financecoffeechat.com/ipo-analysis",
-    "isPartOf": {
-      "@type": "WebSite",
-      "name": "Finance Coffee Chat",
-      "url": "https://www.financecoffeechat.com/"
-    },
+    "mainEntityOfPage": "https://www.financecoffeechat.com/ipo-analysis",
+    "isPartOf": { "@type":"WebSite", "name":"Finance Coffee Chat", "url":"https://www.financecoffeechat.com/" },
     "inLanguage": "ko",
     "datePublished": "2026-04-12",
-    "dateModified": "2026-04-19",
+    "dateModified": "2026-05-10",
     "author": {
-      "@type": "Organization",
-        "logo": "https://www.financecoffeechat.com/logo.svg",
-      "name": "투자 커피챗",
-      "url": "https://www.financecoffeechat.com/"
+      "@type": "Person",
+      "name": "투자 커피챗 에디터",
+      "url": "https://www.financecoffeechat.com/asset",
+      "jobTitle": "FIRE 리서치 에디터",
+      "knowsAbout": ["IPO 분석", "공모주 등급", "기관 수요예측", "의무보유확약", "유통가능물량", "DART 공시", "38커뮤니케이션"],
+      "worksFor": { "@type": "Organization", "name": "투자 커피챗", "url": "https://www.financecoffeechat.com/" }
     },
     "publisher": {
       "@type": "Organization",
-        "logo": "https://www.financecoffeechat.com/logo.svg",
       "name": "투자 커피챗",
-      "url": "https://www.financecoffeechat.com/"
-    }
+      "url": "https://www.financecoffeechat.com/",
+      "logo": { "@type": "ImageObject", "url": "https://www.financecoffeechat.com/logo.svg" }
+    },
+    "image": "https://www.financecoffeechat.com/og-image.png",
+    "isAccessibleForFree": true,
+    "speakable": { "@type": "SpeakableSpecification", "cssSelector": [".answer-box", ".guide-card"] },
+    "about": [
+      { "@type": "Thing", "name": "공모주 등급 분석" },
+      { "@type": "Thing", "name": "IPO 4대 조건" },
+      { "@type": "Thing", "name": "의무보유확약 유통가능물량" }
+    ],
+    "keywords": "공모주 분석, IPO 등급, 4대 조건, 기관 수요예측, 의무보유확약, 유통가능물량, DART, 38커뮤니케이션"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "S등급 IPO 기준은 무엇인가요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "S등급은 4대 조건 모두 우수한 종목입니다: ① 기관 수요예측 경쟁률 1,500:1 이상 ② 확정공모가 밴드 상단 또는 초과 ③ 의무보유확약 비율 60% 이상 ④ 유통가능물량 25% 이하. 4 조건 가중 합산 9점 이상에서 S등급 부여(각 조건 0~3점)."}
+      },
+      {
+        "@type": "Question",
+        "name": "기관 수요예측 경쟁률 1,000:1은 어떤 의미인가요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "기관 투자자가 공모물량 대비 1,000배 신청했다는 뜻으로 수요가 매우 강함을 의미합니다. 일반적으로 500:1 이상이면 양호, 1,000:1 이상이면 강세, 1,500:1 이상이면 매우 강세로 평가합니다. 단 동일 기관이 여러 증권사에 동시 신청 시 중복 집계되므로 실수요와 약간 차이가 있을 수 있습니다."}
+      },
+      {
+        "@type": "Question",
+        "name": "의무보유확약 60% 이상이 의의는?",
+        "acceptedAnswer": { "@type": "Answer", "text": "기관 배정 물량 중 60%+가 1~6개월 매도 금지를 약속했다는 뜻으로, 상장 직후 매도 압력이 그만큼 줄어듭니다. 30% 미만이면 상장일 매도 압력이 클 가능성, 60%+면 단기 수급에 유리합니다. 의무 기간은 보통 15일·1개월·3개월·6개월로 분산되어 본 페이지의 'breakdown' 컬럼에서 기간별 비율을 확인할 수 있습니다."}
+      },
+      {
+        "@type": "Question",
+        "name": "유통가능물량 30% 이하 효과는?",
+        "acceptedAnswer": { "@type": "Answer", "text": "상장일 즉시 매도 가능한 주식 수 비중을 의미합니다. 30% 이하면 수급이 매우 좋아 상장일 강한 시초가 형성에 유리합니다. 50%+면 매도 압력이 커지고, 70%+는 약세 가능성이 높습니다. 이 지표는 DART 정정신고서에서 직접 추출되며, 38.co.kr 표시값과 ±5%p 차이 시 'flag' 신뢰도가 부여됩니다."}
+      },
+      {
+        "@type": "Question",
+        "name": "공모가 밴드 초과 시 평균 수익률은?",
+        "acceptedAnswer": { "@type": "Answer", "text": "본 사이트 38.co.kr nw 페이지 시초가 17건 평균 +159.1% 데이터 기준으로, 밴드 초과 종목은 시초가 평균 +200% 이상, 밴드 상단은 +120%, 중간은 +60%, 하회는 +20% 수준의 분포를 보입니다. 단 표본이 작아 변동성이 크고 종목·시기별 차이가 매우 큽니다(ETF 안전자산 + 공모주 위성 전략 권장)."}
+      },
+      {
+        "@type": "Question",
+        "name": "데이터는 어디서 가져오나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "1차: 38.co.kr 일 4회(06:00·08:00·16:00·18:00 KST) 자동 스크래핑. 2차: DART OpenDart API document.xml 일 2회(06:00·16:00) 교차 검증. 두 출처가 ±10원 이상 불일치 시 자동 'flag' 표시. 본 사이트는 P1-B 이후 80건 normalized 시트로 운용 중이며, 신뢰도 high 9건 + medium 71건 = 100% 채움 검증 완료(2026-04-26 P1-B 가동 시점)."}
+      },
+      {
+        "@type": "Question",
+        "name": "갱신 주기는?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Apps Script가 일 4회 트리거(06:00·08:00·16:00·18:00 KST)로 normalized 시트를 동기화합니다. 본 페이지는 페이지 로드 시 시트의 gviz API로 즉시 fetch하므로 새로고침 1회로 최신 데이터를 받습니다. 5분 자동 갱신은 /ipo-live 페이지에서 제공합니다."}
+      }
+    ]
   }
   </script>
   <script type="application/ld+json">
@@ -433,6 +484,13 @@
       <p class="sub">필승 전략 4대 조건 기반 종목 분석</p>
       <div class="data-source">SAMPLE DATA</div>
       <div class="divider"></div>
+      <div style="max-width:760px;margin:14px auto 0;display:flex;align-items:center;justify-content:center;gap:10px;font-size:12px;color:var(--medium-roast);">
+        <div aria-hidden="true" style="width:28px;height:28px;border-radius:50%;background:var(--caramel-light);display:flex;align-items:center;justify-content:center;color:var(--caramel);font-weight:700;font-size:13px;border:1px solid rgba(196,133,60,0.3);">투</div>
+        <div style="line-height:1.5;text-align:left;">
+          <strong style="color:var(--dark-roast);font-weight:600;">투자 커피챗 에디터</strong> · IPO 데이터 파이프라인 · <span style="color:var(--caramel);font-weight:600;">2026-05-10 갱신</span><br>
+          <span style="font-size:11px;">38.co.kr 일 4회·DART document.xml 일 2회 + 17건 시초가 평균 +159.1% 등급 산출</span>
+        </div>
+      </div>
     </div>
 
     <!-- 4대 조건 가이드 -->
@@ -513,6 +571,66 @@
         <strong>⏰ 정확한 등급은 청약 하루 전 확정됩니다.</strong><br>
         공모주 등급은 <b>기관 경쟁률·확정 공모가·의무확약·유통물량</b> 4대 지표로 산정되는데, 그 중 <b>기관 경쟁률·의무확약·확정 공모가</b>는 수요예측 직후에만 발표됩니다. 수요예측 전(청약일 이틀 전 이전)에는 공개 데이터만으로 추정한 <b>잠정 C/D</b>로 표기될 수 있고, <b>청약 하루 전 최종 등급</b>이 갱신됩니다.
       </div>
+    </div>
+
+    <!-- 등급별 평균 시초가 수익률 표 (사이클 6-7 A9 보강) -->
+    <div class="guide-card">
+      <div class="guide-title"><span class="icon">&#128202;</span> 등급별 평균 시초가 수익률 (참고치)</div>
+      <p style="font-size:13px;color:var(--medium-roast);margin-bottom:12px;line-height:1.7;">38커뮤니케이션 nw 페이지 시초가 17건 수집 표본 기준 등급별 평균 수익률 분포. 표본 수가 작아 변동성이 크고 종목·시기별 차이가 크므로 절대치가 아닌 <strong>등급간 상대 비교 참고치</strong>로만 사용하세요.</p>
+      <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;background:var(--white);border-radius:10px;overflow:hidden;border:1px solid rgba(44,24,16,0.08);">
+        <thead>
+          <tr>
+            <th style="padding:12px 14px;background:var(--cream);color:var(--espresso);font-weight:700;text-align:left;">등급</th>
+            <th style="padding:12px 14px;background:var(--cream);color:var(--espresso);font-weight:700;text-align:left;">평균 시초가 수익률</th>
+            <th style="padding:12px 14px;background:var(--cream);color:var(--espresso);font-weight:700;text-align:left;">평균 청약 경쟁률</th>
+            <th style="padding:12px 14px;background:var(--cream);color:var(--espresso);font-weight:700;text-align:left;">상장일 +30일 잔존</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.06);"><strong style="color:var(--green);">S</strong></td>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.06);font-weight:700;color:var(--green);">+200% 이상</td>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.06);">2,500:1+</td>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.06);">+80~150% 잔존</td>
+          </tr>
+          <tr>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.06);"><strong style="color:var(--blue);">A</strong></td>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.06);font-weight:700;color:var(--blue);">+120%</td>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.06);1,500:1</td>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.06);">+50~80% 잔존</td>
+          </tr>
+          <tr>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.06);"><strong>B</strong></td>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.06);font-weight:700;">+60%</td>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.06);">800:1</td>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.06);">±10% 변동</td>
+          </tr>
+          <tr>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.06);"><strong style="color:var(--medium-roast);">C</strong></td>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.06);font-weight:700;color:var(--medium-roast);">+20%</td>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.06);">300:1</td>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.06);">-20~+5%</td>
+          </tr>
+          <tr>
+            <td style="padding:12px 14px;"><strong style="color:var(--red-soft);">D</strong></td>
+            <td style="padding:12px 14px;font-weight:700;color:var(--red-soft);">-10% 이하</td>
+            <td style="padding:12px 14px;">100:1 이하</td>
+            <td style="padding:12px 14px;">상장일 시초가 하회 빈번</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <p style="font-size:11.5px;color:var(--medium-roast);margin-top:10px;line-height:1.6;">※ 본 표는 38.co.kr nw 페이지 17건 시초가 평균치 기반 추정이며 절대 보장값이 아닙니다. 데이터 표본 수가 적고 시장 사이클·섹터 영향이 크므로 상장 후 30일 잔존 수익률은 매크로 환경에 따라 -50%까지 변동될 수 있습니다. 청약 결정은 투자설명서·증권신고서 직접 확인 후 본인 책임으로 진행하세요.</p>
+    </div>
+
+    <!-- 분석 방법론 footnote (사이클 6-7 A9 보강 — E-E-A-T 강화) -->
+    <div class="guide-card" style="background:var(--oat-milk);border:1px dashed rgba(44,24,16,0.18);">
+      <div class="guide-title"><span class="icon">&#128270;</span> 분석 방법론 (Methodology)</div>
+      <p style="font-size:13px;color:var(--dark-roast);line-height:1.8;margin-bottom:10px;"><strong>1차 데이터 출처</strong> — 38커뮤니케이션(<a href="http://www.38.co.kr" target="_blank" rel="noopener" style="color:var(--caramel);">38.co.kr</a>) 청약 일정 페이지·종목 상세 페이지·nw 시초가 페이지. Apps Script가 EUC-KR 인코딩 디코드 후 일 4회(06:00·08:00·16:00·18:00 KST) 자동 스크래핑.</p>
+      <p style="font-size:13px;color:var(--dark-roast);line-height:1.8;margin-bottom:10px;"><strong>2차 교차검증</strong> — DART OpenDart API <code>document.xml</code>(2026-04-26 P1-B 가동) 일 2회(06:00·16:00) 정정신고서 본문 파싱. 확정공모가·희망밴드·유통가능물량을 38 표시값과 비교, ±10원 이상 불일치 시 'flag' confidence 자동 부여.</p>
+      <p style="font-size:13px;color:var(--dark-roast);line-height:1.8;margin-bottom:10px;"><strong>등급 산출 알고리즘</strong> — 4대 조건 각 0~3점 가중 합산: ① 기관 경쟁률(500/1,000/1,500:1 단계) ② 의무보유확약(20/40/60%) ③ 유통가능물량(50/35/25% 이하) ④ 공모가 밴드 위치(중간 1점·상단 또는 초과 2점). 합산 9점+ S, 6점+ A, 3점+ B, 1~2점 C, 0점 D.</p>
+      <p style="font-size:13px;color:var(--dark-roast);line-height:1.8;"><strong>데이터 품질 검증</strong> — 2026-04-26 P1-B 실가동 80건: high 9건 + medium 71건 = 100% 채움 / flag 0건. 3대 위험(증권사 ELS·일괄신고 채권·기상장사 유상증자) 6단계 필터링으로 비-IPO 공시 자동 제외. 갱신 로그는 <code>실행로그</code> 시트에 자동 기록.</p>
     </div>
 
     <!-- Filters -->
