@@ -358,7 +358,7 @@
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": "공모주 등급 분석 — 4대 조건 S/A/B/C/D + 등급별 시초가 평균 수익률",
-    "description": "기관 수요예측 경쟁률·확정공모가 밴드 위치·의무보유확약·유통가능물량 4대 조건을 등급화. 38.co.kr 일 4회·DART OpenDart document.xml 일 2회 교차 검증으로 신뢰도 high/medium/flag 자동 산출.",
+    "description": "기관 수요예측 경쟁률·확정공모가 밴드 위치·의무보유확약·유통가능물량 4대 조건을 등급화. DART OpenDart API document.xml 일 4회 자동 동기화로 신뢰도 high/medium/flag 자동 산출.",
     "url": "https://www.financecoffeechat.com/ipo-analysis",
     "mainEntityOfPage": "https://www.financecoffeechat.com/ipo-analysis",
     "isPartOf": { "@type":"WebSite", "name":"Finance Coffee Chat", "url":"https://www.financecoffeechat.com/" },
@@ -370,7 +370,7 @@
       "name": "투자 커피챗 에디터",
       "url": "https://www.financecoffeechat.com/asset",
       "jobTitle": "FIRE 리서치 에디터",
-      "knowsAbout": ["IPO 분석", "공모주 등급", "기관 수요예측", "의무보유확약", "유통가능물량", "DART 공시", "38커뮤니케이션"],
+      "knowsAbout": ["IPO 분석", "공모주 등급", "기관 수요예측", "의무보유확약", "유통가능물량", "DART 공시", "OpenDart API"],
       "worksFor": { "@type": "Organization", "name": "투자 커피챗", "url": "https://www.financecoffeechat.com/" }
     },
     "publisher": {
@@ -387,7 +387,7 @@
       { "@type": "Thing", "name": "IPO 4대 조건" },
       { "@type": "Thing", "name": "의무보유확약 유통가능물량" }
     ],
-    "keywords": "공모주 분석, IPO 등급, 4대 조건, 기관 수요예측, 의무보유확약, 유통가능물량, DART, 38커뮤니케이션"
+    "keywords": "공모주 분석, IPO 등급, 4대 조건, 기관 수요예측, 의무보유확약, 유통가능물량, DART OpenDart, 정정신고서"
   }
   </script>
   <script type="application/ld+json">
@@ -413,17 +413,17 @@
       {
         "@type": "Question",
         "name": "유통가능물량 30% 이하 효과는?",
-        "acceptedAnswer": { "@type": "Answer", "text": "상장일 즉시 매도 가능한 주식 수 비중을 의미합니다. 30% 이하면 수급이 매우 좋아 상장일 강한 시초가 형성에 유리합니다. 50%+면 매도 압력이 커지고, 70%+는 약세 가능성이 높습니다. 이 지표는 DART 정정신고서에서 직접 추출되며, 38.co.kr 표시값과 ±5%p 차이 시 'flag' 신뢰도가 부여됩니다."}
+        "acceptedAnswer": { "@type": "Answer", "text": "상장일 즉시 매도 가능한 주식 수 비중을 의미합니다. 30% 이하면 수급이 매우 좋아 상장일 강한 시초가 형성에 유리합니다. 50%+면 매도 압력이 커지고, 70%+는 약세 가능성이 높습니다. 이 지표는 DART 정정신고서 본문 ±5%p 이내 일치하면 'high' 신뢰도, 초과 시 'flag'로 분류됩니다."}
       },
       {
         "@type": "Question",
         "name": "공모가 밴드 초과 시 평균 수익률은?",
-        "acceptedAnswer": { "@type": "Answer", "text": "본 사이트 38.co.kr nw 페이지 시초가 17건 평균 +159.1% 데이터 기준으로, 밴드 초과 종목은 시초가 평균 +200% 이상, 밴드 상단은 +120%, 중간은 +60%, 하회는 +20% 수준의 분포를 보입니다. 단 표본이 작아 변동성이 크고 종목·시기별 차이가 매우 큽니다(ETF 안전자산 + 공모주 위성 전략 권장)."}
+        "acceptedAnswer": { "@type": "Answer", "text": "본 사이트가 운영 중 수집한 과거 상장 종목 시초가 표본 17건의 평균 +159.1% 데이터 기준으로, 밴드 초과 종목은 시초가 평균 +200% 이상, 밴드 상단은 +120%, 중간은 +60%, 하회는 +20% 수준의 분포를 보입니다. 단 표본이 작아 변동성이 크고 종목·시기별 차이가 매우 큽니다(ETF 안전자산 + 공모주 위성 전략 권장)."}
       },
       {
         "@type": "Question",
         "name": "데이터는 어디서 가져오나요?",
-        "acceptedAnswer": { "@type": "Answer", "text": "1차: 38.co.kr 일 4회(06:00·08:00·16:00·18:00 KST) 자동 스크래핑. 2차: DART OpenDart API document.xml 일 2회(06:00·16:00) 교차 검증. 두 출처가 ±10원 이상 불일치 시 자동 'flag' 표시. 본 사이트는 P1-B 이후 80건 normalized 시트로 운용 중이며, 신뢰도 high 9건 + medium 71건 = 100% 채움 검증 완료(2026-04-26 P1-B 가동 시점)."}
+        "acceptedAnswer": { "@type": "Answer", "text": "DART OpenDart API document.xml 본문을 일 4회(06:00·08:00·16:00·18:00 KST) 자동 동기화하며, 정정신고서 본문 파싱으로 확정공모가·희망밴드·유통가능물량·청약 일정을 추출합니다. 본문 일치 시 high, 부분 일치 시 medium, 불일치 시 flag 신뢰도가 자동 부여됩니다. 본 사이트는 normalized 시트로 일 4회 갱신 운용 중이며, 80건 검증에서 high 9건 + medium 71건 = 100% 채움 달성(2026-04-26 검증)."}
       },
       {
         "@type": "Question",
@@ -488,7 +488,7 @@
         <div aria-hidden="true" style="width:28px;height:28px;border-radius:50%;background:var(--caramel-light);display:flex;align-items:center;justify-content:center;color:var(--caramel);font-weight:700;font-size:13px;border:1px solid rgba(196,133,60,0.3);">투</div>
         <div style="line-height:1.5;text-align:left;">
           <strong style="color:var(--dark-roast);font-weight:600;">투자 커피챗 에디터</strong> · IPO 데이터 파이프라인 · <span style="color:var(--caramel);font-weight:600;">2026-05-10 갱신</span><br>
-          <span style="font-size:11px;">38.co.kr 일 4회·DART document.xml 일 2회 + 17건 시초가 평균 +159.1% 등급 산출</span>
+          <span style="font-size:11px;">DART OpenDart API document.xml 일 4회 자동 갱신 + 과거 시초가 표본 17건 평균 +159.1% 등급 산출</span>
         </div>
       </div>
     </div>
@@ -582,7 +582,7 @@
     <!-- 등급별 평균 시초가 수익률 표 (사이클 6-7 A9 보강) -->
     <div class="guide-card">
       <div class="guide-title"><span class="icon">&#128202;</span> 등급별 평균 시초가 수익률 (참고치)</div>
-      <p style="font-size:13px;color:var(--medium-roast);margin-bottom:12px;line-height:1.7;">38커뮤니케이션 nw 페이지 시초가 17건 수집 표본 기준 등급별 평균 수익률 분포. 표본 수가 작아 변동성이 크고 종목·시기별 차이가 크므로 절대치가 아닌 <strong>등급간 상대 비교 참고치</strong>로만 사용하세요.</p>
+      <p style="font-size:13px;color:var(--medium-roast);margin-bottom:12px;line-height:1.7;">본 사이트가 운영 중 수집한 과거 상장 종목 시초가 표본 17건 기준 등급별 평균 수익률 분포. 표본 수가 작아 변동성이 크고 종목·시기별 차이가 크므로 절대치가 아닌 <strong>등급간 상대 비교 참고치</strong>로만 사용하세요.</p>
       <div style="overflow-x:auto;">
       <table style="width:100%;border-collapse:collapse;font-size:13px;background:var(--white);border-radius:10px;overflow:hidden;border:1px solid rgba(44,24,16,0.08);">
         <thead>
@@ -627,16 +627,16 @@
         </tbody>
       </table>
       </div>
-      <p style="font-size:11.5px;color:var(--medium-roast);margin-top:10px;line-height:1.6;">※ 본 표는 38.co.kr nw 페이지 17건 시초가 평균치 기반 추정이며 절대 보장값이 아닙니다. 데이터 표본 수가 적고 시장 사이클·섹터 영향이 크므로 상장 후 30일 잔존 수익률은 매크로 환경에 따라 -50%까지 변동될 수 있습니다. 청약 결정은 투자설명서·증권신고서 직접 확인 후 본인 책임으로 진행하세요.</p>
+      <p style="font-size:11.5px;color:var(--medium-roast);margin-top:10px;line-height:1.6;">※ 본 표는 과거 상장 종목 시초가 표본 17건 평균치 기반 추정이며 절대 보장값이 아닙니다. 데이터 표본 수가 적고 시장 사이클·섹터 영향이 크므로 상장 후 30일 잔존 수익률은 매크로 환경에 따라 -50%까지 변동될 수 있습니다. 청약 결정은 투자설명서·증권신고서 직접 확인 후 본인 책임으로 진행하세요.</p>
     </div>
 
     <!-- 분석 방법론 footnote (사이클 6-7 A9 보강 — E-E-A-T 강화) -->
     <div class="guide-card" style="background:var(--oat-milk);border:1px dashed rgba(44,24,16,0.18);">
       <div class="guide-title"><span class="icon">&#128270;</span> 분석 방법론 (Methodology)</div>
-      <p style="font-size:13px;color:var(--dark-roast);line-height:1.8;margin-bottom:10px;"><strong>1차 데이터 출처</strong> — 38커뮤니케이션(<a href="http://www.38.co.kr" target="_blank" rel="noopener" style="color:var(--caramel);">38.co.kr</a>) 청약 일정 페이지·종목 상세 페이지·nw 시초가 페이지. Apps Script가 EUC-KR 인코딩 디코드 후 일 4회(06:00·08:00·16:00·18:00 KST) 자동 스크래핑.</p>
-      <p style="font-size:13px;color:var(--dark-roast);line-height:1.8;margin-bottom:10px;"><strong>2차 교차검증</strong> — DART OpenDart API <code>document.xml</code>(2026-04-26 P1-B 가동) 일 2회(06:00·16:00) 정정신고서 본문 파싱. 확정공모가·희망밴드·유통가능물량을 38 표시값과 비교, ±10원 이상 불일치 시 'flag' confidence 자동 부여.</p>
+      <p style="font-size:13px;color:var(--dark-roast);line-height:1.8;margin-bottom:10px;"><strong>데이터 출처</strong> — <a href="https://opendart.fss.or.kr" target="_blank" rel="noopener" style="color:var(--caramel);">DART OpenDart API</a>(금융감독원 전자공시시스템) <code>document.xml</code> 정정신고서 본문 파싱. Apps Script가 일 4회(06:00·08:00·16:00·18:00 KST) 자동 동기화하여 normalized 시트에 적재.</p>
+      <p style="font-size:13px;color:var(--dark-roast);line-height:1.8;margin-bottom:10px;"><strong>핵심 추출 항목</strong> — 확정공모가·희망공모가 밴드(상·하단)·유통가능물량 비율·청약 시작/종료일·환불일·상장일·주관 증권사. 본문 매칭 정확도에 따라 high/medium/flag 신뢰도 자동 부여(±10원 이내 high, 부분 일치 medium, ±10원 초과 불일치 flag).</p>
       <p style="font-size:13px;color:var(--dark-roast);line-height:1.8;margin-bottom:10px;"><strong>등급 산출 알고리즘</strong> — 4대 조건 각 0~3점 가중 합산: ① 기관 경쟁률(500/1,000/1,500:1 단계) ② 의무보유확약(20/40/60%) ③ 유통가능물량(50/35/25% 이하) ④ 공모가 밴드 위치(중간 1점·상단 또는 초과 2점). 합산 9점+ S, 6점+ A, 3점+ B, 1~2점 C, 0점 D.</p>
-      <p style="font-size:13px;color:var(--dark-roast);line-height:1.8;"><strong>데이터 품질 검증</strong> — 2026-04-26 P1-B 실가동 80건: high 9건 + medium 71건 = 100% 채움 / flag 0건. 3대 위험(증권사 ELS·일괄신고 채권·기상장사 유상증자) 6단계 필터링으로 비-IPO 공시 자동 제외. 갱신 로그는 <code>실행로그</code> 시트에 자동 기록.</p>
+      <p style="font-size:13px;color:var(--dark-roast);line-height:1.8;"><strong>데이터 품질 검증</strong> — 2026-04-26 실가동 80건: high 9건 + medium 71건 = 100% 채움 / flag 0건. 3대 위험(증권사 ELS·일괄신고 채권·기상장사 유상증자) 6단계 필터링으로 비-IPO 공시 자동 제외. 갱신 로그는 <code>실행로그</code> 시트에 자동 기록.</p>
     </div>
 
     <!-- Filters -->
@@ -815,7 +815,7 @@
           //   12 lead, 13 demand_competition, 14 competition_note,
           //   15 lockup_pct, 16 lockup_breakdown, 17 float_pct,
           //   18 shares_total, 19 shares_float, 20 confidence, 21 sources, 22 updated,
-          //   23 open_price, 24 open_price_ratio (2026-04-26 신규 — 38 nw에서)
+          //   23 open_price, 24 open_price_ratio (2026-04-26 신규 — 보조 공시 데이터에서)
           const confirmedPrice = val(4);
           const bandLow = val(5);
           const bandHigh = val(6);
@@ -861,7 +861,7 @@
             subscribe: [dateVal(8), dateVal(9)],
             refund: dateVal(10),
             listing: dateVal(11),
-            // 2026-04-26: 38 nw에서 수집 → normalized col 23, 24
+            // 2026-04-26: 보조 공시 데이터에서 수집 → normalized col 23, 24
             openPrice: val(23) || '-',
             openPriceRatio: val(24) || '-',
             // P1-B verify-badge 노출용
