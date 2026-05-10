@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="naver-site-verification" content="03955cc9cc70b0b97522b98f0c4724b0f23ac71a" />
+  <title>실시간 공모주 일정 — 5분 자동 갱신·라이브 변경 카운트 [실시간] | 투자 커피챗</title>
+  <meta name="description" content="공모주 청약 예정·상장 임박 종목 실시간 일정. 5분마다 자동 갱신, freshness 배지(< 1h 🟢 / < 6h 🟡 / < 24h 🔴), 라이브 변경 카운트로 데이터 업데이트 추적. 38.co.kr·DART OpenDart 공시 기반 일 4회 동기화.">
+  <meta name="keywords" content="실시간 공모주 일정, 공모주 라이브, IPO 실시간, 공모주 청약 예정, 상장 임박, 5분 자동 갱신, 공모주 freshness, 공모주 라이브 카운트, 38커뮤니케이션 실시간, DART 공시 실시간">
+  <link rel="canonical" href="https://www.financecoffeechat.com/ipo-live">
+  <meta property="og:title" content="실시간 공모주 일정 — 5분 자동 갱신·라이브 변경 카운트">
+  <meta property="og:description" content="공모주 청약 예정·상장 임박 5분 자동 갱신 + freshness 배지 + 라이브 변경 카운트.">
+  <meta property="og:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-05-10">
+  <meta property="og:url" content="https://www.financecoffeechat.com/ipo-live">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="투자 커피챗">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="실시간 공모주 일정 — 5분 자동 갱신·라이브 변경 카운트">
+  <meta name="twitter:description" content="청약 예정·상장 임박 5분 자동 갱신 + freshness 배지.">
+  <meta name="twitter:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-05-10">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2026-04-19b">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2026-04-19b">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZEG7YQ80S"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet"></noscript>
+  <style>
+    :root { --espresso:#2C1810; --dark-roast:#3D2317; --medium-roast:#6B3A2A; --caramel:#C4853C; --caramel-light:rgba(196,133,60,0.12); --cream:#F5EDE0; --latte:#E8DBC5; --oat-milk:#FAF6F0; --white:#FFFDF9; --green:#3F8A5C; --blue:#3A6EA5; --red-soft:#B8473D; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Noto Sans KR',sans-serif; background:var(--oat-milk); color:var(--espresso); line-height:1.6; -webkit-font-smoothing:antialiased; min-height:100vh; }
+    nav { background:var(--espresso); padding:12px 16px; text-align:center; }
+    nav a { color:var(--cream); margin:0 12px; text-decoration:none; font-size:14px; font-weight:500; letter-spacing:0.3px; }
+    nav a:hover { color:var(--caramel); }
+    .subnav { background:var(--dark-roast); padding:8px 16px; text-align:center; border-bottom:1px solid rgba(196,133,60,0.15); position:sticky; top:0; z-index:10; }
+    .subnav-label { font-size:10px; font-weight:600; letter-spacing:2px; text-transform:uppercase; color:var(--caramel); margin-right:12px; }
+    .subnav a { color:var(--latte); margin:0 8px; text-decoration:none; font-size:13px; padding:4px 8px; border-radius:6px; }
+    .subnav a:hover { color:var(--caramel); }
+    .subnav a.active { color:var(--cream); background:rgba(196,133,60,0.2); font-weight:600; }
+    @media (max-width:600px) { .subnav a { font-size:12px; margin:0 4px; } nav a { margin:0 6px; font-size:12px; } }
+    .container { max-width:980px; margin:0 auto; padding:48px 28px 64px; }
+    .header { text-align:center; margin-bottom:40px; }
+    .badge { display:inline-block; font-size:10px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--caramel); background:var(--caramel-light); padding:5px 16px; border-radius:20px; margin-bottom:16px; border:1px solid rgba(196,133,60,0.2); }
+    .header h1 { font-family:'Playfair Display',serif; font-size:32px; font-weight:700; color:var(--espresso); letter-spacing:-0.5px; }
+    .header h1 em { font-style:italic; color:var(--medium-roast); }
+    .header .subtitle { margin-top:10px; font-size:14px; color:var(--medium-roast); font-weight:500; }
+    .divider { width:40px; height:2px; background:var(--caramel); margin:20px auto 0; border-radius:1px; }
+    .answer-box { max-width:760px; margin:24px auto 0; background:linear-gradient(180deg,var(--white) 0%,var(--cream) 100%); border:1px solid var(--caramel); border-radius:12px; padding:18px 22px; box-shadow:0 4px 16px rgba(196,133,60,0.10); position:relative; }
+    .answer-box::before { content:'A.'; position:absolute; left:-12px; top:-12px; background:var(--caramel); color:var(--white); width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-weight:700; font-size:14px; box-shadow:0 2px 8px rgba(196,133,60,0.3); }
+    .answer-box .answer-label { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--caramel); margin-bottom:6px; }
+    .answer-box .answer-text { font-size:16px; font-weight:600; color:var(--espresso); line-height:1.65; letter-spacing:-0.2px; }
+    .answer-box .answer-text strong { color:var(--medium-roast); }
+    .byline { max-width:760px; margin:14px auto 0; display:flex; align-items:center; gap:10px; font-size:12px; color:var(--medium-roast); }
+    .byline .avatar { width:28px; height:28px; border-radius:50%; background:var(--caramel-light); display:flex; align-items:center; justify-content:center; color:var(--caramel); font-weight:700; font-size:13px; border:1px solid rgba(196,133,60,0.3); }
+    .byline .meta { line-height:1.5; }
+    .byline .meta strong { color:var(--dark-roast); font-weight:600; }
+    .byline .updated { color:var(--caramel); font-weight:600; }
+    @media (max-width:600px) { .answer-box { padding:16px 18px; } .answer-box .answer-text { font-size:15px; } }
+    .live-bar { background:var(--white); border:1px solid rgba(44,24,16,0.08); border-radius:12px; padding:16px 22px; margin-top:36px; display:flex; flex-wrap:wrap; gap:18px; align-items:center; justify-content:space-between; }
+    .live-stat { display:flex; flex-direction:column; }
+    .live-stat .lab { font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--medium-roast); }
+    .live-stat .val { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--espresso); }
+    .live-stat .val.green { color:var(--green); }
+    .live-stat .val.red { color:var(--red-soft); }
+    .live-stat .val.blue { color:var(--blue); }
+    .freshness { display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:14px; font-size:12px; font-weight:600; }
+    .freshness.green { background:rgba(63,138,92,0.12); color:var(--green); }
+    .freshness.yellow { background:rgba(196,133,60,0.18); color:var(--caramel); }
+    .freshness.red { background:rgba(184,71,61,0.12); color:var(--red-soft); }
+    .pulse { width:8px; height:8px; background:var(--green); border-radius:50%; display:inline-block; animation:pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(1.2); } }
+    .ipo-row { background:var(--white); border:1px solid rgba(44,24,16,0.08); border-radius:12px; padding:16px 22px; margin-top:14px; display:grid; grid-template-columns:1fr auto auto auto; gap:14px; align-items:center; }
+    @media (max-width:768px) { .ipo-row { grid-template-columns:1fr; gap:8px; } }
+    .ipo-row .name { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; color:var(--espresso); }
+    .ipo-row .meta { font-size:12.5px; color:var(--medium-roast); margin-top:4px; }
+    .ipo-row .market { display:inline-block; padding:2px 8px; border-radius:10px; font-size:10px; font-weight:700; letter-spacing:1px; margin-right:6px; }
+    .ipo-row .market.kospi { background:rgba(58,110,165,0.12); color:var(--blue); }
+    .ipo-row .market.kosdaq { background:rgba(63,138,92,0.12); color:var(--green); }
+    .ipo-row .grade-pill { font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:var(--caramel); padding:0 12px; }
+    .ipo-row .stat-mini { font-size:12px; color:var(--medium-roast); text-align:right; line-height:1.5; }
+    .ipo-row .stat-mini strong { color:var(--espresso); font-size:14px; display:block; }
+    .ipo-row .timeline-mini { font-size:12px; color:var(--medium-roast); text-align:right; line-height:1.5; min-width:160px; }
+    .ipo-row .timeline-mini strong { color:var(--espresso); }
+    .status-tag { display:inline-block; font-size:10px; font-weight:700; letter-spacing:1px; padding:3px 10px; border-radius:10px; margin-left:6px; text-transform:uppercase; }
+    .status-tag.upcoming { background:rgba(58,110,165,0.12); color:var(--blue); }
+    .status-tag.subscribing { background:rgba(196,133,60,0.18); color:var(--caramel); }
+    .status-tag.pending { background:rgba(63,138,92,0.12); color:var(--green); }
+    .group-title { font-family:'Playfair Display',serif; font-size:20px; color:var(--espresso); margin-top:32px; margin-bottom:8px; padding-bottom:8px; border-bottom:2px solid var(--caramel); }
+    .group-desc { font-size:12.5px; color:var(--medium-roast); margin-bottom:6px; }
+    .empty-state { background:var(--white); border-radius:14px; padding:32px 28px; text-align:center; margin-top:18px; border:1px solid rgba(44,24,16,0.08); font-size:13px; color:var(--medium-roast); line-height:1.7; }
+    .section { margin-top:56px; scroll-margin-top:64px; }
+    .section-title { font-family:'Playfair Display',serif; font-size:24px; font-weight:700; color:var(--espresso); margin-bottom:6px; letter-spacing:-0.3px; }
+    .section-desc { font-size:13px; color:var(--medium-roast); margin-bottom:18px; }
+    .faq-list { margin-top:12px; }
+    .faq-item { background:var(--white); border-radius:10px; border:1px solid rgba(44,24,16,0.08); margin-bottom:10px; padding:14px 20px; box-shadow:0 2px 10px rgba(44,24,16,0.03); }
+    .faq-item summary { cursor:pointer; font-weight:600; color:var(--espresso); font-size:14.5px; list-style:none; padding-right:24px; position:relative; }
+    .faq-item summary::-webkit-details-marker { display:none; }
+    .faq-item summary::after { content:'+'; position:absolute; right:0; top:0; color:var(--caramel); font-weight:700; font-size:18px; line-height:1; }
+    .faq-item[open] summary::after { content:'−'; }
+    .faq-item p { margin-top:12px; color:var(--dark-roast); font-size:13.5px; line-height:1.8; }
+    .related { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:18px; }
+    @media (max-width:768px) { .related { grid-template-columns:1fr; } }
+    .related a { background:var(--white); border-radius:10px; padding:16px 18px; border:1px solid rgba(44,24,16,0.08); text-decoration:none; color:var(--espresso); transition:all 0.18s; display:block; }
+    .related a:hover { transform:translateY(-2px); border-color:var(--caramel); box-shadow:0 8px 20px rgba(44,24,16,0.06); }
+    .related .tag { display:inline-block; font-size:10px; font-weight:700; letter-spacing:1.4px; color:var(--caramel); margin-bottom:6px; text-transform:uppercase; }
+    .related h4 { font-family:'Playfair Display',serif; font-size:15px; color:var(--espresso); margin-bottom:4px; }
+    .related p { font-size:12.5px; color:var(--medium-roast); line-height:1.6; }
+    .disclaimer { margin-top:48px; padding:16px 20px; background:var(--white); border:1px dashed rgba(44,24,16,0.15); border-radius:10px; font-size:12px; color:var(--medium-roast); line-height:1.7; }
+    @media (max-width:600px) { .container { padding:32px 16px 48px; } .header h1 { font-size:26px; } }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org", "@type":"Article",
+    "headline":"실시간 공모주 일정 — 5분 자동 갱신·라이브 변경 카운트",
+    "description":"공모주 청약 예정·상장 임박 종목 실시간 일정. 5분 자동 갱신, freshness 배지, 라이브 변경 카운트로 업데이트 추적.",
+    "url":"https://www.financecoffeechat.com/ipo-live",
+    "mainEntityOfPage":"https://www.financecoffeechat.com/ipo-live",
+    "inLanguage":"ko", "datePublished":"2026-05-10", "dateModified":"2026-05-10",
+    "author": { "@type":"Person", "name":"투자 커피챗 에디터", "url":"https://www.financecoffeechat.com/asset", "jobTitle":"FIRE 리서치 에디터", "knowsAbout":["IPO","공모주 실시간","공모주 일정","수요예측","DART 공시"], "worksFor":{"@type":"Organization","name":"투자 커피챗","url":"https://www.financecoffeechat.com/"} },
+    "publisher": { "@type":"Organization", "name":"투자 커피챗", "url":"https://www.financecoffeechat.com/", "logo":{"@type":"ImageObject","url":"https://www.financecoffeechat.com/logo.svg"} },
+    "image":"https://www.financecoffeechat.com/og-image.png", "isAccessibleForFree":true,
+    "speakable": { "@type":"SpeakableSpecification", "cssSelector":[".answer-box", ".live-bar"] },
+    "about": [
+      { "@type":"Thing", "name":"실시간 공모주 일정" },
+      { "@type":"Thing", "name":"공모주 데이터 freshness" }
+    ],
+    "keywords":"실시간 공모주 일정, 공모주 라이브, 5분 자동 갱신, freshness, 공모주 청약 예정, 상장 임박"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org", "@type":"BreadcrumbList",
+    "itemListElement": [
+      { "@type":"ListItem", "position":1, "name":"홈", "item":"https://www.financecoffeechat.com/" },
+      { "@type":"ListItem", "position":2, "name":"공모주", "item":"https://www.financecoffeechat.com/ipo" },
+      { "@type":"ListItem", "position":3, "name":"실시간 공모주 일정", "item":"https://www.financecoffeechat.com/ipo-live" }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org", "@type":"FAQPage",
+    "mainEntity": [
+      { "@type":"Question", "name":"5분 자동 갱신은 어떻게 작동하나요?", "acceptedAnswer":{"@type":"Answer","text":"본 페이지는 setInterval로 5분마다 Google Sheets normalized 시트를 다시 fetch하여 변경된 데이터를 반영합니다. 페이지를 켜둔 채로 두면 별도 새로고침 없이 최신 데이터가 표시되며, 라이브 변경 카운트(이번 세션 동안 변경된 종목 수)가 우상단에 표시됩니다."} },
+      { "@type":"Question", "name":"freshness 배지의 의미는?", "acceptedAnswer":{"@type":"Answer","text":"마지막 데이터 갱신 시각과 현재 시각의 차이를 색상 배지로 표시합니다. 🟢 1시간 미만: 매우 신선 / 🟡 1~6시간: 보통 / 🔴 6시간 이상: 오래된 데이터(데이터 파이프라인 트리거 06:00·08:00·16:00·18:00 KST 사이 자연 발생)."} },
+      { "@type":"Question", "name":"upcoming과 pending_listing의 차이는?", "acceptedAnswer":{"@type":"Answer","text":"upcoming은 청약 시작일이 오늘 이후인 종목, pending_listing은 청약은 끝났으나 상장일 도래 전인 종목입니다. 본 페이지는 두 그룹을 분리 표시해 일정 추적을 용이하게 합니다."} },
+      { "@type":"Question", "name":"데이터 신뢰도 confidence는?", "acceptedAnswer":{"@type":"Answer","text":"high = DART OpenDart API 교차 검증 OK, medium = 38.co.kr 단일 출처, flag = DART와 38이 ±10원 이상 불일치(파싱 오류 의심). flag 종목은 별도 표시되며 청약 결정 전 투자설명서 직접 확인 권고."} },
+      { "@type":"Question", "name":"왜 모바일 카드가 작은가요?", "acceptedAnswer":{"@type":"Answer","text":"실시간 페이지는 다수 종목을 한 화면에 표시하기 위해 콤팩트 행 레이아웃을 사용합니다. 종목별 상세 정보(4대 조건 등급 분석)는 /ipo-analysis 페이지에서 확인할 수 있고, 청약 절차는 /ipo-guide에서 상세 가이드를 제공합니다."} }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <nav>
+    <a href="/" data-ga="click_gnb" data-ga-text="홈" data-ga-loc="gnb">홈</a>
+    <a href="/portfolio" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
+    <a href="/asset" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
+    <a href="/index-investing" data-ga="click_gnb" data-ga-text="지수투자" data-ga-loc="gnb">지수투자</a>
+    <a href="/tax-optimization" data-ga="click_gnb" data-ga-text="절세" data-ga-loc="gnb">절세</a>
+    <a href="/ipo" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
+    <a href="/cost-optimization" data-ga="click_gnb" data-ga-text="생활비 줄이기" data-ga-loc="gnb">생활비 줄이기</a>
+  </nav>
+  <div class="subnav">
+    <span class="subnav-label">공모주</span>
+    <a href="/ipo-today" data-ga="click_ipo_tab" data-ga-text="today" data-ga-loc="ipo_subnav">오늘</a>
+    <a href="/ipo-this-week" data-ga="click_ipo_tab" data-ga-text="this-week" data-ga-loc="ipo_subnav">이번 주</a>
+    <a href="/ipo-live" class="active" data-ga="click_ipo_tab" data-ga-text="live" data-ga-loc="ipo_subnav">실시간</a>
+    <a href="/ipo" data-ga="click_ipo_tab" data-ga-text="hub" data-ga-loc="ipo_subnav">캘린더</a>
+    <a href="/ipo-analysis" data-ga="click_ipo_tab" data-ga-text="analysis" data-ga-loc="ipo_subnav">분석</a>
+    <a href="/ipo-guide" data-ga="click_ipo_tab" data-ga-text="guide" data-ga-loc="ipo_subnav">가이드</a>
+  </div>
+
+  <div class="container">
+    <header class="header">
+      <div class="badge">IPO Live</div>
+      <h1>실시간 <em>공모주 일정</em></h1>
+      <div class="subtitle">5분 자동 갱신 · freshness 추적 · 라이브 변경 카운트</div>
+      <div class="divider"></div>
+      <div class="answer-box" role="region" aria-label="실시간 공모주 일정 핵심 답변">
+        <div class="answer-label">한 줄 답변</div>
+        <p class="answer-text">청약 예정 + 상장 임박 종목을 <strong>5분마다 자동 갱신</strong>. freshness 배지(< 1h 🟢 / < 6h 🟡 / < 24h 🔴)로 데이터 신선도 표시. 페이지 켜두면 별도 새로고침 없이 라이브 추적.</p>
+      </div>
+      <div class="byline">
+        <div class="avatar" aria-hidden="true">투</div>
+        <div class="meta">
+          <strong>투자 커피챗 에디터</strong> · IPO 데이터 파이프라인 · <span class="updated">2026-05-10 갱신</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="live-bar" role="region" aria-live="polite" aria-label="실시간 데이터 상태">
+      <div class="live-stat"><span class="lab">총 추적 종목</span><span class="val" id="liveTotal">—</span></div>
+      <div class="live-stat"><span class="lab">청약 예정 (upcoming)</span><span class="val blue" id="liveUpcoming">—</span></div>
+      <div class="live-stat"><span class="lab">상장 임박 (pending)</span><span class="val green" id="livePending">—</span></div>
+      <div class="live-stat"><span class="lab">이번 세션 변경</span><span class="val" id="liveChanges">0</span></div>
+      <div class="live-stat"><span class="lab">데이터 상태</span><span id="freshness" class="freshness green"><span class="pulse"></span> 데이터 fresh</span></div>
+    </div>
+
+    <div id="liveContent">
+      <div class="empty-state">⏳ 실시간 데이터 로딩 중…</div>
+    </div>
+
+    <section class="section">
+      <h2 class="section-title">자주 묻는 질문</h2>
+      <div class="faq-list">
+        <details class="faq-item"><summary>5분 자동 갱신은 어떻게 작동하나요?</summary><p>본 페이지는 <code>setInterval</code>로 <strong>5분마다 Google Sheets normalized 시트를 다시 fetch</strong>하여 변경된 데이터를 반영합니다. 페이지를 켜둔 채로 두면 별도 새로고침 없이 최신 데이터가 표시되며, 라이브 변경 카운트(이번 세션 동안 변경된 종목 수)가 우상단에 표시됩니다.</p></details>
+        <details class="faq-item"><summary>freshness 배지의 의미는?</summary><p>마지막 데이터 갱신 시각과 현재 시각의 차이를 색상 배지로 표시합니다. <strong>🟢 1시간 미만</strong>: 매우 신선 / <strong>🟡 1~6시간</strong>: 보통 / <strong>🔴 6시간 이상</strong>: 오래된 데이터(데이터 파이프라인 트리거 06:00·08:00·16:00·18:00 KST 사이 자연 발생).</p></details>
+        <details class="faq-item"><summary>upcoming과 pending_listing의 차이는?</summary><p><strong>upcoming</strong>은 청약 시작일이 오늘 이후인 종목, <strong>pending_listing</strong>은 청약은 끝났으나 상장일 도래 전인 종목입니다. 본 페이지는 두 그룹을 분리 표시해 일정 추적을 용이하게 합니다.</p></details>
+        <details class="faq-item"><summary>데이터 신뢰도 confidence는?</summary><p><strong>high</strong> = DART OpenDart API 교차 검증 OK, <strong>medium</strong> = 38.co.kr 단일 출처, <strong>flag</strong> = DART와 38이 ±10원 이상 불일치(파싱 오류 의심). flag 종목은 별도 표시되며 청약 결정 전 투자설명서 직접 확인 권고.</p></details>
+        <details class="faq-item"><summary>왜 모바일 카드가 작은가요?</summary><p>실시간 페이지는 다수 종목을 한 화면에 표시하기 위해 <strong>콤팩트 행 레이아웃</strong>을 사용합니다. 종목별 상세 정보(4대 조건 등급 분석)는 <a href="/ipo-analysis" style="color:var(--caramel);">/ipo-analysis</a> 페이지에서 확인할 수 있고, 청약 절차는 <a href="/ipo-guide" style="color:var(--caramel);">/ipo-guide</a>에서 상세 가이드를 제공합니다.</p></details>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">함께 보면 좋은 페이지</h2>
+      <div class="related">
+        <a href="/ipo-today" data-ga="click_related" data-ga-text="ipo-today" data-ga-loc="ipo_live_related"><span class="tag">오늘</span><h4>오늘의 공모주</h4><p>마감 카운트다운·등급</p></a>
+        <a href="/ipo-this-week" data-ga="click_related" data-ga-text="ipo-this-week" data-ga-loc="ipo_live_related"><span class="tag">이번 주</span><h4>이번 주 청약</h4><p>7일 캘린더 그리드</p></a>
+        <a href="/ipo" data-ga="click_related" data-ga-text="ipo-hub" data-ga-loc="ipo_live_related"><span class="tag">캘린더</span><h4>전체 공모주 캘린더</h4><p>월간 그리드·전체 종목</p></a>
+      </div>
+    </section>
+
+    <div class="disclaimer">
+      <strong>유의사항.</strong> 본 페이지는 38.co.kr·DART 공시 자료를 자동 가공해 표시하며 투자 권유가 아닙니다. 5분 자동 갱신은 클라이언트 측 fetch이며, 데이터 파이프라인의 실제 갱신 주기는 일 4회(06:00·08:00·16:00·18:00 KST)입니다. 청약 결정은 본인 책임으로 진행하시고, 데이터 오류 발견 시 hello@financecoffeechat.com 으로 알려주시면 즉시 정정합니다.
+    </div>
+  </div>
+
+  <script>
+    const SHEET_ID = '1_xXYdZ5d8COXBajVZ_tyd2p5JaOhQcQnNPQrS9-e-Jk';
+    const SHEET_NAME = 'normalized';
+    const REFRESH_MS = 5 * 60 * 1000;
+
+    let lastSnapshot = null;
+    let sessionChanges = 0;
+
+    function ymd(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+
+    async function fetchData() {
+      const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&_=${Date.now()}`;
+      const res = await fetch(url, { cache: 'no-store' });
+      const text = await res.text();
+      const json = JSON.parse(text.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\);?/)[1]);
+      const rows = json.table.rows;
+      let lastUpdated = null;
+      const items = rows.map(row => {
+        const c = row.c;
+        const val = (i) => { if (!c[i]) return ''; return c[i].f ? String(c[i].f) : (c[i].v != null ? String(c[i].v) : ''); };
+        const dateVal = (i) => {
+          if (!c[i] || c[i].v == null) return '';
+          const raw = String(c[i].v);
+          const dm = raw.match(/Date\((\d+),(\d+),(\d+)\)/);
+          if (dm) { return `${dm[1]}-${String(Number(dm[2])+1).padStart(2,'0')}-${dm[3].padStart(2,'0')}`; }
+          if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+          if (c[i].f) { const fm = String(c[i].f).match(/(\d{4})[-.](\d{1,2})[-.](\d{1,2})/); if (fm) return `${fm[1]}-${fm[2].padStart(2,'0')}-${fm[3].padStart(2,'0')}`; }
+          return '';
+        };
+        const u = val(22);
+        if (u && (!lastUpdated || u > lastUpdated)) lastUpdated = u;
+        return {
+          name: val(1), market: val(2).toLowerCase(), status: val(3),
+          confirmedPrice: val(4), bandPosition: val(7),
+          subscribeStart: dateVal(8), subscribeEnd: dateVal(9), refund: dateVal(10), listing: dateVal(11),
+          lead: val(12), competition: val(13), lockup: val(15), float: val(17),
+          confidence: val(20), updated: u
+        };
+      });
+      return { items, lastUpdated };
+    }
+
+    function gradeFor(it) {
+      let s = 0;
+      const c = parseFloat(String(it.competition).replace(/[^0-9.]/g, ''));
+      if (c >= 1500) s += 3; else if (c >= 1000) s += 2; else if (c >= 500) s += 1;
+      const lk = parseFloat(String(it.lockup).replace(/[^0-9.]/g, ''));
+      if (lk >= 60) s += 3; else if (lk >= 40) s += 2; else if (lk >= 20) s += 1;
+      const fl = parseFloat(String(it.float).replace(/[^0-9.]/g, ''));
+      if (fl > 0 && fl <= 25) s += 3; else if (fl > 0 && fl <= 35) s += 2; else if (fl > 0 && fl <= 50) s += 1;
+      if (it.bandPosition === '초과' || it.bandPosition === '상단') s += 2;
+      else if (it.bandPosition === '중간') s += 1;
+      if (s >= 9) return 'S';
+      if (s >= 6) return 'A';
+      if (s >= 3) return 'B';
+      return 'C';
+    }
+
+    function snapshotKey(it) {
+      return [it.name, it.confirmedPrice, it.subscribeStart, it.subscribeEnd, it.listing, it.competition, it.lockup, it.float].join('|');
+    }
+
+    function detectChanges(prev, curr) {
+      if (!prev) return 0;
+      const prevMap = new Map(prev.map(it => [it.name, snapshotKey(it)]));
+      let n = 0;
+      curr.forEach(it => {
+        const before = prevMap.get(it.name);
+        if (before && before !== snapshotKey(it)) n++;
+        if (!before) n++;
+      });
+      return n;
+    }
+
+    function renderFreshness(updated) {
+      const el = document.getElementById('freshness');
+      if (!el || !updated) return;
+      const u = new Date(updated.replace(' ', 'T'));
+      if (isNaN(u)) return;
+      const diffH = (Date.now() - u.getTime()) / 3600000;
+      el.classList.remove('green','yellow','red');
+      let lab = '';
+      if (diffH < 1) { el.classList.add('green'); lab = `${Math.round(diffH*60)}분 전`; }
+      else if (diffH < 6) { el.classList.add('yellow'); lab = `${diffH.toFixed(1)}시간 전`; }
+      else { el.classList.add('red'); lab = `${Math.round(diffH)}시간 전`; }
+      el.innerHTML = `<span class="pulse"></span> ${lab} 갱신`;
+    }
+
+    function renderContent(items) {
+      const today = ymd(new Date());
+      const upcoming = items.filter(it => it.status === 'upcoming' || (it.subscribeStart && it.subscribeStart > today))
+        .sort((a,b) => (a.subscribeStart||'9').localeCompare(b.subscribeStart||'9'));
+      const subscribing = items.filter(it => it.subscribeStart && it.subscribeEnd && it.subscribeStart <= today && today <= it.subscribeEnd);
+      const pending = items.filter(it => it.status === 'pending_listing' || (it.subscribeEnd && it.subscribeEnd < today && it.listing && it.listing >= today))
+        .sort((a,b) => (a.listing||'9').localeCompare(b.listing||'9'));
+
+      document.getElementById('liveTotal').textContent = items.length;
+      document.getElementById('liveUpcoming').textContent = upcoming.length;
+      document.getElementById('livePending').textContent = pending.length;
+
+      const renderRow = (it, statusTag) => `
+        <div class="ipo-row">
+          <div>
+            <span class="market ${it.market}">${(it.market||'-').toUpperCase()}</span>
+            <span class="name">${it.name}</span>
+            <span class="status-tag ${statusTag}">${statusTag}</span>
+            <div class="meta">${it.lead || '-'} · 확정공모가 ${it.confirmedPrice ? it.confirmedPrice + '원' : '-'} ${it.bandPosition ? '['+it.bandPosition+']' : ''}</div>
+          </div>
+          <div class="grade-pill">${gradeFor(it)}</div>
+          <div class="stat-mini">기관 경쟁률<strong>${it.competition || '-'}</strong>확약 ${it.lockup || '-'}</div>
+          <div class="timeline-mini">청약 <strong>${it.subscribeStart || '-'}~${it.subscribeEnd || '-'}</strong>상장 ${it.listing || '-'}</div>
+        </div>`;
+
+      let html = '';
+      if (subscribing.length > 0) {
+        html += `<div class="group-title">청약 진행 중 (${subscribing.length})</div><div class="group-desc">오늘 청약 신청 가능한 종목입니다.</div>`;
+        html += subscribing.map(it => renderRow(it, 'subscribing')).join('');
+      }
+      if (upcoming.length > 0) {
+        html += `<div class="group-title">청약 예정 (${upcoming.length}, upcoming)</div><div class="group-desc">청약 시작일이 오늘 이후인 종목.</div>`;
+        html += upcoming.map(it => renderRow(it, 'upcoming')).join('');
+      }
+      if (pending.length > 0) {
+        html += `<div class="group-title">상장 임박 (${pending.length}, pending_listing)</div><div class="group-desc">청약 완료, 상장 대기 중인 종목.</div>`;
+        html += pending.map(it => renderRow(it, 'pending')).join('');
+      }
+      if (!html) {
+        html = '<div class="empty-state">현재 추적 중인 청약 예정·상장 임박 종목이 없습니다.<br>전체 캘린더 <a href="/ipo" style="color:var(--caramel);">/ipo</a>에서 과거·미래 일정을 확인하세요.</div>';
+      }
+      document.getElementById('liveContent').innerHTML = html;
+    }
+
+    async function refresh() {
+      try {
+        const { items, lastUpdated } = await fetchData();
+        const changes = detectChanges(lastSnapshot, items);
+        if (changes > 0) {
+          sessionChanges += changes;
+          document.getElementById('liveChanges').textContent = sessionChanges;
+        }
+        lastSnapshot = items;
+        renderFreshness(lastUpdated);
+        renderContent(items);
+      } catch (e) {
+        console.error('실시간 갱신 실패:', e);
+        document.getElementById('liveContent').innerHTML = '<div class="empty-state">⚠️ 데이터 로드 실패. 5분 후 자동 재시도.</div>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      refresh();
+      setInterval(refresh, REFRESH_MS);
+    });
+    document.addEventListener('click', function(e) {
+      var el = e.target.closest('[data-ga]');
+      if (!el || typeof gtag !== 'function') return;
+      gtag('event', el.dataset.ga, { click_text: el.dataset.gaText || el.textContent.trim().substring(0,50), click_location: el.dataset.gaLoc || 'unknown' });
+    });
+  </script>
+<footer class="site-contact" style="text-align:center;padding:24px 16px;font-size:12px;color:#6B3A2A;border-top:1px solid rgba(107,58,42,0.15);margin-top:32px;font-family:inherit;">Contact · <a href="mailto:hello@financecoffeechat.com" style="color:inherit;text-decoration:underline;" data-ga="click_contact_email" data-ga-text="hello@financecoffeechat.com" data-ga-loc="footer">hello@financecoffeechat.com</a></footer>
+</body>
+</html>
