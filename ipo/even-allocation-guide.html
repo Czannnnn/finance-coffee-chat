@@ -40,7 +40,7 @@
     nav { background: var(--espresso); padding: 12px 16px; text-align: center; }
     nav a { color: var(--cream); margin: 0 12px; text-decoration: none; font-size: 14px; font-weight: 500; }
     nav a:hover { color: var(--caramel); }
-    .subnav { background: var(--dark-roast); padding: 8px 16px; text-align: center; border-bottom: 1px solid rgba(196,133,60,0.15); position: sticky; top: 0; z-index: 10; }
+    .subnav { background: var(--dark-roast); padding: 8px 16px; text-align: center; border-bottom: 1px solid rgba(196,133,60,0.15); position: sticky; top: 0; z-index: 10; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
     .subnav-label { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-right: 12px; }
     .subnav a { color: var(--latte); margin: 0 8px; text-decoration: none; font-size: 13px; padding: 6px 10px; border-radius: 6px; min-height: 44px; display: inline-block; line-height: 1.6; }
     .subnav a:hover { color: var(--caramel); }
@@ -137,12 +137,16 @@
     <a href="/portfolio">포트폴리오</a>
     <a href="/asset">자산관리</a>
   </nav>
-  <div class="subnav">
+    <div class="subnav">
     <span class="subnav-label">공모주</span>
-    <a href="/ipo">캘린더</a>
-    <a href="/ipo-analysis">종목 분석</a>
-    <a href="/ipo-guide">청약 가이드</a>
-    <a href="/ipo/even-allocation-guide" class="active">균등배정</a>
+    <a href="/ipo" data-ga="click_subnav" data-ga-text="hub" data-ga-loc="ipo_subnav">캘린더</a>
+    <a href="/ipo-today" data-ga="click_subnav" data-ga-text="today" data-ga-loc="ipo_subnav">오늘</a>
+    <a href="/ipo-this-week" data-ga="click_subnav" data-ga-text="this-week" data-ga-loc="ipo_subnav">이번 주</a>
+    <a href="/ipo-live" data-ga="click_subnav" data-ga-text="live" data-ga-loc="ipo_subnav">실시간</a>
+    <a href="/ipo-analysis" data-ga="click_subnav" data-ga-text="analysis" data-ga-loc="ipo_subnav">종목 분석</a>
+    <a href="/ipo-guide" data-ga="click_subnav" data-ga-text="guide" data-ga-loc="ipo_subnav">청약 가이드</a>
+    <a href="/ipo/even-allocation-guide" class="active" data-ga="click_subnav" data-ga-text="even-allocation" data-ga-loc="ipo_subnav">균등배정</a>
+    <a href="/ipo/refund-schedule-2026" data-ga="click_subnav" data-ga-text="refund-schedule" data-ga-loc="ipo_subnav">환불일</a>
   </div>
   <div class="container">
     <div class="header">

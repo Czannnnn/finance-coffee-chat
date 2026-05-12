@@ -40,7 +40,7 @@
     nav { background: var(--espresso); padding: 12px 16px; text-align: center; }
     nav a { color: var(--cream); margin: 0 12px; text-decoration: none; font-size: 14px; font-weight: 500; }
     nav a:hover { color: var(--caramel); }
-    .subnav { background: var(--dark-roast); padding: 8px 16px; text-align: center; border-bottom: 1px solid rgba(196,133,60,0.15); position: sticky; top: 0; z-index: 10; }
+    .subnav { background: var(--dark-roast); padding: 8px 16px; text-align: center; border-bottom: 1px solid rgba(196,133,60,0.15); position: sticky; top: 0; z-index: 10; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
     .subnav-label { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-right: 12px; }
     .subnav a { color: var(--latte); margin: 0 8px; text-decoration: none; font-size: 13px; padding: 6px 10px; border-radius: 6px; min-height: 44px; display: inline-block; line-height: 1.6; }
     .subnav a:hover { color: var(--caramel); }
@@ -137,12 +137,16 @@
     <a href="/portfolio">포트폴리오</a>
     <a href="/asset">자산관리</a>
   </nav>
-  <div class="subnav">
+    <div class="subnav">
     <span class="subnav-label">세제</span>
-    <a href="/tax-optimization">절세 전략</a>
-    <a href="/tax/isa-guide">ISA 가이드</a>
-    <a href="/tax/pension-irp-comparison">연금·IRP</a>
-    <a href="/tax/global-income-tax-2026" class="active">종합소득세</a>
+    <a href="/tax-optimization" data-ga="click_subnav" data-ga-text="hub" data-ga-loc="tax_subnav">허브</a>
+    <a href="/tax/isa-guide" data-ga="click_subnav" data-ga-text="isa" data-ga-loc="tax_subnav">ISA</a>
+    <a href="/tax/irp-refund-guide" data-ga="click_subnav" data-ga-text="irp-refund" data-ga-loc="tax_subnav">IRP 환급</a>
+    <a href="/tax/pension-irp-comparison" data-ga="click_subnav" data-ga-text="pension-vs-irp" data-ga-loc="tax_subnav">연저펀 vs IRP</a>
+    <a href="/severance-irp-rollover" data-ga="click_subnav" data-ga-text="severance-irp" data-ga-loc="tax_subnav">퇴직금 IRP</a>
+    <a href="/tax/foreign-stock-capital-gains-2026" data-ga="click_subnav" data-ga-text="foreign-stock" data-ga-loc="tax_subnav">해외주식</a>
+    <a href="/tax/global-income-tax-2026" class="active" data-ga="click_subnav" data-ga-text="global-income" data-ga-loc="tax_subnav">종합소득세</a>
+    <a href="/tax-simulation" data-ga="click_subnav" data-ga-text="sim" data-ga-loc="tax_subnav">시뮬레이션</a>
   </div>
   <div class="container">
     <div class="header">

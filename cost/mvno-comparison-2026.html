@@ -40,7 +40,7 @@
     nav { background: var(--espresso); padding: 12px 16px; text-align: center; }
     nav a { color: var(--cream); margin: 0 12px; text-decoration: none; font-size: 14px; font-weight: 500; }
     nav a:hover { color: var(--caramel); }
-    .subnav { background: var(--dark-roast); padding: 8px 16px; text-align: center; border-bottom: 1px solid rgba(196,133,60,0.15); position: sticky; top: 0; z-index: 10; }
+    .subnav { background: var(--dark-roast); padding: 8px 16px; text-align: center; border-bottom: 1px solid rgba(196,133,60,0.15); position: sticky; top: 0; z-index: 10; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
     .subnav-label { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-right: 12px; }
     .subnav a { color: var(--latte); margin: 0 8px; text-decoration: none; font-size: 13px; padding: 6px 10px; border-radius: 6px; min-height: 44px; display: inline-block; line-height: 1.6; }
     .subnav a:hover { color: var(--caramel); }
@@ -137,11 +137,11 @@
     <a href="/portfolio">포트폴리오</a>
     <a href="/asset">자산관리</a>
   </nav>
-  <div class="subnav">
+    <div class="subnav">
     <span class="subnav-label">고정비</span>
-    <a href="/cost-optimization">절약 전략</a>
-    <a href="/cost/area-04-telecom">통신비 영역</a>
-    <a href="/cost/mvno-comparison-2026" class="active">알뜰폰 비교</a>
+    <a href="/cost-optimization" data-ga="click_subnav" data-ga-text="guide" data-ga-loc="cost_subnav">가이드</a>
+    <a href="/cost-simulation" data-ga="click_subnav" data-ga-text="sim" data-ga-loc="cost_subnav">시뮬레이션</a>
+    <a href="/cost/mvno-comparison-2026" class="active" data-ga="click_subnav" data-ga-text="mvno" data-ga-loc="cost_subnav">알뜰폰</a>
   </div>
   <div class="container">
     <div class="header">
