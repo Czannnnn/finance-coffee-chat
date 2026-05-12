@@ -28,6 +28,7 @@
   <!-- GA4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZEG7YQ80S"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
+  <script defer src="/js/ga-click-tracker.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -490,17 +491,7 @@
 
   <div class="toast" id="toast">링크가 복사되었어요</div>
 
-  <script>
-  document.addEventListener('click', function(e) {
-    var el = e.target.closest('[data-ga]');
-    if (!el) return;
-    if (typeof gtag !== 'function') return;
-    gtag('event', el.dataset.ga, {
-      click_text: el.dataset.gaText || el.textContent.trim().substring(0, 50),
-      click_location: el.dataset.gaLoc || 'unknown'
-    });
-  });
-  </script>
+  
   <script src="js/tax-simulator.js"></script>
 <footer class="site-contact" style="text-align:center;padding:24px 16px;font-size:12px;color:#6B3A2A;border-top:1px solid rgba(107,58,42,0.15);margin-top:32px;font-family:inherit;">Contact · <a href="mailto:hello@financecoffeechat.com" style="color:inherit;text-decoration:underline;" data-ga="click_contact_email" data-ga-text="hello@financecoffeechat.com" data-ga-loc="footer">hello@financecoffeechat.com</a></footer>
 </body>
