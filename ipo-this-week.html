@@ -192,6 +192,7 @@
     ]
   }
   </script>
+  <script src="/js/last-updated.js" defer></script>
 </head>
 <body>
   <nav>
@@ -229,7 +230,7 @@
       <div class="byline">
         <div class="avatar" aria-hidden="true">투</div>
         <div class="meta">
-          <strong>투자 커피챗 에디터</strong> · IPO 데이터 파이프라인 · <span class="updated">2026-05-10 갱신</span>
+          <strong>투자 커피챗 에디터</strong> · IPO 데이터 파이프라인 · <span class="updated"></span>
           <span id="freshness" class="freshness green" aria-live="polite">🟢 데이터 fresh</span>
         </div>
       </div>
@@ -321,6 +322,7 @@
         });
 
         renderFreshness(lastUpdated);
+        if (lastUpdated && typeof window.cfcSetLastUpdated === 'function') window.cfcSetLastUpdated(lastUpdated);
         if (weekItems.length === 0) renderEmpty();
         else renderWeek(weekItems, monday, today);
       } catch (e) {

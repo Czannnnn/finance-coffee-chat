@@ -213,6 +213,7 @@
     ]
   }
   </script>
+  <script src="/js/last-updated.js" defer></script>
 </head>
 <body>
   <nav>
@@ -241,7 +242,7 @@
     <header class="header">
       <div class="badge">IPO Today</div>
       <h1>오늘의 <em>공모주</em></h1>
-      <div class="subtitle"><span id="todayStr">2026-05-10</span> 청약 가능 종목 · 마감 카운트다운</div>
+      <div class="subtitle"><span id="todayStr">오늘</span> 청약 가능 종목 · 마감 카운트다운</div>
       <div class="divider"></div>
       <div class="answer-box" role="region" aria-label="오늘의 공모주 핵심 답변">
         <div class="answer-label">한 줄 답변</div>
@@ -250,7 +251,7 @@
       <div class="byline">
         <div class="avatar" aria-hidden="true">투</div>
         <div class="meta">
-          <strong>투자 커피챗 에디터</strong> · IPO 데이터 파이프라인 · <span class="updated">2026-05-10 갱신</span>
+          <strong>투자 커피챗 에디터</strong> · IPO 데이터 파이프라인 · <span class="updated"></span>
           <span id="freshness" class="freshness green" aria-live="polite">🟢 데이터 fresh</span>
         </div>
       </div>
@@ -370,6 +371,7 @@
         const todayItems = items.filter(it => it.subscribeStart && it.subscribeEnd && it.subscribeStart <= today && today <= it.subscribeEnd);
 
         renderFreshness(lastUpdated);
+        if (lastUpdated && typeof window.cfcSetLastUpdated === 'function') window.cfcSetLastUpdated(lastUpdated);
         if (todayItems.length === 0) renderEmpty(items);
         else renderItems(todayItems);
       } catch (e) {

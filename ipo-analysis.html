@@ -481,6 +481,7 @@
     ]
   }
   </script>
+  <script src="/js/last-updated.js" defer></script>
 </head>
 <body>
   <nav>
@@ -515,7 +516,7 @@
       <div style="max-width:760px;margin:14px auto 0;display:flex;align-items:center;justify-content:center;gap:10px;font-size:12px;color:var(--medium-roast);">
         <div aria-hidden="true" style="width:28px;height:28px;border-radius:50%;background:var(--caramel-light);display:flex;align-items:center;justify-content:center;color:var(--caramel);font-weight:700;font-size:13px;border:1px solid rgba(196,133,60,0.3);">투</div>
         <div style="line-height:1.5;text-align:left;">
-          <strong style="color:var(--dark-roast);font-weight:600;">투자 커피챗 에디터</strong> · IPO 데이터 파이프라인 · <span style="color:var(--caramel);font-weight:600;">2026-05-10 갱신</span><br>
+          <strong style="color:var(--dark-roast);font-weight:600;">투자 커피챗 에디터</strong> · IPO 데이터 파이프라인 · <span class="updated" style="color:var(--caramel);font-weight:600;"></span><br>
           <span style="font-size:11px;">DART OpenDart API document.xml 일 4회 자동 갱신 + 과거 시초가 표본 17건 평균 +159.1% 등급 산출</span>
         </div>
       </div>
@@ -902,7 +903,15 @@
         // 등급 자동 계산
         IPO_DATA.forEach(ipo => { ipo.grade = calcGrade(ipo); });
 
-        console.log(`Google Sheets에서 ${IPO_DATA.length}건 로드 완료`);
+        // 시트 updated 컬럼 최댓값으로 byline · JSON-LD dateModified 동기화
+        const latestUpdate = IPO_DATA.reduce((max, ipo) => {
+          return ipo.updated && (!max || ipo.updated > max) ? ipo.updated : max;
+        }, null);
+        if (latestUpdate && typeof window.cfcSetLastUpdated === 'function') {
+          window.cfcSetLastUpdated(latestUpdate);
+        }
+
+        console.log(`Google Sheets에서 ${IPO_DATA.length}건 로드 완료 (최종 업데이트: ${latestUpdate || 'n/a'})`);
         showDataSource('live');
       } catch (e) {
         console.error('Sheets 로드 실패, 샘플 데이터 사용:', e);
