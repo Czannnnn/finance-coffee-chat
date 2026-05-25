@@ -106,7 +106,21 @@
     .faq-item p { margin-top: 12px; color: var(--dark-roast); font-size: 14px; line-height: 1.85; }
     .faq-item p strong { color: var(--espresso); }
     .disclaimer { margin-top: 48px; padding: 16px 20px; background: var(--white); border: 1px dashed rgba(44,24,16,0.15); border-radius: 10px; font-size: 12px; color: var(--medium-roast); line-height: 1.7; }
-    @media (max-width: 600px) { .container { padding: 32px 16px 48px; } .header h1 { font-size: 24px; } .section-title { font-size: 19px; } .compare-table th, .compare-table td { padding: 10px; font-size: 13px; } .answer-box { padding: 16px 18px; } .answer-box .answer-text { font-size: 15px; } }
+    .calc-card { background: var(--white); border: 1px solid var(--caramel); border-radius: 12px; padding: 22px 24px; box-shadow: 0 4px 16px rgba(196,133,60,0.10); margin-top: 12px; }
+    .calc-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .calc-row label { font-size: 13.5px; font-weight: 600; color: var(--espresso); }
+    .calc-row input { padding: 12px 14px; border: 1px solid rgba(44,24,16,0.18); border-radius: 8px; font-size: 16px; font-family: inherit; color: var(--espresso); background: var(--white); -webkit-appearance: none; appearance: none; }
+    .calc-row input:focus { outline: 2px solid var(--caramel); outline-offset: -1px; border-color: var(--caramel); }
+    .calc-row small { font-size: 11.5px; color: var(--medium-roast); margin-top: 2px; line-height: 1.5; }
+    #calc-btn { display: block; width: 100%; padding: 14px 18px; background: var(--espresso); color: var(--cream); border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 6px; transition: background 0.15s; min-height: 44px; }
+    #calc-btn:hover { background: var(--dark-roast); }
+    #calc-btn:focus { outline: 2px solid var(--caramel); outline-offset: 2px; }
+    .calc-output { min-height: 0; margin-top: 16px; padding: 0; background: transparent; border-radius: 8px; font-size: 14.5px; line-height: 1.8; color: var(--dark-roast); display: none; }
+    .calc-output.has-result { display: block; padding: 16px 18px; background: var(--cream); }
+    .calc-output strong { color: var(--espresso); font-weight: 700; }
+    .calc-output .calc-headline { font-size: 16px; color: var(--espresso); font-weight: 700; margin-bottom: 8px; }
+    .calc-disclaimer { display: block; margin-top: 10px; font-size: 11.5px; color: var(--medium-roast); line-height: 1.55; }
+    @media (max-width: 600px) { .container { padding: 32px 16px 48px; } .header h1 { font-size: 24px; } .section-title { font-size: 19px; } .compare-table th, .compare-table td { padding: 10px; font-size: 13px; } .answer-box { padding: 16px 18px; } .answer-box .answer-text { font-size: 15px; } .calc-card { padding: 18px 16px; } }
   </style>
   <script type="application/ld+json">
   {
@@ -156,6 +170,21 @@
         "name": "환율은 어떻게 적용하나요?",
         "acceptedAnswer": { "@type": "Answer", "text": "양도일(결제일) 기준의 매매기준율로 환산합니다. 매수 시점·매도 시점 각각 결제일 환율을 적용해 원화 환산 차익을 계산합니다. 증권사 거래내역서가 자동 환산해 제공하는 경우가 많습니다." }
       }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "해외주식 양도소득세 간이 계산 방법",
+    "description": "매수·매도 금액으로 250만원 기본공제 적용 후 22% 세율을 적용해 해외주식 양도세를 산출하는 4단계.",
+    "totalTime": "PT3M",
+    "step": [
+      {"@type": "HowToStep", "position": 1, "name": "양도차익 계산", "text": "원화 환산 매도 금액에서 매수 금액을 차감해 양도차익을 구합니다."},
+      {"@type": "HowToStep", "position": 2, "name": "기본공제 차감", "text": "연 250만원 기본공제를 차감해 과세표준을 산출합니다 (음수면 0)."},
+      {"@type": "HowToStep", "position": 3, "name": "세액 계산", "text": "과세표준에 22% (양도세 20% + 지방소득세 2%)를 곱해 세액을 산출합니다."},
+      {"@type": "HowToStep", "position": 4, "name": "홈택스 신고", "text": "양도 연도의 다음 해 5월 1일부터 31일 사이 홈택스에서 양도소득세 확정신고와 납부를 동시에 완료합니다."}
     ]
   }
   </script>
@@ -219,13 +248,31 @@
       </table>
     </div>
 
-    <div class="section">
-      <h2 class="section-title">계산 예시</h2>
-      <p class="section-desc">2025년 미국 ETF 매도 차익 1,000만원 케이스</p>
-      <div class="lede">
-        <strong>양도차익</strong> 1,000만원 − <strong>기본공제</strong> 250만원 = <strong>과세표준</strong> 750만원<br>
-        <strong>세액</strong> 750만원 × 22% = <strong>165만원</strong> (양도세 150만 + 지방세 15만)<br><br>
-        손실이 있는 종목과 같은 연도 내 매도해 통산하면 과세표준이 낮아져 세액을 줄일 수 있습니다. 12월 말 손절 매도로 손익 통산하는 방법은 흔히 알려진 절세 전략이지만, 매도 후 동일 종목 재매수 시 매수단가가 바뀌어 다음 해 부담이 늘 수 있으니 주의가 필요합니다.
+    <div class="section" id="section-calc">
+      <h2 class="section-title">간이 양도세 계산기</h2>
+      <p class="section-desc">매수·매도 결제 금액(원화 환산)을 입력하면 250만원 기본공제와 22% 세율을 자동 적용해 세액을 산출합니다.</p>
+      <div class="calc-card" role="form" aria-labelledby="calc-form-label">
+        <div id="calc-form-label" class="visually-hidden" style="position:absolute;left:-9999px">해외주식 양도세 간이 계산기</div>
+        <div class="calc-row">
+          <label for="calc-buy">매수 금액 (원, 결제일 환율 환산)</label>
+          <input id="calc-buy" type="number" inputmode="numeric" min="0" step="10000" placeholder="예: 13,000,000" autocomplete="off">
+        </div>
+        <div class="calc-row">
+          <label for="calc-sell">매도 금액 (원, 결제일 환율 환산)</label>
+          <input id="calc-sell" type="number" inputmode="numeric" min="0" step="10000" placeholder="예: 18,200,000" autocomplete="off">
+        </div>
+        <div class="calc-row">
+          <label for="calc-fx">참고 환율 (USD/KRW, 선택)</label>
+          <input id="calc-fx" type="number" inputmode="decimal" min="0" step="0.01" placeholder="예: 1380" autocomplete="off">
+          <small>※ 원화 금액을 직접 입력하시면 환율은 비워두셔도 됩니다. 외화 거래는 매수·매도 결제일 매매기준율로 각각 환산한 원화 금액을 사용하세요.</small>
+        </div>
+        <button type="button" id="calc-btn" data-ga="click_tax_calc" data-ga-text="capital-gains-calc" data-ga-loc="tax_foreign_stock">세액 계산</button>
+        <div id="calc-output" class="calc-output" aria-live="polite"></div>
+        <small class="calc-disclaimer">※ 단순 참고용 계산입니다. 손익 통산, 외국납부세액 공제, 필요경비, 분납 등 실제 신고는 거래내역과 홈택스·세무대리인 안내를 기준으로 진행하세요.</small>
+      </div>
+      <div class="lede" style="margin-top:18px">
+        <strong>예시</strong> · 2025년 미국 ETF를 1,300만원에 사서 1,820만원에 매도 → 양도차익 520만원 − 기본공제 250만원 = 과세표준 270만원 → 세액 약 <strong>59만 4천원</strong>.<br>
+        손실 종목을 같은 해 매도해 통산하면 과세표준을 낮춰 세액을 줄일 수 있지만, 매도 후 동일 종목 재매수 시 매수단가가 바뀌어 다음 해 부담이 늘 수 있으니 주의가 필요합니다.
       </div>
     </div>
 
@@ -285,5 +332,51 @@
       본 페이지는 일반 정보 제공 목적이며 특정 금융상품 또는 세무 처리에 대한 권유·자문이 아닙니다. 실제 신고는 본인의 거래내역과 국세청·세무대리인의 안내를 기준으로 진행하세요. 2026년 5월 신고 기준이며 향후 세법 개정 시 내용이 달라질 수 있습니다.
     </div>
   </div>
+  <script>
+    (function () {
+      var btn = document.getElementById('calc-btn');
+      var out = document.getElementById('calc-output');
+      var buyEl = document.getElementById('calc-buy');
+      var sellEl = document.getElementById('calc-sell');
+      if (!btn || !out || !buyEl || !sellEl) return;
+
+      function fmt(n) { return Math.round(n).toLocaleString('ko-KR') + ' 원'; }
+
+      function compute() {
+        var buy = parseFloat(buyEl.value) || 0;
+        var sell = parseFloat(sellEl.value) || 0;
+        var profit = sell - buy;
+        var deduction = 2500000;
+        var base = Math.max(0, profit - deduction);
+        var tax = base * 0.22;
+        var national = base * 0.20;
+        var local = base * 0.02;
+
+        var html;
+        if (buy <= 0 && sell <= 0) {
+          html = '<div class="calc-headline">매수·매도 금액을 입력해 주세요</div>';
+        } else if (profit <= 0) {
+          html = '<div class="calc-headline">양도차익 ' + fmt(profit) + ' · 세액 0 원</div>' +
+                 '손실분은 같은 해 다른 해외주식 이익과 통산할 수 있습니다 (국내주식과는 통산 불가).';
+        } else if (base <= 0) {
+          html = '<div class="calc-headline">양도차익 ' + fmt(profit) + ' · 세액 0 원</div>' +
+                 '250만원 기본공제 한도 안에 있어 납부 세액이 0원입니다. 단, 손익 통산 이력 관리를 위해 0원 신고가 권장됩니다.';
+        } else {
+          html = '<div class="calc-headline">예상 세액 ' + fmt(tax) + '</div>' +
+                 '<strong>양도차익</strong> ' + fmt(profit) + ' − <strong>기본공제</strong> 2,500,000 원 = <strong>과세표준</strong> ' + fmt(base) + '<br>' +
+                 '<strong>세액 (22%)</strong> ' + fmt(tax) + ' = 양도세 ' + fmt(national) + ' + 지방소득세 ' + fmt(local);
+        }
+        out.classList.add('has-result');
+        out.innerHTML = html;
+      }
+
+      btn.addEventListener('click', compute);
+      [buyEl, sellEl].forEach(function (el) {
+        el.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') { e.preventDefault(); compute(); }
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
