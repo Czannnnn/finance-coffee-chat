@@ -182,12 +182,17 @@
         }
         renderResults(q, results, resultsEl);
         // GA4: search_query (debounced, 같은 query 중복 전송 방지)
+        // + GA4 표준 view_search_results (site search 표준 보고서용)
         if (q && q !== lastQuerySent && typeof gtag === 'function') {
           lastQuerySent = q;
           try {
             gtag('event', 'search_query', {
               click_text: q.substring(0, 80),
               click_location: 'gnb_search',
+              result_count: results.length
+            });
+            gtag('event', 'view_search_results', {
+              search_term: q.substring(0, 80),
               result_count: results.length
             });
           } catch (e) { /* swallow */ }

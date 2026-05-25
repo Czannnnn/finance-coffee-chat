@@ -1151,6 +1151,18 @@
     }
 
     // --- Summary ---------------------------------------------------------
+    // GA4 발화 헬퍼 — Summary 합계 변동 디바운스
+    var summaryDebounce = null;
+    var lastSummarySent = '';
+    function band(v) {
+      if (v <= 0) return 'zero';
+      if (v < 100) return 'lt_100';
+      if (v < 300) return 'lt_300';
+      if (v < 600) return 'lt_600';
+      if (v < 1000) return 'lt_1000';
+      return 'ge_1000';
+    }
+
     function updateSummary() {
       var total = 0;
       Object.keys(state.savings).forEach(function(k){ total += state.savings[k] || 0; });
@@ -1161,6 +1173,24 @@
         var label = SEGMENT_DEFAULTS[state.segment].label;
         $('summaryMeta').textContent = state.segment + ' · ' + label + ' · 선택 세그먼트 기준 예상치';
       }
+
+      // GA4: view_cost_summary (Summary 합계 변동 시 1.2초 디바운스, segment+band 트래킹)
+      if (typeof gtag !== 'function' || !state.segment) return;
+      if (summaryDebounce) clearTimeout(summaryDebounce);
+      summaryDebounce = setTimeout(function () {
+        var sig = state.segment + ':' + band(total);
+        if (sig === lastSummarySent) return;
+        lastSummarySent = sig;
+        try {
+          gtag('event', 'view_cost_summary', {
+            click_text: state.segment,
+            click_location: 'cost_sim_summary',
+            segment_key: state.segment,
+            total_band: band(total),
+            total_yearly: Math.round(total)
+          });
+        } catch (e) { /* swallow */ }
+      }, 1200);
     }
 
     // --- Segment selection & defaults -----------------------------------
@@ -1186,6 +1216,17 @@
       $('areaSection').classList.remove('area-disabled');
       applyDefaults(seg);
       recalcAll();
+
+      // GA4: cost_sim_segment_select (시나리오 선택 진입점 측정)
+      if (typeof gtag === 'function') {
+        try {
+          gtag('event', 'cost_sim_segment_select', {
+            click_text: seg,
+            click_location: 'cost_sim_step1',
+            segment_key: seg
+          });
+        } catch (e) { /* swallow */ }
+      }
     }
 
     function recalcAll() {

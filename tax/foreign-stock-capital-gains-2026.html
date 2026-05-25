@@ -340,11 +340,27 @@
       var out = document.getElementById('calc-output');
       var buyEl = document.getElementById('calc-buy');
       var sellEl = document.getElementById('calc-sell');
+      var fxEl = document.getElementById('calc-fx');
       if (!btn || !out || !buyEl || !sellEl) return;
 
       function fmt(n) { return Math.round(n).toLocaleString('ko-KR') + ' 원'; }
 
-      function compute() {
+      function bandProfit(profit) {
+        if (profit <= 0) return 'loss';
+        if (profit < 2500000) return 'under_deduction';
+        if (profit < 10000000) return 'taxable_lt_10m';
+        if (profit < 50000000) return 'taxable_lt_50m';
+        return 'taxable_ge_50m';
+      }
+      function bandTax(tax) {
+        if (tax <= 0) return 'zero';
+        if (tax < 1000000) return 'tax_lt_1m';
+        if (tax < 5000000) return 'tax_lt_5m';
+        if (tax < 20000000) return 'tax_lt_20m';
+        return 'tax_ge_20m';
+      }
+
+      function compute(source) {
         var buy = parseFloat(buyEl.value) || 0;
         var sell = parseFloat(sellEl.value) || 0;
         var profit = sell - buy;
@@ -354,30 +370,77 @@
         var national = base * 0.20;
         var local = base * 0.02;
 
-        var html;
+        var html, segment;
         if (buy <= 0 && sell <= 0) {
           html = '<div class="calc-headline">매수·매도 금액을 입력해 주세요</div>';
+          segment = 'empty';
         } else if (profit <= 0) {
           html = '<div class="calc-headline">양도차익 ' + fmt(profit) + ' · 세액 0 원</div>' +
                  '손실분은 같은 해 다른 해외주식 이익과 통산할 수 있습니다 (국내주식과는 통산 불가).';
+          segment = 'loss';
         } else if (base <= 0) {
           html = '<div class="calc-headline">양도차익 ' + fmt(profit) + ' · 세액 0 원</div>' +
                  '250만원 기본공제 한도 안에 있어 납부 세액이 0원입니다. 단, 손익 통산 이력 관리를 위해 0원 신고가 권장됩니다.';
+          segment = 'under_deduction';
         } else {
           html = '<div class="calc-headline">예상 세액 ' + fmt(tax) + '</div>' +
                  '<strong>양도차익</strong> ' + fmt(profit) + ' − <strong>기본공제</strong> 2,500,000 원 = <strong>과세표준</strong> ' + fmt(base) + '<br>' +
                  '<strong>세액 (22%)</strong> ' + fmt(tax) + ' = 양도세 ' + fmt(national) + ' + 지방소득세 ' + fmt(local);
+          segment = 'taxable';
         }
         out.classList.add('has-result');
         out.innerHTML = html;
+
+        // GA4: tax_calc_result (결과 segment + 세액·차익 구간 트래킹)
+        if (typeof gtag === 'function' && segment !== 'empty') {
+          try {
+            gtag('event', 'tax_calc_result', {
+              click_text: segment,
+              click_location: 'tax_foreign_stock',
+              result_segment: segment,
+              profit_band: bandProfit(profit),
+              tax_band: bandTax(tax),
+              trigger_source: source || 'button'
+            });
+          } catch (e) { /* swallow */ }
+        }
       }
 
-      btn.addEventListener('click', compute);
+      btn.addEventListener('click', function () { compute('button'); });
       [buyEl, sellEl].forEach(function (el) {
         el.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter') { e.preventDefault(); compute(); }
+          if (e.key === 'Enter') { e.preventDefault(); compute('enter'); }
         });
       });
+
+      // GA4: input 변경 트래킹 (디바운스 600ms, funnel drop 측정)
+      var inputDebounce = null;
+      var lastInputSent = '';
+      function onInput(field) {
+        return function () {
+          if (inputDebounce) clearTimeout(inputDebounce);
+          inputDebounce = setTimeout(function () {
+            var buy = parseFloat(buyEl.value) || 0;
+            var sell = parseFloat(sellEl.value) || 0;
+            var sig = field + ':' + buy + '/' + sell;
+            if (sig === lastInputSent) return;
+            lastInputSent = sig;
+            if (typeof gtag === 'function' && (buy > 0 || sell > 0)) {
+              try {
+                gtag('event', 'click_tax_calc_input', {
+                  click_text: field,
+                  click_location: 'tax_foreign_stock',
+                  buy_filled: buy > 0 ? 1 : 0,
+                  sell_filled: sell > 0 ? 1 : 0
+                });
+              } catch (e) { /* swallow */ }
+            }
+          }, 600);
+        };
+      }
+      buyEl.addEventListener('input', onInput('buy'));
+      sellEl.addEventListener('input', onInput('sell'));
+      if (fxEl) fxEl.addEventListener('input', onInput('fx'));
     })();
   </script>
 </body>
