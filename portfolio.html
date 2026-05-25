@@ -260,6 +260,29 @@
       margin-top: 12px; line-height: 1.6;
     }
     .simulate-note strong { color: var(--dark-roast); font-weight: 500; }
+    .recommend-section {
+      background: var(--white); border-radius: 16px; padding: 24px 22px;
+      border: 1px solid rgba(196,133,60,0.25); box-shadow: 0 2px 16px rgba(196,133,60,0.08);
+      margin-bottom: 24px;
+    }
+    .recommend-header { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: var(--espresso); margin-bottom: 8px; }
+    .recommend-header .emoji { font-size: 18px; }
+    .recommend-disclaimer { font-size: 11.5px; color: var(--medium-roast); line-height: 1.55; margin-bottom: 16px; padding: 10px 12px; background: var(--oat-milk); border-radius: 6px; border-left: 2px solid var(--caramel); }
+    .recommend-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .recommend-card {
+      display: flex; flex-direction: column; gap: 8px;
+      padding: 16px 16px 14px;
+      background: var(--white); border: 1px solid var(--caramel-light); border-radius: 12px;
+      text-decoration: none; color: var(--espresso);
+      transition: all 0.18s; min-height: 44px;
+    }
+    .recommend-card:hover { border-color: var(--caramel); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(196,133,60,0.12); }
+    .recommend-card .badge-pct { display: inline-block; padding: 3px 10px; background: var(--caramel-light); color: var(--caramel); font-size: 11px; font-weight: 700; border-radius: 12px; letter-spacing: 0.3px; align-self: flex-start; }
+    .recommend-card .card-msg { font-size: 13.5px; line-height: 1.55; color: var(--dark-roast); font-weight: 500; }
+    .recommend-card .card-cta { font-size: 12px; color: var(--caramel); font-weight: 700; margin-top: auto; letter-spacing: 0.2px; }
+    .deep-link-row { text-align: center; margin: 28px 0 12px; padding: 14px 16px; background: var(--white); border-radius: 10px; border: 1px dashed rgba(196,133,60,0.3); font-size: 13.5px; color: var(--medium-roast); }
+    .deep-link-row a { color: var(--caramel); font-weight: 700; text-decoration: none; }
+    .deep-link-row a:hover { text-decoration: underline; }
     @media (max-width: 480px) {
       .container { padding: 32px 16px 48px; }
       .header h1 { font-size: 26px; }
@@ -269,6 +292,10 @@
       .chart-actions { flex-direction: column; }
       .btn-back, .btn-save { flex: none; }
       .talk-grid { grid-template-columns: 1fr; }
+      .recommend-cards { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .recommend-cards { grid-template-columns: 1fr; }
     }
   
     /* === A13 mobile a11y (사이클 6-8) === */
@@ -339,8 +366,8 @@
 <body>
   <nav>
     <a href="/" data-ga="click_gnb" data-ga-text="홈" data-ga-loc="gnb">홈</a>
-    <a href="/portfolio" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
     <a href="/asset" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
+    <a href="/portfolio" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
     <a href="/index-investing" data-ga="click_gnb" data-ga-text="지수투자" data-ga-loc="gnb">지수투자</a>
     <a href="/tax-optimization" data-ga="click_gnb" data-ga-text="절세" data-ga-loc="gnb">절세</a>
     <a href="/ipo" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
@@ -378,6 +405,12 @@
           <canvas id="pieChart"></canvas>
         </div>
         <div class="legend-grid" id="legendGrid"></div>
+      </div>
+
+      <div id="recommendSection" class="recommend-section" style="display:none">
+        <div class="recommend-header"><span class="emoji">💡</span><span>내 포트폴리오 기반 추천</span></div>
+        <p class="recommend-disclaimer">아래 추천은 일반 정보 제공용이며 투자 추천이 아닙니다. 본인 상황과 판단을 바탕으로 활용하세요.</p>
+        <div class="recommend-cards" id="recommendCards"></div>
       </div>
 
       <div class="talk-section">
@@ -439,6 +472,10 @@
         <button class="btn-back" onclick="goBack()" data-ga="click_edit_chart" data-ga-text="수정하기" data-ga-loc="portfolio_chart">← 수정하기</button>
         <button class="btn-save" id="btnSave" onclick="saveChart()" data-ga="click_save_chart" data-ga-text="이미지로 저장" data-ga-loc="portfolio_chart">이미지로 저장</button>
       </div>
+
+      <div class="deep-link-row">
+        포트폴리오 이론부터 다시 보고 싶다면 <a href="/asset" data-ga="click_portfolio_to_asset" data-ga-text="자산관리 101로" data-ga-loc="portfolio_chart_deep">자산관리 101로 가기 →</a>
+      </div>
     </div>
   </div>
 
@@ -457,6 +494,59 @@
     const CUSTOM_COLORS = ['#6A8EAE', '#D4806B', '#5B8C72', '#A67B9B', '#8C7B5E', '#6B9BAD'];
     let customCount = 0;
     let chartInstance = null;
+
+    // 자산 비중 기반 맞춤 추천 규칙 (우선순위 정렬, 상위 3개 노출)
+    const RECOMMEND_RULES = [
+      { id: 'no_pension', test: function (b) { return b.pensionPct === 0; }, target: '/tax/pension-irp-comparison', msg: '노후 절세 계좌가 비어 있습니다 — 연금저축·IRP 세액공제 13.2~16.5% 비교 보기', getLabel: function () { return '연금 0%'; } },
+      { id: 'stock_heavy', test: function (b) { return b.stockPct >= 60; }, target: '/index-investing', msg: '주식 비중이 높습니다 — 4대 지수 FIRE 로드맵으로 글로벌 분산 점검', getLabel: function (b) { return '주식 ' + Math.round(b.stockPct) + '%'; } },
+      { id: 'cash_heavy', test: function (b) { return b.cashPct >= 30; }, target: '/index-simulation', msg: '현금 비중이 큽니다 — 단순 적립 시뮬레이션으로 기회비용 가늠해 보기', getLabel: function (b) { return '현금 ' + Math.round(b.cashPct) + '%'; } },
+      { id: 'no_bond', test: function (b) { return b.bondPct === 0 && b.totalDefaultPct > 0; }, target: '/asset', msg: '안전자산이 없습니다 — 자산관리 101에서 5대 자산군 역할 다시 보기', getLabel: function () { return '채권 0%'; } },
+      { id: 'alt_heavy', test: function (b) { return b.altPct >= 20; }, target: '/portfolio', msg: '대안투자 비중이 큽니다 — 변동성이 큰 자산은 리밸런싱 주기를 더 짧게 설정', getLabel: function (b) { return '대안 ' + Math.round(b.altPct) + '%'; } },
+      { id: 'real_estate_heavy', test: function (b) { return b.realEstatePct >= 50; }, target: '/tax-optimization', msg: '부동산 편중 — ISA·IRP 등 금융자산 절세 계좌로 다각화 검토', getLabel: function (b) { return '거주 ' + Math.round(b.realEstatePct) + '%'; } },
+      { id: 'fallback_isa', test: function () { return true; }, target: '/tax/isa-guide', msg: '다음 단계: ISA 한도부터 점검 (일반·서민·농어민형 한도 비교)', getLabel: function () { return 'ISA'; } }
+    ];
+
+    function computeBuckets(data, total) {
+      var m = {};
+      DEFAULT_TYPES.forEach(function (t) { m[t.name] = 0; });
+      data.forEach(function (d) { if (Object.prototype.hasOwnProperty.call(m, d.name)) m[d.name] += d.value; });
+      function pct(name) { return total > 0 ? (m[name] / total) * 100 : 0; }
+      return {
+        stockPct: pct('주식 / ETF'),
+        bondPct: pct('예·적금 / 채권'),
+        pensionPct: pct('연금 (연금저축/IRP)'),
+        realEstatePct: pct('거주 / 청약'),
+        altPct: pct('대안투자 (코인 등)'),
+        cashPct: pct('현금성 (CMA/파킹)'),
+        totalDefaultPct: pct('주식 / ETF') + pct('예·적금 / 채권') + pct('연금 (연금저축/IRP)') + pct('거주 / 청약') + pct('대안투자 (코인 등)') + pct('현금성 (CMA/파킹)')
+      };
+    }
+
+    function generateRecommendations(data, total) {
+      var section = document.getElementById('recommendSection');
+      var cards = document.getElementById('recommendCards');
+      if (!section || !cards) return;
+      var buckets = computeBuckets(data, total);
+      var matched = RECOMMEND_RULES.filter(function (r) { return r.test(buckets); }).slice(0, 3);
+      cards.innerHTML = matched.map(function (r) {
+        var label = r.getLabel(buckets);
+        return '<a class="recommend-card" href="' + r.target + '" data-ga="click_portfolio_recommend" data-ga-text="rule:' + r.id + '|target:' + r.target + '" data-ga-loc="portfolio_recommend">'
+          + '<span class="badge-pct">' + label + '</span>'
+          + '<div class="card-msg">' + r.msg + '</div>'
+          + '<div class="card-cta">→ 보러 가기</div>'
+          + '</a>';
+      }).join('');
+      section.style.display = matched.length > 0 ? 'block' : 'none';
+      // view event는 generate마다 1회 (입력 변경 후 재진입도 새로 카운트)
+      if (matched.length > 0 && typeof gtag === 'function') {
+        try {
+          gtag('event', 'view_portfolio_recommendation', {
+            click_text: 'rules:' + matched.map(function (r) { return r.id; }).join(','),
+            click_location: 'portfolio_recommend'
+          });
+        } catch (e) { /* swallow */ }
+      }
+    }
 
     function init() {
       const container = document.getElementById('defaultRows');
@@ -593,6 +683,8 @@
             <span class="legend-pct">${pct}%</span>
           </div>`;
       });
+
+      generateRecommendations(data, total);
 
       const saveBtn = document.getElementById('btnSave');
       if (saveBtn) {
