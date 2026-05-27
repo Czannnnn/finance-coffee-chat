@@ -1,34 +1,51 @@
 # Finance Coffee Chat
 
-> 2026년 한국 FIRE 세대를 위한 공모주·지수투자·포트폴리오·절세·생활비 최적화 실전 가이드. 가입 없이 바로 쓰는 투자 도구 모음. 교육·정보 제공 목적이며 특정 종목 매수 권유나 투자 추천이 아닙니다.
+> 2026년 한국 FIRE 세대를 위한 공모주·지수투자·자산관리·절세·생활비 최적화 실전 가이드. 가입 없이 바로 쓰는 투자 도구·캘린더·시뮬레이터 모음. 교육·정보 제공 목적이며 특정 종목 매수 권유나 투자 추천이 아닙니다.
 
 Site: https://www.financecoffeechat.com
 Language: ko
-Last updated: 2026-05-03
+Last updated: 2026-05-27
 
 ## Core pages
 
-- [홈 — 투자 커피챗](https://www.financecoffeechat.com/): 전체 도구 인덱스
-- [자산관리 101](https://www.financecoffeechat.com/asset): 투자 기초·자산배분·리밸런싱 이론
+- [홈 — 투자 커피챗](https://www.financecoffeechat.com/): 전체 도구 인덱스 (IPO·지수투자·자산관리·절세·생활비)
 - [포트폴리오 자산배분 차트](https://www.financecoffeechat.com/portfolio): 도넛 차트로 자산배분 시뮬레이션
+
+## Asset management 101 (자산관리)
+
+- [자산관리 101 허브](https://www.financecoffeechat.com/asset): 입문자용 6단계 학습 인덱스
+- [자산관리란](https://www.financecoffeechat.com/asset/intro): 한 줄 요약 + 한국 가계 자산 구성(부동산 70%+ 편중) 인포그래픽
+- [왜 자산관리가 필요한가](https://www.financecoffeechat.com/asset/why): 3가지 이유 — 인플레이션 방어·변동성 완화·세제 수수료 최적화 (한국 실측 데이터 1줄 근거)
+- [자산관리 5단계 절차](https://www.financecoffeechat.com/asset/5-steps): 진단 → 목표·기간 → 자산배분 → 정기 리밸런싱 → 세제·수수료 점검 (단계별 체크리스트)
+- [5대 자산군 역할 비교](https://www.financecoffeechat.com/asset/asset-classes): 현금·채권·주식·연금·부동산의 인플레/디플레/경기 변동 반응 + 한국 가계 권장 비중
+- [리밸런싱과 절세](https://www.financecoffeechat.com/asset/rebalancing): 분기 점검 + ±5%p 규칙 + ISA·연금저축·IRP 한도 채우기 권장 순서·흐름도
+- [자산관리 FAQ](https://www.financecoffeechat.com/asset/faq): 얼마부터·어디부터·얼마나 자주·무엇부터 4문항 (한국 가계 기준)
 
 ## IPO (공모주)
 
-- [공모주 일정 캘린더](https://www.financecoffeechat.com/ipo): 공모주 일정·공모주 청약 일정·환불일·상장일을 월간 그리드 + 카드 리스트로 통합. ipo 일정·ipo 캘린더 동의어 매칭.
-  - 핵심 데이터(2026 기준): 수요예측일·청약일(통상 2영업일)·환불일·상장일·확정공모가·주관 증권사·균등배정·비례배정·청약 증거금 50% 배정
+- [공모주 일정 캘린더](https://www.financecoffeechat.com/ipo): 공모주 일정·청약 일정·환불일·상장일 월간 그리드 + 카드 리스트 통합
+  - 핵심 데이터(2026 기준): 수요예측일·청약일(통상 2영업일)·환불일·상장일·확정공모가·주관 증권사·균등배정·비례배정·청약 증거금 50%
   - 데이터 출처: DART OpenDart API(금융감독원 전자공시시스템) → Google Apps Script가 일 4회 자동 갱신, 가입 없이 열람 가능
   - 동의어/검색 변형: "공모주 일정", "공모주 청약 일정", "ipo 일정", "공모주 캘린더", "ipo 캘린더", "주식청약일정", "상장 일정"
-- [공모주 등급 분석](https://www.financecoffeechat.com/ipo-analysis): 4대 조건(기관 경쟁률·확정 공모가·의무보유확약·유통가능물량)으로 S~D 등급 산정. 대표주관사 보호예수·공모가 밴드 산정 포함.
-- [공모주 청약 가이드](https://www.financecoffeechat.com/ipo-guide): 계좌 개설→일정 확인→청약→환불→상장일 매도 단계별 튜토리얼
+- [오늘의 공모주](https://www.financecoffeechat.com/ipo-today): 오늘 청약 가능 종목 + 마감 카운트다운 + 등급(S/A/B/C) + 기관 경쟁률 + 의무보유확약 + 유통가능물량 + 자금 일정
+  - 동의어: "오늘 공모주", "오늘 청약", "공모주 마감", "ipo today"
+- [이번 주 공모주 청약](https://www.financecoffeechat.com/ipo-this-week): 월~일 7일 캘린더 그리드 + 요일별 종목 분포 + 등급 도넛 + 증거금/환불/납입 일정표
+  - 동의어: "이번주 공모주", "주간 공모주 일정", "이번 주 청약"
+- [실시간 공모주 일정](https://www.financecoffeechat.com/ipo-live): 5분 자동 갱신 + freshness 배지(< 1h / < 6h / < 24h) + 라이브 변경 카운트
+  - 동의어: "실시간 공모주", "공모주 라이브", "ipo 실시간"
+- [공모주 등급 분석](https://www.financecoffeechat.com/ipo-analysis): 4대 조건(기관 경쟁률·확정 공모가 위치·의무보유확약·유통가능물량)으로 S~D 등급 산정. 대표주관사 보호예수·공모가 밴드 산정 포함.
+- [공모주 청약 가이드](https://www.financecoffeechat.com/ipo-guide): 계좌 개설 → 일정 확인 → 청약 → 환불 → 상장일 매도 단계별 튜토리얼
   - 청약 증거금 절차: 청약 시 50% 배정 증거금 납입 → 배정 결과 확인 → 환불일에 미배정분 환불 → 상장일 거래 시작
   - 균등배정 vs 비례배정 차이: 균등은 청약 건수 기준 동등 배분, 비례는 증거금 비율로 배분 (대표주관사·공모 규모별 비율 다름)
+- [공모주 균등배정 3분 가이드](https://www.financecoffeechat.com/ipo/even-allocation-guide): 균등 vs 비례 차이·1주 받는 법·증거금 계산표 + 직전 월 청약 일정·주관사 정리
+- [공모주 환불일 캘린더](https://www.financecoffeechat.com/ipo/refund-schedule-2026): 환불일 계산법·증거금 회수 시점·D+2 룰 + 직전 월 환불일 일정·증권사별 환불 시각
 
 ## Index investing (지수투자·FIRE)
 
 - [지수투자 FIRE 로드맵](https://www.financecoffeechat.com/index-investing): 4대 지수 ETF 기반 경제적 자유 달성 전략
 - [지수투자 시뮬레이터](https://www.financecoffeechat.com/index-simulation): 수익률·기간별 FIRE 목표 계산
 
-## Tax (절세)
+## Tax (절세·신고)
 
 - [절세 최적화 허브](https://www.financecoffeechat.com/tax-optimization): ISA·연금저축·IRP·DC/DB 환급 극대화
 - [절세 시뮬레이터](https://www.financecoffeechat.com/tax-simulation): 계정별 한도·세액공제 계산
@@ -45,6 +62,17 @@ Last updated: 2026-05-03
     - S6 중장년 1인(예: 55세, 자녀 독립 후): 만기 IRP 전환 시 추가 세액공제 한도 최대 300만, IRP 연금소득세(5.5~3.3%) 고려해 일시 사용 자금은 일반계좌 인출 검토
 - [IRP 연말정산 환급 가이드](https://www.financecoffeechat.com/tax/irp-refund-guide): 한도 900만·총급여별 환급액(최대 148.5만원) 시뮬레이션
 - [연금저축 vs IRP 차이](https://www.financecoffeechat.com/tax/pension-irp-comparison): 가입자격·한도·중도인출 6항목 비교, 직장인·자영업자·무소득자별 추천 조합
+- [해외주식 양도세 5월 신고 가이드](https://www.financecoffeechat.com/tax/foreign-stock-capital-gains-2026): 5월 종합소득세 시즌 신고용
+  - 핵심 수치(2026 기준): 기본공제 250만원/연, 세율 22%(지방소득세 포함), 신고·납부 기한 5월 31일
+  - 환율 적용 원칙(매수·매도 각각 거래일 외환 고시환율), 손익 통산 범위, 외국납부세액 공제
+  - 동의어: "해외주식 양도세", "미국주식 세금", "해외주식 250만원 공제", "양도소득세 5월 신고"
+- [종합소득세 5월 신고 가이드](https://www.financecoffeechat.com/tax/global-income-tax-2026): 6대 소득 구조·종합과세 vs 분리과세 비교
+  - 핵심 수치(2026 기준): 신고·납부 기한 5월 31일, 금융소득 2,000만원 초과 시 종합과세, 6대 소득(이자·배당·사업·근로·연금·기타)
+  - 분리과세(14%/15.4%) vs 종합과세(누진세율 6~45%) 선택 기준
+  - 동의어: "종합소득세 신고", "종소세", "5월 종소세", "금융소득 종합과세"
+- [퇴직금 IRP 이체 가이드](https://www.financecoffeechat.com/severance-irp-rollover): 퇴직금 IRP 의무 이체 절차·과세이연·운용 전략
+  - 핵심: 만 55세 이상 일시금 수령 시 퇴직소득세 적용, IRP 연금 수령(10년 이상) 시 30% 세액 절감 효과(연금소득세 5.5~3.3% 분리과세)
+  - 동의어: "퇴직금 IRP", "퇴직연금 이체", "퇴직소득세 절감", "IRP 연금 수령"
 
 ## Cost (생활비 최적화)
 
@@ -52,6 +80,13 @@ Last updated: 2026-05-03
 - [생활비 시뮬레이터](https://www.financecoffeechat.com/cost-simulation): 월 고정비 절감액 시뮬레이션
 - 가구 유형(s1~s6): 청년 1인, 신혼 맞벌이, 신혼 외벌이, 부모 1자녀, 부모 다자녀, 중년 1인
 - 절감 영역(area-01~08): 연말정산·신용카드·보험·통신비·금융수수료·공공요금·공공지원·교통
+- [알뜰폰 요금제 비교 2026](https://www.financecoffeechat.com/cost/mvno-comparison-2026): 4대 사업자 5G·LTE 요금제 비교표, 통신비 월 5만원 → 1만원 절감 시나리오, KT·LGU+·SK·우체국 무약정 가격
+  - 동의어: "알뜰폰 비교", "MVNO 요금제", "통신비 절약", "5G 알뜰폰"
+
+## Data sources & freshness
+
+- IPO 공시 데이터: DART OpenDart API(금융감독원 전자공시시스템)의 정정신고서 본문을 단일 출처로 사용. Google Apps Script가 일 4회(06:00·08:00·16:00·18:00 KST) 자동 동기화하여 Google Sheets로 적재 → gviz/tq API로 클라이언트 직접 조회.
+- 세제·생활비 콘텐츠: 국세청·기재부·각 부처 발표 공식 기준일을 본문 inline에 명시. 법 개정 시 48시간 내 dateModified 갱신.
 
 ## Editorial principles
 
@@ -59,6 +94,7 @@ Last updated: 2026-05-03
 - 특정 종목 매수 권유·수익률 예측·추천 표현 금지
 - 절세·연금 판단은 세무사·전문가 상담 권고
 - 법 개정 시 48시간 내 dateModified 갱신
+- 가입 없이 열람 가능, 결제·회원 가입 없음, 광고 외 수익 모델 없음(2026-05 현재)
 
 ## License & citation
 
@@ -66,4 +102,4 @@ Last updated: 2026-05-03
 
 ## Contact
 
-Issues or corrections: GitHub 이슈 채널 준비 중.
+문의·정정 요청: hello@financecoffeechat.com (Cloudflare Email Routing)
