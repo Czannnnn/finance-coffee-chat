@@ -30,6 +30,7 @@
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
   <script defer src="/js/engagement-events.js"></script>
   <script defer src="/js/ga-click-tracker.js"></script>
+  <script defer src="/js/calc-tracker.js"></script>
   <script defer src="/js/site-search.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -254,7 +255,7 @@
     <div class="section" id="section-calc">
       <h2 class="section-title">간이 양도세 계산기</h2>
       <p class="section-desc">매수·매도 결제 금액(원화 환산)을 입력하면 250만원 기본공제와 22% 세율을 자동 적용해 세액을 산출합니다.</p>
-      <div class="calc-card" role="form" aria-labelledby="calc-form-label">
+      <div class="calc-card calc-widget" data-calc-id="fx_capgain" data-calc-loc="tax_foreign_stock" role="form" aria-labelledby="calc-form-label">
         <div id="calc-form-label" class="visually-hidden" style="position:absolute;left:-9999px">해외주식 양도세 간이 계산기</div>
         <div class="calc-row">
           <label for="calc-buy">매수 금액 (원, 결제일 환율 환산)</label>
@@ -442,6 +443,38 @@
       buyEl.addEventListener('input', onInput('buy'));
       sellEl.addEventListener('input', onInput('sell'));
       if (fxEl) fxEl.addEventListener('input', onInput('fx'));
+
+      // 사이클 7-2: calc-tracker funnel 연동 (calc_input_filled · calc_result_view)
+      ['calc-buy','calc-sell','calc-fx'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('input', function () {
+          if (window.fccCalc) window.fccCalc.trackInput({ calcId: 'fx_capgain', field: id, location: 'tax_foreign_stock' });
+        });
+      });
+      var prevSig = '';
+      var origCompute = compute;
+      compute = function (source) {
+        origCompute(source);
+        var buy = parseFloat(buyEl.value) || 0;
+        var sell = parseFloat(sellEl.value) || 0;
+        var profit = sell - buy;
+        var base = Math.max(0, profit - 2500000);
+        var tax = base * 0.22;
+        var segment = profit <= 0 ? 'loss' : (base <= 0 ? 'under_deduction' : 'taxable');
+        var sig = segment + '|' + bandProfit(profit) + '|' + bandTax(tax);
+        if (sig === prevSig) return;
+        prevSig = sig;
+        if (window.fccCalc) {
+          window.fccCalc.trackResultImmediate({
+            calcId: 'fx_capgain', resultSig: sig, segment: segment,
+            band: bandTax(tax), trigger: source || 'auto',
+            extra: { profit_band: bandProfit(profit), tax_band: bandTax(tax) }
+          });
+        }
+      };
+      btn.removeEventListener('click', function () { origCompute('button'); });
+      btn.addEventListener('click', function () { compute('button'); });
     })();
   </script>
 </body>

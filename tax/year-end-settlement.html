@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="naver-site-verification" content="03955cc9cc70b0b97522b98f0c4724b0f23ac71a" />
+  <title>연말정산 간이 계산기 + 신용카드 공제 역산 — 직장인 가이드 2026 | 투자 커피챗</title>
+  <meta name="description" content="연봉·부양가족·신용카드·의료비·교육비를 입력하면 결정세액과 환급/추납 segment를 즉시 산출. 목표 환급액에서 필요 카드 사용액을 역산하는 보조 위젯 포함. 단순 참고용·홈택스 기준.">
+  <meta name="keywords" content="연말정산 간이 계산기, 연말정산 시뮬, 신용카드 소득공제, 카드 공제 역산, 환급액 계산, 결정세액, 부양가족 공제, 의료비 세액공제, 교육비 세액공제, 직장인 연말정산">
+  <link rel="canonical" href="https://www.financecoffeechat.com/tax/year-end-settlement">
+  <link rel="alternate" hreflang="ko-KR" href="https://www.financecoffeechat.com/tax/year-end-settlement">
+  <link rel="alternate" hreflang="x-default" href="https://www.financecoffeechat.com/tax/year-end-settlement">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta property="og:title" content="연말정산 간이 계산기 + 카드 공제 역산 — 직장인 가이드 2026">
+  <meta property="og:description" content="연봉·부양·카드·의료·교육 입력 → 결정세액·환급/추납 segment 자동 산출. 카드 공제 역산기 포함.">
+  <meta property="og:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-06-01">
+  <meta property="og:url" content="https://www.financecoffeechat.com/tax/year-end-settlement">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="투자 커피챗">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="연말정산 간이 계산기 + 카드 공제 역산 — 직장인 가이드 2026">
+  <meta name="twitter:description" content="결정세액·환급/추납 자동 산출. 목표 환급액에서 카드 사용액 역산.">
+  <meta name="twitter:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-06-01">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2026-04-19b">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2026-04-19b">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZEG7YQ80S"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
+  <script defer src="/js/engagement-events.js"></script>
+  <script defer src="/js/ga-click-tracker.js"></script>
+  <script defer src="/js/calc-tracker.js"></script>
+  <script defer src="/js/site-search.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet"></noscript>
+  <style>
+    :root {
+      --espresso: #2C1810; --dark-roast: #3D2317; --medium-roast: #6B3A2A;
+      --caramel: #C4853C; --caramel-light: rgba(196,133,60,0.12);
+      --cream: #F5EDE0; --latte: #E8DBC5; --oat-milk: #FAF6F0; --white: #FFFDF9;
+      --green: #3F8A5C; --blue: #3A6EA5; --red-soft: #B8473D;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Noto Sans KR', sans-serif; background: var(--oat-milk); color: var(--espresso); line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+    nav { background: var(--espresso); padding: 12px 16px; text-align: center; }
+    nav a { color: var(--cream); margin: 0 12px; text-decoration: none; font-size: 14px; font-weight: 500; }
+    nav a:hover { color: var(--caramel); }
+    .subnav { background: var(--dark-roast); padding: 8px 16px; text-align: center; border-bottom: 1px solid rgba(196,133,60,0.15); position: sticky; top: 0; z-index: 10; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+    .subnav-label { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-right: 12px; }
+    .subnav a { color: var(--latte); margin: 0 8px; text-decoration: none; font-size: 13px; padding: 6px 10px; border-radius: 6px; display: inline-block; }
+    .subnav a:hover { color: var(--caramel); }
+    .subnav a.active { color: var(--cream); background: rgba(196,133,60,0.2); font-weight: 600; }
+    @media (max-width: 600px) { .subnav a { font-size: 12px; margin: 0 4px; } nav a { margin: 0 6px; font-size: 12px; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 48px 28px 64px; }
+    .header { text-align: center; margin-bottom: 28px; }
+    .badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--caramel); background: var(--caramel-light); padding: 5px 16px; border-radius: 20px; margin-bottom: 16px; border: 1px solid rgba(196,133,60,0.2); }
+    .header h1 { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 700; color: var(--espresso); letter-spacing: -0.5px; line-height: 1.35; }
+    .header h1 em { font-style: italic; color: var(--medium-roast); }
+    .header .subtitle { margin-top: 10px; font-size: 14px; color: var(--medium-roast); font-weight: 500; }
+    .divider { width: 40px; height: 2px; background: var(--caramel); margin: 20px auto 0; border-radius: 1px; }
+    .section { margin-top: 48px; scroll-margin-top: 64px; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--espresso); margin-bottom: 6px; letter-spacing: -0.3px; }
+    .section-desc { font-size: 13px; color: var(--medium-roast); margin-bottom: 14px; }
+    .lede { background: var(--white); border-left: 3px solid var(--caramel); padding: 18px 22px; border-radius: 8px; font-size: 15px; color: var(--dark-roast); line-height: 1.85; }
+    .lede strong { color: var(--espresso); }
+    .calc-widget { background: var(--white); border-radius: 12px; padding: 22px; border: 1px solid rgba(44,24,16,0.08); box-shadow: 0 2px 12px rgba(44,24,16,0.04); }
+    .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 600px) { .calc-grid { grid-template-columns: 1fr; } }
+    .calc-grid label { display: flex; flex-direction: column; font-size: 13px; color: var(--medium-roast); }
+    .calc-grid input { margin-top: 4px; padding: 8px 10px; border: 1px solid rgba(44,24,16,0.15); border-radius: 6px; font-size: 14px; font-family: inherit; }
+    .calc-grid input:focus { outline: 2px solid var(--caramel); border-color: var(--caramel); }
+    .calc-btn { margin-top: 16px; background: var(--caramel); color: var(--white); border: none; padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+    .calc-btn:hover { background: var(--medium-roast); }
+    .calc-result { margin-top: 18px; }
+    .calc-result-card { background: var(--oat-milk); border-radius: 8px; padding: 16px 20px; border-left: 3px solid var(--caramel); }
+    .calc-result-card strong { font-size: 16px; display: block; margin-bottom: 8px; }
+    .calc-disclaimer { display: block; margin-top: 14px; font-size: 12px; color: var(--medium-roast); line-height: 1.6; }
+    .related { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+    @media (max-width: 768px) { .related { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .related { grid-template-columns: 1fr; } }
+    .related a { background: var(--white); border-radius: 10px; padding: 16px 18px; border: 1px solid rgba(44,24,16,0.08); text-decoration: none; color: var(--espresso); transition: all 0.18s; display: block; }
+    .related a:hover { transform: translateY(-2px); border-color: var(--caramel); box-shadow: 0 8px 20px rgba(44,24,16,0.06); }
+    .related .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 1.4px; color: var(--caramel); margin-bottom: 6px; text-transform: uppercase; }
+    .related h4 { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--espresso); margin-bottom: 4px; }
+    .related p { font-size: 12.5px; color: var(--medium-roast); line-height: 1.6; }
+    .disclaimer { margin-top: 32px; padding: 18px 22px; background: rgba(184,71,61,0.06); border-radius: 8px; border-left: 3px solid var(--red-soft); font-size: 13px; color: var(--dark-roast); line-height: 1.7; }
+    .pitfalls { background: rgba(184,71,61,0.06); border-left: 3px solid var(--red-soft); padding: 18px 22px; border-radius: 8px; font-size: 14px; color: var(--dark-roast); line-height: 1.85; }
+    .pitfalls strong { color: var(--red-soft); }
+    @media (max-width: 600px) { .container { padding: 32px 16px 48px; } .header h1 { font-size: 24px; } .section-title { font-size: 19px; } .calc-widget { padding: 18px 16px; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/">홈</a>
+    <a href="/asset">자산관리101</a>
+    <a href="/ipo">공모주</a>
+    <a href="/index-investing">인덱스 투자</a>
+    <a href="/tax-optimization">세금</a>
+  </nav>
+  <div class="subnav">
+    <span class="subnav-label">절세 가이드</span>
+    <a href="/tax-optimization">절세 허브</a>
+    <a href="/tax/isa-guide">ISA</a>
+    <a href="/tax/irp-refund-guide">IRP 환급</a>
+    <a href="/tax/pension-irp-comparison">연금·IRP</a>
+    <a href="/tax/foreign-stock-capital-gains-2026">해외주식 양도세</a>
+    <a href="/tax/global-income-tax-2026">종합소득세</a>
+    <a href="/tax/year-end-settlement" class="active">연말정산</a>
+  </div>
+  <div class="container">
+    <div class="header">
+      <span class="badge">연말정산 · 2026</span>
+      <h1>연말정산 간이 계산기<br><em>+ 신용카드 공제 역산</em></h1>
+      <p class="subtitle">연봉·부양가족·카드·의료·교육 입력 → 결정세액·환급/추납 segment 즉시 산출</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">한 줄 요약</h2>
+      <div class="lede">
+        <strong>연말정산은 1년치 결정세액과 이미 납부한 원천징수액의 차액 정산</strong>입니다. 결정세액이 원천징수보다 작으면 환급, 크면 추납. 본 페이지는 (1) 결정세액을 자동 산출하는 <strong>간이 계산기</strong>와 (2) 목표 환급액에서 필요 카드 사용액을 역산하는 <strong>카드 공제 역산기</strong> 두 위젯을 제공합니다. 정식 신고는 홈택스 간소화 자료와 회사 인사팀 안내를 기준으로 진행하세요.
+      </div>
+    </div>
+
+    <div class="section" id="section-year-end-calc">
+      <h2 class="section-title">연말정산 간이 계산기</h2>
+      <p class="section-desc">연봉·부양가족수·카드 사용액·의료비·교육비를 입력하면 결정세액과 환급/추납 segment를 자동 산출합니다.</p>
+      <div class="calc-widget" data-calc-id="year_end" data-calc-loc="tax_year_end">
+        <div class="calc-grid">
+          <label>연봉 (총급여, 만원)
+            <input id="ye-salary" type="number" inputmode="numeric" min="0" step="100" placeholder="예: 5000">
+          </label>
+          <label>부양가족수 (본인 제외)
+            <input id="ye-dependents" type="number" inputmode="numeric" min="0" max="10" step="1" placeholder="예: 2">
+          </label>
+          <label>신용카드 연 사용액 (만원)
+            <input id="ye-card" type="number" inputmode="numeric" min="0" step="10" placeholder="예: 2000">
+          </label>
+          <label>의료비 (만원, 본인+부양)
+            <input id="ye-medical" type="number" inputmode="numeric" min="0" step="10" placeholder="예: 200">
+          </label>
+          <label>교육비 (만원)
+            <input id="ye-edu" type="number" inputmode="numeric" min="0" step="10" placeholder="예: 100">
+          </label>
+          <label>기납부 원천징수액 (만원)
+            <input id="ye-withheld" type="number" inputmode="numeric" min="0" step="10" placeholder="예: 350">
+          </label>
+        </div>
+        <button id="ye-run" type="button" class="calc-btn">시뮬 실행</button>
+        <div id="ye-result" class="calc-result" aria-live="polite"></div>
+        <small class="calc-disclaimer">※ 단순 가정 기반 시뮬레이션입니다. 실제 결정세액은 보험료·기부금·주택자금공제 등 다수 항목과 회사 비과세 처리 방식에 따라 달라집니다. 정확한 수치는 홈택스 연말정산 간소화·회사 제출자료를 기준으로 확인하세요.</small>
+      </div>
+    </div>
+
+    <div class="section" id="section-card-reverse">
+      <h2 class="section-title">신용카드 공제 역산기</h2>
+      <p class="section-desc">목표 환급액과 연봉을 입력하면 그 환급을 받기 위해 필요한 신용카드 연 사용액과 달성 가능 여부(feasibility)를 산출합니다.</p>
+      <div class="calc-widget" data-calc-id="card_reverse" data-calc-loc="year_end_card_reverse">
+        <div class="calc-grid">
+          <label>목표 환급액 (만원)
+            <input id="cr-target" type="number" inputmode="numeric" min="0" step="10" placeholder="예: 100">
+          </label>
+          <label>연봉 (총급여, 만원)
+            <input id="cr-salary" type="number" inputmode="numeric" min="0" step="100" placeholder="예: 5000">
+          </label>
+          <label>신용카드 비중 (체크카드 대비, %)
+            <input id="cr-credit-share" type="number" inputmode="decimal" min="0" max="100" step="5" placeholder="예: 70">
+          </label>
+        </div>
+        <button id="cr-run" type="button" class="calc-btn">역산 실행</button>
+        <div id="cr-result" class="calc-result" aria-live="polite"></div>
+        <small class="calc-disclaimer">※ 신용카드 소득공제는 총급여 25% 초과분에 한해 15% 공제율, 한도 300만원 (총급여 7천만 이하 기준). 본 위젯은 카드 공제가 한계세율 16.5% 구간에서 환급에 미치는 영향을 단순화한 추정치입니다.</small>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">자주 하는 실수</h2>
+      <div class="pitfalls">
+        <p><strong>실수 1.</strong> 신용카드만 많이 쓰면 환급 많이 받는다는 오해 — 카드 공제 한도(300만원)와 한계세율(16.5%)을 고려하면 최대 효과는 약 49.5만원에 그칩니다. 의료비·교육비·기부금이 추가 환급 레버.</p>
+        <p style="margin-top:10px;"><strong>실수 2.</strong> 부양가족 등록을 빠뜨림 — 소득 100만원 이하 부모·자녀 등록 시 기본공제 150만원 × 인원수가 즉시 적용됩니다.</p>
+        <p style="margin-top:10px;"><strong>실수 3.</strong> 의료비를 카드로 결제하고 공제는 카드 공제로만 잡음 — 의료비 세액공제(15%)와 카드 공제(15%) 중 유리한 쪽으로 자동 비교됩니다. 홈택스 간소화 자료에 의료비 별도 분리 등록 필수.</p>
+        <p style="margin-top:10px;"><strong>실수 4.</strong> IRP·연금저축 세액공제를 12월에 급히 입금 — 한도(연 900만 합산) 안에서 미리 분산 입금이 운용수익 측면에서 유리합니다.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">함께 읽으면 좋은 가이드</h2>
+      <div class="related">
+        <a href="/tax/isa-guide"><span class="tag">절세 계좌</span><h4>ISA 비과세 한도</h4><p>국내·해외 ETF 한도 내 비과세</p></a>
+        <a href="/tax/irp-refund-guide"><span class="tag">IRP 환급</span><h4>IRP 세액공제 16.5%</h4><p>연 900만 한도 + 한계세율 16.5%</p></a>
+        <a href="/tax/pension-irp-comparison"><span class="tag">노후 절세</span><h4>연금·IRP 비교</h4><p>4종 비교 + DC·DB 시뮬</p></a>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      본 페이지는 일반 정보 제공 목적이며 특정 금융상품 또는 세무 처리에 대한 권유·자문이 아닙니다. 실제 연말정산은 본인의 소득·공제 자료와 홈택스 간소화·회사 인사팀 안내를 기준으로 진행하세요. 2026년 신고 기준이며 향후 세법 개정 시 내용이 달라질 수 있습니다.
+    </div>
+  </div>
+<footer class="site-contact" style="text-align:center;padding:24px 16px;font-size:12px;color:#6B3A2A;border-top:1px solid rgba(107,58,42,0.15);margin-top:32px;font-family:inherit;">Contact · <a href="mailto:hello@financecoffeechat.com" style="color:inherit;text-decoration:underline;" data-ga="click_contact_email" data-ga-text="hello@financecoffeechat.com" data-ga-loc="footer">hello@financecoffeechat.com</a></footer>
+<script>
+(function () {
+  function num(id) { var el = document.getElementById(id); if (!el) return 0; var v = parseFloat(el.value); return isNaN(v) ? 0 : v; }
+  function fmt(v) { return Math.round(v).toLocaleString('ko-KR') + '만원'; }
+  function salaryBand(s) { if (s < 3000) return '<3000'; if (s < 5000) return '3000-5000'; if (s < 7000) return '5000-7000'; if (s < 10000) return '7000-10000'; return '10000+'; }
+  function refundBand(r) { if (r < 0) return '<0'; if (r < 50) return '0-50'; if (r < 150) return '50-150'; if (r < 300) return '150-300'; return '300+'; }
+
+  // 연말정산 간이 계산기
+  function calcYearEnd() {
+    var salary = num('ye-salary'); // 만원
+    var deps = num('ye-dependents');
+    var card = num('ye-card');
+    var medical = num('ye-medical');
+    var edu = num('ye-edu');
+    var withheld = num('ye-withheld');
+    if (!salary) return null;
+    // 근로소득공제 (단순 산식)
+    var earnedDeduction;
+    if (salary <= 500) earnedDeduction = salary * 0.7;
+    else if (salary <= 1500) earnedDeduction = 350 + (salary - 500) * 0.4;
+    else if (salary <= 4500) earnedDeduction = 750 + (salary - 1500) * 0.15;
+    else if (salary <= 10000) earnedDeduction = 1200 + (salary - 4500) * 0.05;
+    else earnedDeduction = 1475 + (salary - 10000) * 0.02;
+    earnedDeduction = Math.min(earnedDeduction, 2000); // 한도
+
+    // 인적공제 (본인 150 + 부양 150×인원)
+    var personal = 150 + deps * 150;
+
+    // 카드 소득공제: 총급여 25% 초과분의 15%, 한도 300
+    var cardThreshold = salary * 0.25;
+    var cardExcess = Math.max(0, card - cardThreshold);
+    var cardDeduction = Math.min(cardExcess * 0.15, 300);
+
+    var taxBase = Math.max(0, salary - earnedDeduction - personal - cardDeduction);
+
+    // 종합소득세율 (만원 기준)
+    function calcTax(base) {
+      if (base <= 1400) return base * 0.06;
+      if (base <= 5000) return 84 + (base - 1400) * 0.15;
+      if (base <= 8800) return 624 + (base - 5000) * 0.24;
+      if (base <= 15000) return 1536 + (base - 8800) * 0.35;
+      if (base <= 30000) return 3706 + (base - 15000) * 0.38;
+      if (base <= 50000) return 9406 + (base - 30000) * 0.4;
+      return 17406 + (base - 50000) * 0.42;
+    }
+    var grossTax = calcTax(taxBase);
+
+    // 의료비 세액공제: 총급여 3% 초과분의 15%
+    var medThreshold = salary * 0.03;
+    var medCredit = Math.max(0, medical - medThreshold) * 0.15;
+    // 교육비 세액공제: 15%
+    var eduCredit = edu * 0.15;
+    // 표준세액공제 또는 근로소득세액공제 (단순 가정 70만 차감)
+    var stdCredit = 70;
+
+    var finalTax = Math.max(0, grossTax - medCredit - eduCredit - stdCredit);
+    var diff = withheld - finalTax; // 양수 = 환급, 음수 = 추납
+
+    var segment = Math.abs(diff) < 5 ? 'breakeven' : (diff > 0 ? 'refund' : 'owe');
+    return {
+      finalTax: Math.round(finalTax * 10) / 10,
+      withheld: withheld,
+      diff: Math.round(diff * 10) / 10,
+      segment: segment,
+      salaryBand: salaryBand(salary),
+      refundBand: refundBand(Math.abs(diff)),
+      deps: deps
+    };
+  }
+
+  function renderYearEnd() {
+    var out = document.getElementById('ye-result');
+    if (!out) return;
+    var r = calcYearEnd();
+    if (!r) { out.innerHTML = '<div class="calc-result-card" style="border-left-color:#B8473D;color:#B8473D;font-size:13px;">연봉을 입력해주세요.</div>'; return; }
+    var color = r.segment === 'refund' ? '#3F8A5C' : (r.segment === 'owe' ? '#B8473D' : '#6B3A2A');
+    var label = r.segment === 'refund' ? '환급 예상' : (r.segment === 'owe' ? '추납 예상' : '거의 균형');
+    var sign = r.diff > 0 ? '+' : '';
+    out.innerHTML = '<div class="calc-result-card" style="border-left-color:' + color + ';"><strong style="color:' + color + ';">' + label + ' · ' + sign + fmt(r.diff) + '</strong>결정세액 <strong>' + fmt(r.finalTax) + '</strong> · 기납부 <strong>' + fmt(r.withheld) + '</strong><br><span style="font-size:12.5px;color:#6B3A2A;line-height:1.7;display:block;margin-top:6px;">의료비·교육비·기부금 추가 입력 시 환급액이 더 늘 수 있습니다. 정확한 수치는 홈택스 간소화 자료로 확인하세요.</span></div>';
+    if (window.fccCalc) {
+      window.fccCalc.trackResultImmediate({
+        calcId: 'year_end', resultSig: r.segment + '|' + r.refundBand,
+        segment: r.segment, band: r.refundBand, trigger: 'button',
+        extra: { result_segment: r.segment, salary_band: r.salaryBand, refund_band: r.refundBand, dependents_count: r.deps }
+      });
+    }
+    try {
+      gtag('event', 'click_year_end_calc_run', {
+        click_text: r.segment, click_location: 'tax_year_end',
+        result_segment: r.segment, salary_band: r.salaryBand,
+        refund_band: r.refundBand, dependents_count: r.deps,
+        trigger_source: 'button', refund_amount: Math.abs(Math.round(r.diff * 10000))
+      });
+    } catch (e) { /* swallow */ }
+  }
+
+  ['ye-salary','ye-dependents','ye-card','ye-medical','ye-edu','ye-withheld'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', function () {
+      if (window.fccCalc) window.fccCalc.trackInput({ calcId: 'year_end', field: id, location: 'tax_year_end' });
+    });
+    el.addEventListener('keydown', function (e) { if (e.key === 'Enter') renderYearEnd(); });
+  });
+  var yeBtn = document.getElementById('ye-run');
+  if (yeBtn) yeBtn.addEventListener('click', renderYearEnd);
+
+  // 카드 공제 역산
+  function calcCardReverse() {
+    var target = num('cr-target'); // 만원
+    var salary = num('cr-salary'); // 만원
+    var creditShare = num('cr-credit-share') / 100;
+    if (!target || !salary) return null;
+    var marginalRate = 0.165; // 한계세율 단순 가정 (6,600~10,000만 구간)
+    // 카드 공제로 줄여야 할 세액 = target → 줄여야 할 과세표준 = target / marginalRate
+    var requiredDeduction = target / marginalRate;
+    requiredDeduction = Math.min(requiredDeduction, 300); // 한도 300
+    // 카드 공제 = (사용액 - 총급여×25%) × 15% (신용카드 비중 가정)
+    var threshold = salary * 0.25;
+    var requiredExcess = requiredDeduction / 0.15;
+    var requiredSpend = threshold + requiredExcess;
+
+    var feasibility;
+    if (requiredDeduction >= 300 - 0.1) feasibility = 'over'; // 한도 초과 (목표가 너무 큼)
+    else if (requiredSpend > salary * 0.6) feasibility = 'impossible'; // 현실적으로 불가
+    else feasibility = 'reachable';
+
+    var rsBand;
+    if (requiredSpend < 1500) rsBand = '<1500';
+    else if (requiredSpend < 2500) rsBand = '1500-2500';
+    else if (requiredSpend < 4000) rsBand = '2500-4000';
+    else rsBand = '4000+';
+
+    var trBand;
+    if (target < 50) trBand = '<50';
+    else if (target < 150) trBand = '50-150';
+    else if (target < 300) trBand = '150-300';
+    else trBand = '300+';
+
+    return {
+      requiredSpend: Math.round(requiredSpend),
+      feasibility: feasibility,
+      requiredSpendBand: rsBand,
+      targetRefundBand: trBand,
+      creditSharePct: Math.round(creditShare * 100)
+    };
+  }
+
+  function renderCardReverse() {
+    var out = document.getElementById('cr-result');
+    if (!out) return;
+    var r = calcCardReverse();
+    if (!r) { out.innerHTML = '<div class="calc-result-card" style="border-left-color:#B8473D;color:#B8473D;font-size:13px;">목표 환급액과 연봉을 입력해주세요.</div>'; return; }
+    var color = r.feasibility === 'reachable' ? '#3F8A5C' : (r.feasibility === 'over' ? '#3A6EA5' : '#B8473D');
+    var label = r.feasibility === 'reachable' ? '달성 가능' : (r.feasibility === 'over' ? '카드 공제 한도 초과 (다른 공제 필요)' : '현실적으로 불가 (목표 환급 너무 큼)');
+    out.innerHTML = '<div class="calc-result-card" style="border-left-color:' + color + ';"><strong style="color:' + color + ';">' + label + '</strong>필요 카드 사용액 <strong>' + fmt(r.requiredSpend) + '</strong><br><span style="font-size:12.5px;color:#6B3A2A;line-height:1.7;display:block;margin-top:6px;">한계세율 16.5% + 카드 공제율 15% + 한도 300만원 가정. 의료비·교육비·기부금 등 다른 공제를 활용하면 카드 사용액 부담을 줄일 수 있습니다.</span></div>';
+    if (window.fccCalc) {
+      window.fccCalc.trackResultImmediate({
+        calcId: 'card_reverse', resultSig: r.feasibility + '|' + r.requiredSpendBand,
+        segment: r.feasibility, band: r.requiredSpendBand, trigger: 'button',
+        extra: { feasibility: r.feasibility, target_refund_band: r.targetRefundBand, required_spend_band: r.requiredSpendBand, credit_share_pct: r.creditSharePct }
+      });
+    }
+    try {
+      gtag('event', 'click_card_deduction_reverse', {
+        click_text: r.feasibility, click_location: 'year_end_card_reverse',
+        feasibility: r.feasibility, target_refund_band: r.targetRefundBand,
+        required_spend_band: r.requiredSpendBand, credit_share_pct: r.creditSharePct,
+        trigger_source: 'button', required_spend_amount: r.requiredSpend * 10000
+      });
+    } catch (e) { /* swallow */ }
+  }
+
+  ['cr-target','cr-salary','cr-credit-share'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', function () {
+      if (window.fccCalc) window.fccCalc.trackInput({ calcId: 'card_reverse', field: id, location: 'year_end_card_reverse' });
+    });
+    el.addEventListener('keydown', function (e) { if (e.key === 'Enter') renderCardReverse(); });
+  });
+  var crBtn = document.getElementById('cr-run');
+  if (crBtn) crBtn.addEventListener('click', renderCardReverse);
+})();
+</script>
+</body>
+</html>

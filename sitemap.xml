@@ -32,7 +32,13 @@
   </url>
   <url>
     <loc>https://www.financecoffeechat.com/tax/isa-guide</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-06-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://www.financecoffeechat.com/tax/year-end-settlement</loc>
+    <lastmod>2026-06-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>

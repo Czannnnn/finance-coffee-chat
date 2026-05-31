@@ -30,6 +30,7 @@
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
   <script defer src="/js/engagement-events.js"></script>
   <script defer src="/js/ga-click-tracker.js"></script>
+  <script defer src="/js/calc-tracker.js"></script>
   <script defer src="/js/site-search.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -410,6 +411,30 @@
       <p style="font-size:14.5px;line-height:1.8;color:#3D2317;">DB·DC 퇴직연금은 회사가 운영하는 사외적립 제도이고, IRP·연금저축은 근로자 본인이 추가로 가입하는 개인형 제도입니다. 퇴직 시 DB·DC 적립금은 IRP로 의무 이전됩니다(55세 미만). 이후 IRP에서 운용을 이어가거나 연금저축으로 옮길 수 있으며, 일시금 수령 대신 분할 연금 수령을 택해야 연금소득세 3.3~5.5% 분리과세 혜택을 받습니다.</p>
     </section>
 
+    <section class="section" id="section-dcdb-calc">
+      <h2 class="section-title">DC·DB 퇴직금 전환 시뮬</h2>
+      <p class="section-desc">현재 임금·남은 근속·임금 상승률·DC 예상 운용 수익률을 입력하면 같은 조건에서 DB·DC 퇴직금 만기 추정치와 차이를 자동으로 계산합니다.</p>
+      <div class="calc-widget" data-calc-id="dc_db" data-calc-loc="tax_sim_retirement" style="background:var(--white);border-radius:12px;padding:22px;border:1px solid rgba(44,24,16,0.08);box-shadow:0 2px 12px rgba(44,24,16,0.04);">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <label style="display:flex;flex-direction:column;font-size:13px;color:var(--medium-roast);">현재 월 임금 (만원)
+            <input id="dcdb-wage" type="number" inputmode="numeric" min="0" step="10" placeholder="예: 500" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;">
+          </label>
+          <label style="display:flex;flex-direction:column;font-size:13px;color:var(--medium-roast);">남은 근속 연수
+            <input id="dcdb-tenure" type="number" inputmode="numeric" min="1" max="40" step="1" placeholder="예: 15" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;">
+          </label>
+          <label style="display:flex;flex-direction:column;font-size:13px;color:var(--medium-roast);">연 임금 상승률 (%)
+            <input id="dcdb-wage-growth" type="number" inputmode="decimal" min="-5" max="20" step="0.1" placeholder="예: 3" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;">
+          </label>
+          <label style="display:flex;flex-direction:column;font-size:13px;color:var(--medium-roast);">DC 예상 운용 수익률 (%)
+            <input id="dcdb-dc-return" type="number" inputmode="decimal" min="-5" max="20" step="0.1" placeholder="예: 6" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;">
+          </label>
+        </div>
+        <button id="dcdb-run" type="button" style="margin-top:16px;background:var(--caramel);color:#FFFDF9;border:none;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">시뮬 실행</button>
+        <div id="dcdb-result" aria-live="polite" style="margin-top:18px;"></div>
+        <small style="display:block;margin-top:14px;font-size:12px;color:var(--medium-roast);line-height:1.6;">※ 단순 가정 기반 시뮬레이션입니다. DB 산식은 (퇴직 시 평균임금 × 근속연수), DC 산식은 매년 임금의 1/12 적립 + 복리 운용 가정. 실제 회사 퇴직연금 규약·법정 산식과 다를 수 있으니 인사팀 또는 퇴직연금 사업자에게 정확한 수치를 확인하세요.</small>
+      </div>
+    </section>
+
     <section class="section">
       <h2 class="section-title">자주 하는 실수</h2>
       <div class="pitfalls">
@@ -494,5 +519,70 @@
 
   
 <footer class="site-contact" style="text-align:center;padding:24px 16px;font-size:12px;color:#6B3A2A;border-top:1px solid rgba(107,58,42,0.15);margin-top:32px;font-family:inherit;">Contact · <a href="mailto:hello@financecoffeechat.com" style="color:inherit;text-decoration:underline;" data-ga="click_contact_email" data-ga-text="hello@financecoffeechat.com" data-ga-loc="footer">hello@financecoffeechat.com</a></footer>
+<script>
+(function () {
+  function num(id) { var el = document.getElementById(id); if (!el) return 0; var v = parseFloat(el.value); return isNaN(v) ? 0 : v; }
+  function fmt(v) { return Math.round(v).toLocaleString('ko-KR') + '만원'; }
+  function diffBand(d) { var a = Math.abs(d); if (a < 500) return 'tie'; if (d < -5000) return '<-50M'; if (d < 0) return '-50to0'; if (d < 5000) return '0to50M'; return '50M+'; }
+  function returnBand(r) { if (r < 5) return '<5'; if (r < 7) return '5-7'; if (r < 10) return '7-10'; return '10+'; }
+  function calc() {
+    var wage = num('dcdb-wage');
+    var tenure = num('dcdb-tenure');
+    var g = num('dcdb-wage-growth') / 100;
+    var r = num('dcdb-dc-return') / 100;
+    if (!wage || !tenure) return null;
+    var dbValue = wage * Math.pow(1 + g, tenure) * tenure;
+    var dcValue = 0;
+    for (var y = 0; y < tenure; y++) {
+      var wageY = wage * Math.pow(1 + g, y);
+      dcValue += wageY * Math.pow(1 + r, tenure - y);
+    }
+    var diff = Math.round(dbValue - dcValue);
+    var winner = Math.abs(diff) < wage * 0.5 ? 'tie' : (diff > 0 ? 'DB' : 'DC');
+    return { db: Math.round(dbValue), dc: Math.round(dcValue), diff: diff, winner: winner };
+  }
+  function interpret(r) {
+    if (r.winner === 'DB') return '임금 상승률이 DC 운용 수익률보다 우위인 조건이라 DB가 유리합니다. 임금 피크제 도입이 임박했다면 그 직전 DC 전환을 고려하세요.';
+    if (r.winner === 'DC') return '운용 수익률이 임금 상승률보다 우위인 조건이라 DC가 유리합니다. 단 위험자산 70% 한도와 운용 자신감이 필요합니다.';
+    return '두 형태 차이가 적습니다. 운용 능력·이직 가능성·세금 시점 등 비재무 변수를 고려해 선택하세요.';
+  }
+  function render() {
+    var out = document.getElementById('dcdb-result');
+    if (!out) return;
+    var r = calc();
+    if (!r) { out.innerHTML = '<div style="color:#B8473D;font-size:13px;padding:10px 14px;background:rgba(184,71,61,0.06);border-radius:8px;border-left:3px solid #B8473D;">월 임금과 남은 근속 연수를 입력해주세요.</div>'; return; }
+    var label = r.winner === 'tie' ? '두 형태 차이 미미' : (r.winner === 'DB' ? 'DB가 유리' : 'DC가 유리');
+    var color = r.winner === 'DB' ? '#3A6EA5' : (r.winner === 'DC' ? '#3F8A5C' : '#6B3A2A');
+    out.innerHTML = '<div style="background:#FAF6F0;border-radius:8px;padding:16px 20px;border-left:3px solid ' + color + ';"><strong style="color:' + color + ';font-size:16px;display:block;margin-bottom:8px;">' + label + '</strong><div style="font-size:13.5px;color:#3D2317;line-height:1.85;">DB 만기 추정 <strong>' + fmt(r.db) + '</strong> · DC 만기 추정 <strong>' + fmt(r.dc) + '</strong><br>차이 절대값 <strong>' + fmt(Math.abs(r.diff)) + '</strong></div><p style="margin-top:10px;font-size:12.5px;color:#6B3A2A;line-height:1.7;">' + interpret(r) + '</p></div>';
+    if (window.fccCalc) {
+      window.fccCalc.trackResultImmediate({
+        calcId: 'dc_db', resultSig: r.winner + '|' + diffBand(r.diff),
+        segment: r.winner, band: diffBand(r.diff), trigger: 'button',
+        extra: { winner: r.winner, diff_band: diffBand(r.diff), tenure_years: num('dcdb-tenure'), dc_return_band: returnBand(num('dcdb-dc-return')) }
+      });
+    }
+    try {
+      gtag('event', 'click_dc_db_calc_run', {
+        click_text: r.winner, click_location: 'tax_sim_retirement',
+        winner: r.winner, diff_band: diffBand(r.diff),
+        tenure_years: num('dcdb-tenure'),
+        dc_return_band: returnBand(num('dcdb-dc-return')),
+        trigger_source: 'button',
+        diff_amount: Math.abs(r.diff)
+      });
+    } catch (e) { /* swallow */ }
+  }
+  ['dcdb-wage','dcdb-tenure','dcdb-wage-growth','dcdb-dc-return'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', function () {
+      if (window.fccCalc) window.fccCalc.trackInput({ calcId: 'dc_db', field: id, location: 'tax_sim_retirement' });
+    });
+    el.addEventListener('keydown', function (e) { if (e.key === 'Enter') render(); });
+  });
+  var btn = document.getElementById('dcdb-run');
+  if (btn) btn.addEventListener('click', render);
+})();
+</script>
 </body>
 </html>

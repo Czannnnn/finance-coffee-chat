@@ -30,6 +30,7 @@
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
   <script defer src="/js/engagement-events.js"></script>
   <script defer src="/js/ga-click-tracker.js"></script>
+  <script defer src="/js/calc-tracker.js"></script>
   <script defer src="/js/site-search.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1032,6 +1033,30 @@
       </div>
     </div>
 
+    <section class="section" id="section-etf-tax-compare" style="margin-top:24px;">
+      <h2 style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#2C1810;margin-bottom:6px;letter-spacing:-0.3px;">한국 vs 미국 ETF 세후 수익률 비교</h2>
+      <p style="font-size:13px;color:#6B3A2A;margin-bottom:14px;">원금·연 수익률·배당률·기간을 입력하면 국내 상장 미국지수 ETF와 직접 미국 ETF의 세후 누적 잔액을 비교합니다.</p>
+      <div class="calc-widget" data-calc-id="etf_us_kr" data-calc-loc="index_etf_compare" style="background:#FFFDF9;border-radius:12px;padding:22px;border:1px solid rgba(44,24,16,0.08);box-shadow:0 2px 12px rgba(44,24,16,0.04);">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">투자 원금 (만원)
+            <input id="etc-principal" type="number" inputmode="numeric" min="0" step="100" placeholder="예: 5000" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
+          </label>
+          <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">투자 기간 (년)
+            <input id="etc-years" type="number" inputmode="numeric" min="1" max="40" step="1" placeholder="예: 20" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
+          </label>
+          <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">연 총 수익률 (%)
+            <input id="etc-return" type="number" inputmode="decimal" min="0" max="20" step="0.1" placeholder="예: 8" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
+          </label>
+          <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">연 배당률 (%)
+            <input id="etc-dividend" type="number" inputmode="decimal" min="0" max="10" step="0.1" placeholder="예: 1.5" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
+          </label>
+        </div>
+        <button id="etc-run" type="button" style="margin-top:16px;background:#C4853C;color:#FFFDF9;border:none;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">시뮬 비교</button>
+        <div id="etc-result" aria-live="polite" style="margin-top:18px;"></div>
+        <small style="display:block;margin-top:14px;font-size:12px;color:#6B3A2A;line-height:1.6;">※ 단순 가정. 국내 상장 미국지수 ETF(예: TIGER 미국S&P500): 매년 배당 15.4% 분리과세 + 매도 차익 비과세(2026-01 개정 기준). 직접 미국 ETF(예: VOO·QQQ): 매년 배당 15.4% 분리과세 + 매도 시 양도세 22%(250만 공제). ISA·연금계좌 활용 시 추가 절세 효과 별도(/tax/isa-guide 참조).</small>
+      </div>
+    </section>
+
     <div style="margin-top:24px; padding:22px 24px; background:#FFFDF9; border:1px solid rgba(196,133,60,0.25); border-radius:14px;">
       <div style="font-size:11px; font-weight:700; letter-spacing:2px; color:#C4853C; text-transform:uppercase; margin-bottom:8px;">절세 계좌 활용</div>
       <h3 style="font-family:'Playfair Display',serif; font-size:19px; color:#2C1810; margin-bottom:6px;">FIRE 자산은 어떤 계좌에 담아야 할까?</h3>
@@ -1069,6 +1094,70 @@
   
   <script src="js/index-personalizer.js"></script>
   <script src="js/index-personalizer-init.js"></script>
+  <script>
+(function () {
+  function num(id) { var el = document.getElementById(id); if (!el) return 0; var v = parseFloat(el.value); return isNaN(v) ? 0 : v; }
+  function fmt(v) { return Math.round(v).toLocaleString('ko-KR') + '만원'; }
+  function gapBand(g) { if (g < 5) return '<5'; if (g < 15) return '5-15'; if (g < 30) return '15-30'; return '30+'; }
+
+  function calcEtfCompare() {
+    var p = num('etc-principal');
+    var n = num('etc-years');
+    var r = num('etc-return') / 100;
+    var d = num('etc-dividend') / 100;
+    if (!p || !n || !r) return null;
+    var growth = r - d; // 가격상승률
+    // 국내 상장 미국지수 ETF: 매년 배당 15.4% 분리, 매도 차익 비과세
+    var krPrice = p * Math.pow(1 + growth, n);
+    var krDivAfterTax = 0;
+    for (var y = 1; y <= n; y++) {
+      var balance = p * Math.pow(1 + growth, y);
+      var divY = balance * d;
+      krDivAfterTax += divY * (1 - 0.154) * Math.pow(1 + growth, n - y);
+    }
+    var krFinal = krPrice + krDivAfterTax;
+    // 직접 미국 ETF: 매년 배당 15.4% 분리 + 매도 시 22% 양도세 (250만 공제)
+    var usPriceGross = p * Math.pow(1 + growth, n);
+    var usCapGain = usPriceGross - p;
+    var usCapGainAfterTax = usCapGain - Math.max(0, usCapGain - 250) * 0.22;
+    var usDivAfterTax = krDivAfterTax; // 동일 가정
+    var usFinal = p + usCapGainAfterTax + usDivAfterTax;
+    var diff = krFinal - usFinal;
+    var winner = Math.abs(diff) < p * 0.01 ? 'tie' : (diff > 0 ? 'KR_listed' : 'US_direct');
+    var gapPct = ((Math.max(krFinal, usFinal) - Math.min(krFinal, usFinal)) / Math.min(krFinal, usFinal)) * 100;
+    return {
+      kr: Math.round(krFinal), us: Math.round(usFinal),
+      winner: winner, gapPct: Math.round(gapPct * 10) / 10, n: n
+    };
+  }
+  function renderEtfCompare() {
+    var out = document.getElementById('etc-result');
+    if (!out) return;
+    var r = calcEtfCompare();
+    if (!r) { out.innerHTML = '<div style="background:rgba(184,71,61,0.06);color:#B8473D;border-left:3px solid #B8473D;border-radius:8px;padding:14px 18px;font-size:13px;">원금·기간·수익률을 입력해주세요.</div>'; return; }
+    var label = r.winner === 'tie' ? '두 시나리오 차이 미미' : (r.winner === 'KR_listed' ? '국내 상장 미국지수 ETF 우위' : '직접 미국 ETF 우위');
+    var color = r.winner === 'KR_listed' ? '#3A6EA5' : (r.winner === 'US_direct' ? '#3F8A5C' : '#6B3A2A');
+    out.innerHTML = '<div style="background:#FAF6F0;border-radius:8px;padding:16px 20px;border-left:3px solid ' + color + ';"><strong style="color:' + color + ';font-size:16px;display:block;margin-bottom:10px;">' + label + ' · 격차 ' + r.gapPct + '%</strong><div style="font-size:13.5px;color:#3D2317;line-height:1.8;">국내 상장 미국지수 ETF 추정 <strong>' + fmt(r.kr) + '</strong><br>직접 미국 ETF 추정 <strong>' + fmt(r.us) + '</strong></div><p style="margin-top:10px;font-size:12.5px;color:#6B3A2A;line-height:1.7;">매도 차익이 큰 장기 투자에서는 국내 상장 ETF의 차익 비과세가 우세할 수 있고, 배당 비중이 높은 ETF는 어느 쪽이든 배당세 부담이 비슷합니다. ISA 계좌에 담으면 두 시나리오 모두 추가 절세 효과 발생.</p></div>';
+    if (window.fccCalc) {
+      window.fccCalc.trackResultImmediate({
+        calcId: 'etf_us_kr', resultSig: r.winner + '|' + gapBand(r.gapPct),
+        segment: r.winner, band: gapBand(r.gapPct), trigger: 'button',
+        extra: { winner: r.winner, horizon_years: r.n, gap_band: gapBand(r.gapPct) }
+      });
+    }
+  }
+  ['etc-principal','etc-years','etc-return','etc-dividend'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', function () {
+      if (window.fccCalc) window.fccCalc.trackInput({ calcId: 'etf_us_kr', field: id, location: 'index_etf_compare' });
+    });
+    el.addEventListener('keydown', function (e) { if (e.key === 'Enter') renderEtfCompare(); });
+  });
+  var etcBtn = document.getElementById('etc-run');
+  if (etcBtn) etcBtn.addEventListener('click', renderEtfCompare);
+})();
+</script>
 <footer class="site-contact" style="text-align:center;padding:24px 16px;font-size:12px;color:#6B3A2A;border-top:1px solid rgba(107,58,42,0.15);margin-top:32px;font-family:inherit;">Contact · <a href="mailto:hello@financecoffeechat.com" style="color:inherit;text-decoration:underline;" data-ga="click_contact_email" data-ga-text="hello@financecoffeechat.com" data-ga-loc="footer">hello@financecoffeechat.com</a></footer>
 </body>
 </html>

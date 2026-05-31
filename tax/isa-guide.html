@@ -30,6 +30,7 @@
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
   <script defer src="/js/engagement-events.js"></script>
   <script defer src="/js/ga-click-tracker.js"></script>
+  <script defer src="/js/calc-tracker.js"></script>
   <script defer src="/js/site-search.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -455,6 +456,30 @@
       </div>
     </section>
 
+    <section class="section" id="section-isa-combo-calc">
+      <h2 class="section-title">ISA·IRP·연금저축 세액공제 최적 조합</h2>
+      <p class="section-desc" style="font-size:13px;color:#6B3A2A;margin-bottom:14px;">연봉과 이미 납입한 금액을 입력하면 남은 한도와 풀 활용 시 환급액을 자동 산출합니다.</p>
+      <div class="calc-widget" data-calc-id="isa_combo" data-calc-loc="tax_isa_combo" style="background:#FFFDF9;border-radius:12px;padding:22px;border:1px solid rgba(44,24,16,0.08);box-shadow:0 2px 12px rgba(44,24,16,0.04);">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">연봉 (총급여, 만원)
+            <input id="ic-salary" type="number" inputmode="numeric" min="0" step="100" placeholder="예: 5000" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
+          </label>
+          <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">이미 납입한 연저펀 (만원)
+            <input id="ic-pension" type="number" inputmode="numeric" min="0" max="600" step="10" placeholder="예: 0" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
+          </label>
+          <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">이미 납입한 IRP (만원)
+            <input id="ic-irp" type="number" inputmode="numeric" min="0" max="900" step="10" placeholder="예: 0" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
+          </label>
+          <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">이미 납입한 ISA (만원)
+            <input id="ic-isa" type="number" inputmode="numeric" min="0" step="10" placeholder="예: 0" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
+          </label>
+        </div>
+        <button id="ic-run" type="button" style="margin-top:16px;background:#C4853C;color:#FFFDF9;border:none;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">조합 추천</button>
+        <div id="ic-result" aria-live="polite" style="margin-top:18px;"></div>
+        <small style="display:block;margin-top:14px;font-size:12px;color:#6B3A2A;line-height:1.6;">※ 2026년 기준: 세액공제율 16.5%(총급여 5,500만 이하)/13.2%(초과). 연저펀 한도 600만 + IRP 추가 300만 = 합산 900만. ISA 한도 일반형 연 2,000만 + 200만 비과세. 정확한 환급은 다른 공제 항목과 한계세율에 따라 달라집니다.</small>
+      </div>
+    </section>
+
     <section class="section">
       <h2 class="section-title">함께 읽으면 좋은 가이드</h2>
       <div class="related">
@@ -498,5 +523,71 @@
 
   
 <footer class="site-contact" style="text-align:center;padding:24px 16px;font-size:12px;color:#6B3A2A;border-top:1px solid rgba(107,58,42,0.15);margin-top:32px;font-family:inherit;">Contact · <a href="mailto:hello@financecoffeechat.com" style="color:inherit;text-decoration:underline;" data-ga="click_contact_email" data-ga-text="hello@financecoffeechat.com" data-ga-loc="footer">hello@financecoffeechat.com</a></footer>
+<script>
+(function () {
+  function num(id) { var el = document.getElementById(id); if (!el) return 0; var v = parseFloat(el.value); return isNaN(v) ? 0 : v; }
+  function fmt(v) { return Math.round(v).toLocaleString('ko-KR') + '만원'; }
+  function salaryBand(s) { if (s < 3000) return '<3000'; if (s < 5500) return '3000-5500'; if (s < 8000) return '5500-8000'; return '8000+'; }
+  function refundBand(r) { if (r < 50) return '<50'; if (r < 100) return '50-100'; if (r < 200) return '100-200'; return '200+'; }
+
+  function calcIsaCombo() {
+    var salary = num('ic-salary');
+    var pension = num('ic-pension');
+    var irp = num('ic-irp');
+    var isa = num('ic-isa');
+    if (!salary) return null;
+    var creditRate = salary <= 5500 ? 0.165 : 0.132;
+    var pensionLimit = 600;
+    var combinedLimit = 900;
+    var isaLimit = 2000;
+    var pensionRemain = Math.max(0, pensionLimit - pension);
+    var combined = pension + irp;
+    var combinedRemain = Math.max(0, combinedLimit - combined);
+    var irpRemain = Math.min(combinedRemain, 900 - irp);
+    var isaRemain = Math.max(0, isaLimit - isa);
+    // 현재 환급 + 풀 활용 시 환급
+    var currentCredit = Math.min(combined, combinedLimit) * creditRate;
+    var fullCredit = combinedLimit * creditRate;
+    var extraRefund = fullCredit - currentCredit;
+    var topAccount;
+    if (pension < pensionLimit) topAccount = 'pension'; // 연저펀 우선
+    else if (irp < combinedLimit - pension) topAccount = 'IRP';
+    else if (isa < isaLimit) topAccount = 'ISA';
+    else topAccount = 'full';
+    return {
+      salary: salary, creditRate: creditRate,
+      pensionRemain: pensionRemain, irpRemain: irpRemain, isaRemain: isaRemain,
+      currentCredit: currentCredit, fullCredit: fullCredit, extraRefund: extraRefund,
+      topAccount: topAccount, combined: combined
+    };
+  }
+  function renderIsaCombo() {
+    var out = document.getElementById('ic-result');
+    if (!out) return;
+    var r = calcIsaCombo();
+    if (!r) { out.innerHTML = '<div style="background:rgba(184,71,61,0.06);color:#B8473D;border-left:3px solid #B8473D;border-radius:8px;padding:14px 18px;font-size:13px;">연봉을 입력해주세요.</div>'; return; }
+    var topColor = r.topAccount === 'full' ? '#3F8A5C' : '#C4853C';
+    var topLabel = r.topAccount === 'pension' ? '연저펀 한도 우선 채우기' : (r.topAccount === 'IRP' ? 'IRP 추가 납입' : (r.topAccount === 'ISA' ? 'ISA 추가 활용' : '풀 활용 완료'));
+    out.innerHTML = '<div style="background:#FAF6F0;border-radius:8px;padding:16px 20px;border-left:3px solid ' + topColor + ';"><strong style="color:' + topColor + ';font-size:16px;display:block;margin-bottom:10px;">' + topLabel + ' · 추가 환급 가능 ' + fmt(r.extraRefund) + '</strong><div style="font-size:13.5px;color:#3D2317;line-height:1.8;">세액공제율 <strong>' + (r.creditRate * 100).toFixed(1) + '%</strong> (총급여 5,500만 ' + (r.salary <= 5500 ? '이하' : '초과') + ')<br>남은 한도 → 연저펀 <strong>' + fmt(r.pensionRemain) + '</strong> · IRP 추가 <strong>' + fmt(r.irpRemain) + '</strong> · ISA <strong>' + fmt(r.isaRemain) + '</strong><br>현재 환급 추정 <strong>' + fmt(r.currentCredit) + '</strong> → 풀 활용 시 <strong>' + fmt(r.fullCredit) + '</strong></div><p style="margin-top:10px;font-size:12.5px;color:#6B3A2A;line-height:1.7;">정석 분배: 연저펀 600(자유도↑) + IRP 300(보너스 한도 합산) + ISA는 별도 한도. 위험자산 100%로 운용하려면 IRP보다 연저펀 우선이 유리합니다.</p></div>';
+    if (window.fccCalc) {
+      window.fccCalc.trackResultImmediate({
+        calcId: 'isa_combo', resultSig: r.topAccount + '|' + refundBand(r.extraRefund),
+        segment: r.topAccount, band: refundBand(r.extraRefund), trigger: 'button',
+        extra: { top_account: r.topAccount, salary_band: salaryBand(r.salary), refund_band: refundBand(r.extraRefund) }
+      });
+    }
+  }
+  ['ic-salary','ic-pension','ic-irp','ic-isa'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', function () {
+      if (window.fccCalc) window.fccCalc.trackInput({ calcId: 'isa_combo', field: id, location: 'tax_isa_combo' });
+    });
+    el.addEventListener('keydown', function (e) { if (e.key === 'Enter') renderIsaCombo(); });
+  });
+  var icBtn = document.getElementById('ic-run');
+  if (icBtn) icBtn.addEventListener('click', renderIsaCombo);
+})();
+</script>
 </body>
 </html>

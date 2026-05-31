@@ -30,6 +30,7 @@
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
   <script defer src="/js/engagement-events.js"></script>
   <script defer src="/js/ga-click-tracker.js"></script>
+  <script defer src="/js/calc-tracker.js"></script>
   <script defer src="/js/site-search.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -939,6 +940,54 @@
       </div>
     </div>
 
+    <section class="section" id="section-4account-compare" style="margin-top:32px;">
+      <h2 class="section-title">4계좌 세후 수익률 비교</h2>
+      <p class="section-desc" style="font-size:13px;color:#6B3A2A;margin-bottom:14px;">연 적립금·수익률·기간을 입력하면 일반·ISA·IRP·연금저축 4계좌의 세후 잔액과 우위 계좌(top_account)를 자동 산출합니다.</p>
+      <div class="calc-widget" data-calc-id="account4" data-calc-loc="tax_opt_4account" style="background:#FFFDF9;border-radius:12px;padding:22px;border:1px solid rgba(44,24,16,0.08);box-shadow:0 2px 12px rgba(44,24,16,0.04);">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">연 적립금 (만원)
+            <input id="a4-annual" type="number" inputmode="numeric" min="0" step="100" placeholder="예: 1200" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
+          </label>
+          <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">기간 (년)
+            <input id="a4-years" type="number" inputmode="numeric" min="1" max="40" step="1" placeholder="예: 30" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
+          </label>
+          <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">연 수익률 (%)
+            <input id="a4-return" type="number" inputmode="decimal" min="0" max="20" step="0.1" placeholder="예: 7" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
+          </label>
+          <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">한계세율 (%)
+            <input id="a4-tax" type="number" inputmode="decimal" min="6" max="45" step="0.1" placeholder="예: 16.5" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
+          </label>
+        </div>
+        <button id="a4-run" type="button" style="margin-top:16px;background:#C4853C;color:#FFFDF9;border:none;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">시뮬 실행</button>
+        <div id="a4-result" aria-live="polite" style="margin-top:18px;"></div>
+        <small style="display:block;margin-top:14px;font-size:12px;color:#6B3A2A;line-height:1.6;">※ 단순 가정: 일반계좌는 매년 배당 15.4% 분리과세(배당비중 30% 가정), ISA는 5년 만기 200만원 비과세 후 초과분 9.9% 분리, IRP·연금저축은 세액공제 13.2%/16.5% 보너스 + 운용수익 비과세 + 인출 시 연금소득세 5.5% 가정. 실제 세금은 본인 소득·납입 패턴에 따라 달라집니다.</small>
+      </div>
+    </section>
+
+    <section class="section" id="section-fin-income-threshold" style="margin-top:24px;">
+      <h2 class="section-title">금융소득종합과세 임계 회피</h2>
+      <p class="section-desc" style="font-size:13px;color:#6B3A2A;margin-bottom:14px;">연 이자·배당 합산이 2,000만원을 넘으면 종합과세 대상. 현재 위치와 회피 시나리오를 자동 산출합니다.</p>
+      <div class="calc-widget" data-calc-id="fin_income" data-calc-loc="tax_opt_fin_income" style="background:#FFFDF9;border-radius:12px;padding:22px;border:1px solid rgba(44,24,16,0.08);box-shadow:0 2px 12px rgba(44,24,16,0.04);">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+          <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">연 이자소득 (만원)
+            <input id="fi-interest" type="number" inputmode="numeric" min="0" step="10" placeholder="예: 800" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
+          </label>
+          <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">연 배당소득 (만원)
+            <input id="fi-dividend" type="number" inputmode="numeric" min="0" step="10" placeholder="예: 1300" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
+          </label>
+          <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">ISA 한도 여유 (만원, 선택)
+            <input id="fi-isa-room" type="number" inputmode="numeric" min="0" step="10" placeholder="예: 500" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
+          </label>
+          <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">연저펀/IRP 한도 여유 (만원, 선택)
+            <input id="fi-pension-room" type="number" inputmode="numeric" min="0" step="10" placeholder="예: 300" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
+          </label>
+        </div>
+        <button id="fi-run" type="button" style="margin-top:16px;background:#C4853C;color:#FFFDF9;border:none;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">임계 점검</button>
+        <div id="fi-result" aria-live="polite" style="margin-top:18px;"></div>
+        <small style="display:block;margin-top:14px;font-size:12px;color:#6B3A2A;line-height:1.6;">※ 2,000만원 임계는 금융소득(이자+배당) 단순 합산 기준. 종합과세 적용 시 한계세율(6~45%) - 분리과세 14% 차액이 추가 부담. ISA·연금저축으로 이전하면 금융소득에서 제외되어 임계 회피에 유리합니다.</small>
+      </div>
+    </section>
+
     <div class="footer-note">
       <strong>업데이트:</strong> 2026-04 · 2026 세법·연금 세액공제·ISA 개정 반영<br>
       <strong>법적 고지:</strong> 본 자료는 공개된 세법·제도 정보를 바탕으로 한 일반 안내이며 개별 세무자문이 아닙니다.
@@ -953,6 +1002,151 @@
   
   <script src="js/tax-personalizer.js"></script>
   <script src="js/tax-personalizer-init.js"></script>
+  <script>
+(function () {
+  function num(id) { var el = document.getElementById(id); if (!el) return 0; var v = parseFloat(el.value); return isNaN(v) ? 0 : v; }
+  function fmt(v) { return Math.round(v).toLocaleString('ko-KR') + '만원'; }
+
+  // 3순위: 4계좌 세후 비교
+  function gapBand(g) { if (g < 5) return '<5'; if (g < 15) return '5-15'; if (g < 30) return '15-30'; return '30+'; }
+  function bracketBand(t) { if (t <= 6.6) return '6.6'; if (t <= 16.5) return '16.5'; if (t <= 26.4) return '26.4'; if (t <= 38.5) return '38.5'; return '46.2+'; }
+  function fvAnnuity(annual, n, r) {
+    // 매년 말 적립 + 복리
+    if (r === 0) return annual * n;
+    return annual * ((Math.pow(1 + r, n) - 1) / r);
+  }
+  function calcAccount4() {
+    var annual = num('a4-annual');
+    var n = num('a4-years');
+    var r = num('a4-return') / 100;
+    var t = num('a4-tax') / 100;
+    if (!annual || !n || !r) return null;
+    var bonus = t >= 0.165 ? 0.132 : 0.165; // 5500↓ = 16.5% 보너스, 초과 = 13.2%
+    // 일반계좌: 매년 배당 15.4% 분리(배당비중 30%) + 매도 차익 비과세 가정
+    var rGeneral = r * (1 - 0.154 * 0.3);
+    var fvGeneral = fvAnnuity(annual, n, rGeneral);
+    // ISA: 매년 적립 (1+r)^n, 200만 비과세 후 9.9% 분리 (5년 만기 가정으로 단순화)
+    var fvIsaGross = fvAnnuity(annual, n, r);
+    var isaProfit = fvIsaGross - annual * n;
+    var isaTaxable = Math.max(0, isaProfit - 200 * Math.ceil(n / 5));
+    var fvIsa = fvIsaGross - isaTaxable * 0.099;
+    // IRP·연금저축: 세액공제 보너스 + 운용수익 비과세 + 인출 시 5.5%
+    var pensionBonus = annual * bonus * n; // 매년 환급액 총합
+    var fvPensionGross = fvAnnuity(annual, n, r) + pensionBonus;
+    var pensionTax = fvPensionGross * 0.055;
+    var fvIrp = fvPensionGross - pensionTax;
+    var fvPension = fvPensionGross - pensionTax; // 동일 가정
+    var arr = [
+      { name: 'general', label: '일반계좌', value: fvGeneral },
+      { name: 'ISA', label: 'ISA', value: fvIsa },
+      { name: 'IRP', label: 'IRP', value: fvIrp },
+      { name: 'pension', label: '연금저축', value: fvPension }
+    ];
+    arr.sort(function (a, b) { return b.value - a.value; });
+    var top = arr[0];
+    var gapPct = ((top.value - fvGeneral) / fvGeneral) * 100;
+    return { ranked: arr, top: top, gapPct: Math.round(gapPct * 10) / 10, n: n, t: t * 100 };
+  }
+  function renderAccount4() {
+    var out = document.getElementById('a4-result');
+    if (!out) return;
+    var r = calcAccount4();
+    if (!r) { out.innerHTML = '<div style="background:rgba(184,71,61,0.06);color:#B8473D;border-left:3px solid #B8473D;border-radius:8px;padding:14px 18px;font-size:13px;">연 적립금·기간·수익률을 입력해주세요.</div>'; return; }
+    var rows = r.ranked.map(function (x, i) {
+      var color = i === 0 ? '#3F8A5C' : (i === 3 ? '#B8473D' : '#3D2317');
+      return '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed rgba(44,24,16,0.08);font-size:13.5px;color:' + color + ';"><span><strong>' + (i + 1) + '. ' + x.label + '</strong></span><span><strong>' + fmt(x.value) + '</strong></span></div>';
+    }).join('');
+    var topColor = r.top.name === 'ISA' || r.top.name === 'IRP' || r.top.name === 'pension' ? '#3F8A5C' : '#6B3A2A';
+    out.innerHTML = '<div style="background:#FAF6F0;border-radius:8px;padding:16px 20px;border-left:3px solid ' + topColor + ';"><strong style="color:' + topColor + ';font-size:16px;display:block;margin-bottom:10px;">우위 ' + r.top.label + ' · 일반 대비 +' + r.gapPct + '%</strong>' + rows + '<p style="margin-top:10px;font-size:12.5px;color:#6B3A2A;line-height:1.7;">세액공제 보너스와 운용수익 비과세 + 인출 시 5.5% 분리과세의 누적 효과가 30년 이상이면 절세 계좌가 일반계좌 대비 +' + r.gapPct + '% 우위를 만듭니다.</p></div>';
+    if (window.fccCalc) {
+      window.fccCalc.trackResultImmediate({
+        calcId: 'account4', resultSig: r.top.name + '|' + gapBand(r.gapPct),
+        segment: r.top.name, band: gapBand(r.gapPct), trigger: 'button',
+        extra: { top_account: r.top.name, horizon_years: r.n, after_tax_gap_band: gapBand(r.gapPct), tax_bracket: bracketBand(r.t) }
+      });
+    }
+    try {
+      gtag('event', 'view_4account_compare', {
+        click_text: r.top.name, click_location: 'tax_opt_4account',
+        top_account: r.top.name, horizon_years: r.n,
+        after_tax_gap_band: gapBand(r.gapPct), tax_bracket: bracketBand(r.t),
+        after_tax_gap_pct: r.gapPct
+      });
+    } catch (e) { /* swallow */ }
+  }
+  ['a4-annual','a4-years','a4-return','a4-tax'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', function () {
+      if (window.fccCalc) window.fccCalc.trackInput({ calcId: 'account4', field: id, location: 'tax_opt_4account' });
+    });
+    el.addEventListener('keydown', function (e) { if (e.key === 'Enter') renderAccount4(); });
+  });
+  var a4Btn = document.getElementById('a4-run');
+  if (a4Btn) a4Btn.addEventListener('click', renderAccount4);
+
+  // 7순위: 금융소득종합과세 임계
+  function incomeBand(s) { if (s < 1000) return '<1000'; if (s < 1800) return '1000-1800'; if (s < 2000) return '1800-2000'; return '2000+'; }
+  function gapBand2k(g) { if (g < 0) return 'over'; if (g < 200) return '<200'; if (g < 500) return '200-500'; return '500+'; }
+  function calcFinIncome() {
+    var interest = num('fi-interest');
+    var dividend = num('fi-dividend');
+    var isaRoom = num('fi-isa-room');
+    var pensionRoom = num('fi-pension-room');
+    if (!interest && !dividend) return null;
+    var total = interest + dividend;
+    var gap = 2000 - total;
+    var riskSegment;
+    if (total < 1500) riskSegment = 'safe';
+    else if (total < 2000) riskSegment = 'warn';
+    else riskSegment = 'over';
+    var recommendation;
+    if (riskSegment === 'safe') recommendation = 'none';
+    else if (isaRoom >= -gap || isaRoom > 0) recommendation = 'isa_shift';
+    else if (pensionRoom > 0) recommendation = 'pension_shift';
+    else recommendation = 'none';
+    return { total: total, gap: gap, riskSegment: riskSegment, recommendation: recommendation, isaRoom: isaRoom, pensionRoom: pensionRoom };
+  }
+  function renderFinIncome() {
+    var out = document.getElementById('fi-result');
+    if (!out) return;
+    var r = calcFinIncome();
+    if (!r) { out.innerHTML = '<div style="background:rgba(184,71,61,0.06);color:#B8473D;border-left:3px solid #B8473D;border-radius:8px;padding:14px 18px;font-size:13px;">이자 또는 배당소득을 입력해주세요.</div>'; return; }
+    var color = r.riskSegment === 'safe' ? '#3F8A5C' : (r.riskSegment === 'warn' ? '#C4853C' : '#B8473D');
+    var label = r.riskSegment === 'safe' ? '안전 구간' : (r.riskSegment === 'warn' ? '경고 (임계 임박)' : '임계 초과 (종합과세 대상)');
+    var advice;
+    if (r.recommendation === 'isa_shift') advice = '<strong>ISA 한도 활용 권장.</strong> 다음 해 금융자산 일부를 ISA로 옮기면 금융소득에서 제외되어 임계 회피 가능. 사용 가능 한도 ' + fmt(r.isaRoom) + '.';
+    else if (r.recommendation === 'pension_shift') advice = '<strong>연저펀/IRP 한도 활용 권장.</strong> 노후 인출 시 연금소득세 5.5% 분리과세로 전환되어 종합과세 부담 감소. 사용 가능 한도 ' + fmt(r.pensionRoom) + '.';
+    else advice = r.riskSegment === 'safe' ? '임계까지 여유 ' + fmt(r.gap) + '. 현재 패턴 유지 OK.' : '추가 절세 한도 없음. 자산 이전 시점 분산이나 펀드/예금 구조 재검토 필요.';
+    out.innerHTML = '<div style="background:#FAF6F0;border-radius:8px;padding:16px 20px;border-left:3px solid ' + color + ';"><strong style="color:' + color + ';font-size:16px;display:block;margin-bottom:8px;">' + label + ' · 합산 ' + fmt(r.total) + '</strong><div style="font-size:13.5px;color:#3D2317;line-height:1.8;">이자 + 배당 합산이 2,000만원 임계 ' + (r.gap >= 0 ? '까지 ' + fmt(r.gap) + ' 여유' : '초과 ' + fmt(-r.gap)) + '.</div><p style="margin-top:10px;font-size:12.5px;color:#6B3A2A;line-height:1.7;">' + advice + '</p></div>';
+    if (window.fccCalc) {
+      window.fccCalc.trackResultImmediate({
+        calcId: 'fin_income', resultSig: r.riskSegment + '|' + r.recommendation,
+        segment: r.riskSegment, band: incomeBand(r.total), trigger: 'button',
+        extra: { risk_segment: r.riskSegment, recommendation_id: r.recommendation, current_income_band: incomeBand(r.total), gap_to_2000_band: gapBand2k(r.gap) }
+      });
+    }
+    try {
+      gtag('event', 'click_financial_income_threshold', {
+        click_text: r.riskSegment, click_location: 'tax_opt_fin_income',
+        risk_segment: r.riskSegment, current_income_band: incomeBand(r.total),
+        gap_to_2000_band: gapBand2k(r.gap), recommendation_id: r.recommendation,
+        trigger_source: 'button', gap_to_2000_amount: Math.abs(r.gap) * 10000
+      });
+    } catch (e) { /* swallow */ }
+  }
+  ['fi-interest','fi-dividend','fi-isa-room','fi-pension-room'].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', function () {
+      if (window.fccCalc) window.fccCalc.trackInput({ calcId: 'fin_income', field: id, location: 'tax_opt_fin_income' });
+    });
+    el.addEventListener('keydown', function (e) { if (e.key === 'Enter') renderFinIncome(); });
+  });
+  var fiBtn = document.getElementById('fi-run');
+  if (fiBtn) fiBtn.addEventListener('click', renderFinIncome);
+})();
+</script>
 <footer class="site-contact" style="text-align:center;padding:24px 16px;font-size:12px;color:#6B3A2A;border-top:1px solid rgba(107,58,42,0.15);margin-top:32px;font-family:inherit;">Contact · <a href="mailto:hello@financecoffeechat.com" style="color:inherit;text-decoration:underline;" data-ga="click_contact_email" data-ga-text="hello@financecoffeechat.com" data-ga-loc="footer">hello@financecoffeechat.com</a></footer>
 </body>
 </html>
