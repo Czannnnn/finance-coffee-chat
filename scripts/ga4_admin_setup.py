@@ -17,8 +17,11 @@ GA4 Custom Dimensions / Custom Metrics 일괄 등록 스크립트.
 
 import os
 import sys
-from google.analytics.admin import AnalyticsAdminServiceClient
-from google.analytics.admin_v1beta import CustomDimension, CustomMetric
+from google.analytics.admin_v1beta import (
+    AnalyticsAdminServiceClient,
+    CustomDimension,
+    CustomMetric,
+)
 from google.oauth2 import service_account
 
 PROPERTY_ID = "531235095"
@@ -54,11 +57,11 @@ CUSTOM_DIMENSIONS = [
 # Custom Metrics — 6개
 # Type은 모두 IntegerOrFloat. measurement_unit만 다름.
 CUSTOM_METRICS = [
-    ("diff_amount", "Diff Amount", "DC·DB 만기 차이 금액 (원)", "CURRENCY"),
-    ("refund_amount", "Refund Amount", "연말정산 환급|추납 금액 (원)", "CURRENCY"),
-    ("after_tax_gap_pct", "After Tax Gap %", "절세계좌 vs 일반 세후 격차 (%)", "STANDARD"),
-    ("required_spend_amount", "Required Spend Amount", "카드 공제 역산 필요 사용액 (원)", "CURRENCY"),
-    ("gap_to_2000_amount", "Gap to 2000 Amount", "2,000만 임계 격차 절대값 (원)", "CURRENCY"),
+    ("diff_amount", "Diff Amount", "DC·DB 만기 차이 금액 (원)", "STANDARD"),
+    ("refund_amount", "Refund Amount", "연말정산 환급|추납 금액 (원)", "STANDARD"),
+    ("after_tax_gap_pct", "After Tax Gap Pct", "절세계좌 vs 일반 세후 격차 (퍼센트)", "STANDARD"),
+    ("required_spend_amount", "Required Spend Amount", "카드 공제 역산 필요 사용액 (원)", "STANDARD"),
+    ("gap_to_2000_amount", "Gap to 2000 Amount", "2,000만 임계 격차 절대값 (원)", "STANDARD"),
     ("time_to_first_input_ms", "Time to First Input", "최초 입력 도달 시간 (ms)", "MILLISECONDS"),
 ]
 
