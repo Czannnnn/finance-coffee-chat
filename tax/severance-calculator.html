@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="naver-site-verification" content="03955cc9cc70b0b97522b98f0c4724b0f23ac71a" />
+  <title>퇴직금 계산기 2026 | 평균임금·근속연수로 세후 퇴직금 산출</title>
+  <meta name="description" content="평균임금(상여 반영)·근속연수로 법정 퇴직금과 퇴직소득세를 계산. 연봉 환산 입력 지원. 세후 실수령액 3분 확인.">
+  <meta name="keywords" content="퇴직금계산기, 퇴직금 계산, 퇴직금 세금, 퇴직소득세, 평균임금, 법정 퇴직금, 근속연수공제, 환산급여, 퇴직금 IRP, 퇴직소득세 계산기">
+  <link rel="canonical" href="https://www.financecoffeechat.com/tax/severance-calculator">
+  <link rel="alternate" hreflang="ko-KR" href="https://www.financecoffeechat.com/tax/severance-calculator">
+  <link rel="alternate" hreflang="x-default" href="https://www.financecoffeechat.com/tax/severance-calculator">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta property="og:title" content="퇴직금 계산기 2026 | 평균임금·근속연수로 세후 퇴직금 산출">
+  <meta property="og:description" content="평균임금(상여 반영)·근속연수로 법정 퇴직금과 퇴직소득세를 계산. 연봉 환산 입력 지원. 세후 실수령액 3분 확인.">
+  <meta property="og:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-04-19">
+  <meta property="og:url" content="https://www.financecoffeechat.com/tax/severance-calculator">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="투자 커피챗">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="퇴직금 계산기 2026 | 세후 퇴직금 3분 산출">
+  <meta name="twitter:description" content="평균임금(상여 반영)·근속연수로 법정 퇴직금과 퇴직소득세를 계산. 연봉 환산 입력 지원. 세후 실수령액 3분 확인.">
+  <meta name="twitter:image" content="https://www.financecoffeechat.com/og-image.png?v=2026-04-19">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2026-04-19b">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2026-04-19b">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <!-- GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZEG7YQ80S"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-ZZEG7YQ80S');</script>
+  <script defer src="/js/engagement-events.js"></script>
+  <script defer src="/js/ga-click-tracker.js"></script>
+  <script defer src="/js/calc-tracker.js"></script>
+  <script defer src="/js/site-search.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet"></noscript>
+  <style>
+    :root {
+      --espresso: #2C1810; --dark-roast: #3D2317; --medium-roast: #6B3A2A;
+      --caramel: #C4853C; --caramel-light: rgba(196,133,60,0.12);
+      --cream: #F5EDE0; --latte: #E8DBC5; --oat-milk: #FAF6F0; --white: #FFFDF9;
+      --green: #3F8A5C; --blue: #3A6EA5; --red-soft: #B8473D;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Noto Sans KR', sans-serif; background: var(--oat-milk); color: var(--espresso); line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+    nav { background: var(--espresso); padding: 12px 16px; text-align: center; }
+    nav a { color: var(--cream); margin: 0 12px; text-decoration: none; font-size: 14px; font-weight: 500; }
+    nav a:hover { color: var(--caramel); }
+    .subnav { background: var(--dark-roast); padding: 8px 16px; text-align: center; border-bottom: 1px solid rgba(196,133,60,0.15); position: sticky; top: 0; z-index: 10; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+    .subnav-label { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-right: 12px; }
+    .subnav a { color: var(--latte); margin: 0 8px; text-decoration: none; font-size: 13px; padding: 6px 10px; border-radius: 6px; min-height: 44px; display: inline-block; line-height: 1.6; }
+    .subnav a:hover { color: var(--caramel); }
+    .subnav a.active { color: var(--cream); background: rgba(196,133,60,0.2); font-weight: 600; }
+    @media (max-width: 600px) { .subnav a { font-size: 12px; margin: 0 4px; } nav a { margin: 0 6px; font-size: 12px; } }
+    .container { max-width: 880px; margin: 0 auto; padding: 48px 28px 64px; }
+    .header { text-align: center; margin-bottom: 28px; }
+    .badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--caramel); background: var(--caramel-light); padding: 5px 16px; border-radius: 20px; margin-bottom: 16px; border: 1px solid rgba(196,133,60,0.2); }
+    .header h1 { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 700; color: var(--espresso); letter-spacing: -0.5px; line-height: 1.35; }
+    .header h1 em { font-style: italic; color: var(--medium-roast); }
+    .header .subtitle { margin-top: 10px; font-size: 14px; color: var(--medium-roast); font-weight: 500; }
+    .divider { width: 40px; height: 2px; background: var(--caramel); margin: 20px auto 0; border-radius: 1px; }
+    .answer-box { max-width: 720px; margin: 24px auto 0; background: linear-gradient(180deg, var(--white) 0%, var(--cream) 100%); border: 1px solid var(--caramel); border-radius: 12px; padding: 18px 22px; box-shadow: 0 4px 16px rgba(196,133,60,0.10); position: relative; }
+    .answer-box::before { content: 'A.'; position: absolute; left: -12px; top: -12px; background: var(--caramel); color: var(--white); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-weight: 700; font-size: 14px; box-shadow: 0 2px 8px rgba(196,133,60,0.3); }
+    .answer-box .answer-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-bottom: 6px; }
+    .answer-box .answer-text { font-size: 16px; font-weight: 600; color: var(--espresso); line-height: 1.7; letter-spacing: -0.2px; }
+    .answer-box .answer-text strong { color: var(--medium-roast); }
+    .byline { max-width: 720px; margin: 14px auto 0; display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--medium-roast); }
+    .byline .avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--caramel-light); display: flex; align-items: center; justify-content: center; color: var(--caramel); font-weight: 700; font-size: 13px; border: 1px solid rgba(196,133,60,0.3); }
+    .byline .meta { line-height: 1.5; }
+    .byline .meta strong { color: var(--dark-roast); font-weight: 600; }
+    .byline .updated { color: var(--caramel); font-weight: 600; }
+    .section { margin-top: 48px; scroll-margin-top: 64px; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--espresso); margin-bottom: 6px; letter-spacing: -0.3px; }
+    .section-desc { font-size: 13px; color: var(--medium-roast); margin-bottom: 14px; }
+    .lede { background: var(--white); border-left: 3px solid var(--caramel); padding: 18px 22px; border-radius: 8px; font-size: 15px; color: var(--dark-roast); line-height: 1.85; }
+    .lede strong { color: var(--espresso); }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; background: var(--white); border-radius: 12px; overflow: hidden; border: 1px solid rgba(44,24,16,0.08); box-shadow: 0 2px 12px rgba(44,24,16,0.04); margin-top: 8px; }
+    .compare-table th, .compare-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid rgba(44,24,16,0.08); vertical-align: top; }
+    .compare-table thead th { background: var(--cream); color: var(--espresso); font-size: 13px; font-weight: 700; }
+    .compare-table tbody th { background: var(--oat-milk); color: var(--dark-roast); font-weight: 600; white-space: nowrap; }
+    .badge-pos { color: var(--green); font-weight: 600; }
+    .badge-neg { color: var(--red-soft); font-weight: 600; }
+    .checklist { background: var(--white); border-radius: 12px; padding: 20px 24px; border: 1px solid rgba(44,24,16,0.08); margin-top: 16px; }
+    .checklist h4 { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--espresso); margin-bottom: 12px; }
+    .checklist ul { list-style: none; padding-left: 0; }
+    .checklist li { padding: 8px 0 8px 28px; position: relative; font-size: 14px; color: var(--dark-roast); line-height: 1.7; border-bottom: 1px dashed rgba(44,24,16,0.08); }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before { content: '✓'; position: absolute; left: 0; top: 8px; color: var(--green); font-weight: 700; }
+    .checklist li strong { color: var(--espresso); }
+    .pitfalls { background: rgba(184,71,61,0.06); border-left: 3px solid var(--red-soft); padding: 18px 22px; border-radius: 8px; font-size: 14px; color: var(--dark-roast); line-height: 1.85; margin-top: 12px; }
+    .pitfalls strong { color: var(--red-soft); }
+    .related { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+    @media (max-width: 768px) { .related { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .related { grid-template-columns: 1fr; } }
+    .related a { background: var(--white); border-radius: 10px; padding: 16px 18px; border: 1px solid rgba(44,24,16,0.08); text-decoration: none; color: var(--espresso); transition: all 0.18s; display: block; min-height: 44px; }
+    .related a:hover { transform: translateY(-2px); border-color: var(--caramel); box-shadow: 0 8px 20px rgba(44,24,16,0.06); }
+    .related .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 1.4px; color: var(--caramel); margin-bottom: 6px; text-transform: uppercase; }
+    .related h4 { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--espresso); margin-bottom: 4px; }
+    .related p { font-size: 12.5px; color: var(--medium-roast); line-height: 1.6; }
+    .faq-list { margin-top: 12px; }
+    .faq-item { background: var(--white); border-radius: 10px; border: 1px solid rgba(44,24,16,0.08); margin-bottom: 10px; padding: 16px 20px; box-shadow: 0 2px 10px rgba(44,24,16,0.03); }
+    .faq-item summary { cursor: pointer; font-weight: 600; color: var(--espresso); font-size: 15px; list-style: none; padding-right: 24px; position: relative; min-height: 44px; display: flex; align-items: center; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; position: absolute; right: 0; top: 50%; transform: translateY(-50%); color: var(--caramel); font-weight: 700; font-size: 18px; line-height: 1; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-item p { margin-top: 12px; color: var(--dark-roast); font-size: 14px; line-height: 1.85; }
+    .faq-item p strong { color: var(--espresso); }
+    .disclaimer { margin-top: 48px; padding: 16px 20px; background: var(--white); border: 1px dashed rgba(44,24,16,0.15); border-radius: 10px; font-size: 12px; color: var(--medium-roast); line-height: 1.7; }
+    .calc-card { background: var(--white); border: 1px solid var(--caramel); border-radius: 12px; padding: 22px 24px; box-shadow: 0 4px 16px rgba(196,133,60,0.10); margin-top: 12px; }
+    .calc-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .calc-row label { font-size: 13.5px; font-weight: 600; color: var(--espresso); }
+    .calc-row input, .calc-row select { padding: 12px 14px; border: 1px solid rgba(44,24,16,0.18); border-radius: 8px; font-size: 16px; font-family: inherit; color: var(--espresso); background: var(--white); -webkit-appearance: none; appearance: none; }
+    .calc-row input:focus, .calc-row select:focus { outline: 2px solid var(--caramel); outline-offset: -1px; border-color: var(--caramel); }
+    .calc-row small { font-size: 11.5px; color: var(--medium-roast); margin-top: 2px; line-height: 1.5; }
+    #sv-run { display: block; width: 100%; padding: 14px 18px; background: var(--espresso); color: var(--cream); border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 6px; transition: background 0.15s; min-height: 44px; }
+    #sv-run:hover { background: var(--dark-roast); }
+    #sv-run:focus { outline: 2px solid var(--caramel); outline-offset: 2px; }
+    .calc-output { min-height: 0; margin-top: 16px; padding: 0; background: transparent; border-radius: 8px; font-size: 14.5px; line-height: 1.8; color: var(--dark-roast); display: none; }
+    .calc-output.has-result { display: block; padding: 16px 18px; background: var(--cream); }
+    .calc-output strong { color: var(--espresso); font-weight: 700; }
+    .calc-output .calc-headline { font-size: 16px; color: var(--espresso); font-weight: 700; margin-bottom: 8px; }
+    .calc-disclaimer { display: block; margin-top: 10px; font-size: 11.5px; color: var(--medium-roast); line-height: 1.55; }
+    @media (max-width: 600px) { .container { padding: 32px 16px 48px; } .header h1 { font-size: 24px; } .section-title { font-size: 19px; } .compare-table th, .compare-table td { padding: 10px; font-size: 13px; } .answer-box { padding: 16px 18px; } .answer-box .answer-text { font-size: 15px; } .calc-card { padding: 18px 16px; } }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "퇴직금 계산기 2026 | 평균임금·근속연수로 세후 퇴직금 산출",
+    "description": "평균임금(상여 반영)·근속연수로 법정 퇴직금과 퇴직소득세를 계산. 연봉 환산 입력 지원. 세후 실수령액 3분 확인.",
+    "image": "https://www.financecoffeechat.com/og-image.png",
+    "datePublished": "2026-06-03",
+    "dateModified": "2026-06-03",
+    "author": { "@type": "Organization", "name": "투자 커피챗 에디터" },
+    "publisher": {
+      "@type": "Organization",
+      "name": "투자 커피챗",
+      "logo": { "@type": "ImageObject", "url": "https://www.financecoffeechat.com/logo.svg" }
+    },
+    "mainEntityOfPage": "https://www.financecoffeechat.com/tax/severance-calculator"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "법정 퇴직금은 어떻게 산정하나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "법정 퇴직금은 1일 평균임금 × 30일 × (총 근속일수 / 365)로 계산합니다. 간단히는 1개월분 평균임금에 근속연수를 곱한 금액과 거의 같습니다. 계속근로기간이 1년 이상이고 4주 평균 주 15시간 이상 근무한 근로자가 대상입니다." }
+      },
+      {
+        "@type": "Question",
+        "name": "평균임금이란 무엇인가요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "평균임금은 퇴직일 직전 3개월간 지급된 임금 총액을 그 기간의 총 일수로 나눈 1일 단가입니다. 기본급뿐 아니라 정기적·일률적으로 지급된 수당과 상여금의 3개월분이 포함되므로, 통상임금보다 높게 산정되는 것이 일반적입니다." }
+      },
+      {
+        "@type": "Question",
+        "name": "상여금도 퇴직금에 포함되나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "정기적·계속적으로 지급되는 상여금은 평균임금에 포함됩니다. 연간 상여금 총액의 3개월분(연간 상여 × 3/12)을 직전 3개월 임금에 더해 평균임금을 산정하므로, 상여가 많을수록 퇴직금도 늘어납니다. 본 계산기는 연간 상여를 12로 나눠 월 평균임금에 가산하는 약식으로 반영합니다." }
+      },
+      {
+        "@type": "Question",
+        "name": "퇴직소득세는 어떻게 매겨지나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "퇴직소득세는 퇴직급여에서 근속연수공제를 차감하고, 이를 근속연수로 나눠 12를 곱한 환산급여에 종합소득세율표를 적용한 뒤 다시 근속연수를 곱해 12로 나누는 연분연승 방식입니다. 근속연수가 길수록 공제가 커지고 세율 구간이 낮아져 실효세율이 떨어집니다." }
+      },
+      {
+        "@type": "Question",
+        "name": "퇴직금을 IRP로 이체하면 절세가 되나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "퇴직급여를 IRP(개인형 퇴직연금) 계좌로 이체하면 퇴직소득세 납부가 이연됩니다. 이후 만 55세 이후 연금으로 수령하면 퇴직소득세의 30~40%를 감면받아 연금소득세 5.5~3.3% 분리과세로 부담이 줄어듭니다. 일시금 수령보다 세 부담을 크게 낮출 수 있습니다." }
+      }
+    ]
+  }
+  </script>
+  <script src="/js/last-updated.js" defer></script>
+</head>
+<body>
+  <nav>
+    <a href="/" data-ga="click_gnb" data-ga-text="홈" data-ga-loc="gnb">홈</a>
+    <a href="/asset" data-ga="click_gnb" data-ga-text="자산관리101" data-ga-loc="gnb">자산관리101</a>
+    <a href="/portfolio" data-ga="click_gnb" data-ga-text="포트폴리오" data-ga-loc="gnb">포트폴리오</a>
+    <a href="/index-investing" data-ga="click_gnb" data-ga-text="지수투자" data-ga-loc="gnb">지수투자</a>
+    <a href="/tax-optimization" data-ga="click_gnb" data-ga-text="절세" data-ga-loc="gnb">절세</a>
+    <a href="/ipo" data-ga="click_gnb" data-ga-text="공모주" data-ga-loc="gnb">공모주</a>
+    <a href="/cost-optimization" data-ga="click_gnb" data-ga-text="생활비 줄이기" data-ga-loc="gnb">생활비 줄이기</a>
+  <button class="search-trigger" id="siteSearchTrigger" type="button" aria-label="사이트 내부 검색">🔍</button>
+  </nav>
+    <div class="subnav">
+    <span class="subnav-label">세제</span>
+    <a href="/tax-optimization" data-ga="click_subnav" data-ga-text="hub" data-ga-loc="tax_subnav">허브</a>
+    <a href="/tax/isa-guide" data-ga="click_subnav" data-ga-text="isa" data-ga-loc="tax_subnav">ISA</a>
+    <a href="/tax/irp-refund-guide" data-ga="click_subnav" data-ga-text="irp-refund" data-ga-loc="tax_subnav">IRP 환급</a>
+    <a href="/tax/pension-irp-comparison" data-ga="click_subnav" data-ga-text="pension-vs-irp" data-ga-loc="tax_subnav">연저펀 vs IRP</a>
+    <a href="/severance-irp-rollover" data-ga="click_subnav" data-ga-text="severance-irp" data-ga-loc="tax_subnav">퇴직금 IRP</a>
+    <a href="/tax/foreign-stock-capital-gains-2026" data-ga="click_subnav" data-ga-text="foreign-stock" data-ga-loc="tax_subnav">해외주식</a>
+    <a href="/tax/global-income-tax-2026" data-ga="click_subnav" data-ga-text="global-income" data-ga-loc="tax_subnav">종합소득세</a>
+    <a href="/tax-simulation" data-ga="click_subnav" data-ga-text="sim" data-ga-loc="tax_subnav">시뮬레이션</a>
+  </div>
+  <div class="container">
+    <div class="header">
+      <div class="badge">2026 퇴직금 계산기</div>
+      <h1>퇴직금 계산기 <em>3분 산출</em></h1>
+      <p class="subtitle">평균임금(상여 반영) · 근속연수 · 법정 퇴직금 · 퇴직소득세 · 세후 실수령액</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="answer-box">
+      <div class="answer-label">한 줄 답</div>
+      <div class="answer-text">
+        법정 퇴직금은 <strong>평균임금 × 근속연수</strong>로 산정하고, 여기서 <strong>근속연수공제</strong>를 차감한 환산급여에 세율을 적용해 <strong>퇴직소득세</strong>를 매깁니다. 근속이 길수록 실효세율이 낮아지며, IRP 이체 시 추가 절세가 가능합니다.
+      </div>
+    </div>
+    <div class="byline">
+      <div class="avatar">투</div>
+      <div class="meta"><strong>투자 커피챗 에디터</strong> · 출처 근로기준법·소득세법 퇴직소득 안내 · <span class="updated"></span></div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">퇴직금 핵심 요약</h2>
+      <p class="section-desc">법정 퇴직금은 계속근로기간 1년 이상·주 평균 15시간 이상 근무한 근로자에게 지급됩니다.</p>
+      <table class="compare-table">
+        <thead><tr><th>항목</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><th>지급 대상</th><td>계속근로기간 1년 이상, 4주 평균 1주 소정근로 15시간 이상 근로자</td></tr>
+          <tr><th>산정 공식</th><td>1일 평균임금 × 30일 × (총 근속일수 / 365) ≈ <span class="badge-pos">평균임금 × 근속연수</span></td></tr>
+          <tr><th>평균임금</th><td>퇴직 직전 <strong>3개월</strong> 임금 총액 ÷ 총 일수. 기본급 + 정기수당 + <strong>상여금 3개월분</strong> 포함</td></tr>
+          <tr><th>퇴직소득세</th><td>퇴직급여 − 근속연수공제 → 환산급여 → 누진세율 → 연분연승</td></tr>
+          <tr><th>근속연수공제</th><td>근속이 길수록 공제 증가 (실효세율 하락 효과)</td></tr>
+          <tr><th>지급 기한</th><td>퇴직일로부터 <strong>14일 이내</strong> (당사자 합의 시 연장 가능)</td></tr>
+          <tr><th>IRP 이체</th><td>퇴직급여 IRP 이체 시 과세이연 → 연금수령 시 <span class="badge-pos">5.5~3.3% 분리과세</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section" id="section-calc">
+      <h2 class="section-title">퇴직금 계산기 (세후)</h2>
+      <p class="section-desc">월급 또는 연봉, 연간 상여금과 근속연수를 입력하면 평균임금에 상여를 반영해 법정 퇴직금과 퇴직소득세, 세후 실수령액을 산출합니다.</p>
+      <div class="calc-card calc-widget" data-calc-id="severance" data-calc-loc="severance_calc_page" role="form" aria-labelledby="calc-form-label">
+        <div id="calc-form-label" class="visually-hidden" style="position:absolute;left:-9999px">퇴직금 세후 계산기</div>
+        <div class="calc-row">
+          <label for="sv-mode">입력 방식</label>
+          <select id="sv-mode">
+            <option value="monthly" selected>월급 입력</option>
+            <option value="annual">연봉 입력</option>
+          </select>
+        </div>
+        <div class="calc-row" id="sv-wage-row">
+          <label for="sv-wage">월 기본급 (만원)</label>
+          <input id="sv-wage" type="number" inputmode="numeric" min="0" step="10" placeholder="예: 500" autocomplete="off">
+        </div>
+        <div class="calc-row" id="sv-annual-row" style="display:none">
+          <label for="sv-annual">연봉 (만원)</label>
+          <input id="sv-annual" type="number" inputmode="numeric" min="0" step="100" placeholder="예: 6,000" autocomplete="off">
+          <small>※ 월급 = 연봉 ÷ 12로 환산해 평균임금에 반영합니다.</small>
+        </div>
+        <div class="calc-row">
+          <label for="sv-bonus">연간 상여금 합계 (만원, 선택)</label>
+          <input id="sv-bonus" type="number" inputmode="numeric" min="0" step="10" placeholder="예: 1,000" autocomplete="off">
+          <small>※ 정기적·계속적으로 지급된 상여만 평균임금에 가산됩니다. 연간 상여를 12로 나눠 월 평균임금에 더하는 약식입니다.</small>
+        </div>
+        <div class="calc-row">
+          <label for="sv-years">근속 연수</label>
+          <input id="sv-years" type="number" inputmode="decimal" min="0" max="50" step="0.5" placeholder="예: 10" autocomplete="off">
+        </div>
+        <button type="button" id="sv-run" data-ga="click_severance_calc" data-ga-text="severance-calc" data-ga-loc="severance_calc_page">퇴직금 계산</button>
+        <div id="sv-result" class="calc-output" aria-live="polite"></div>
+        <small class="calc-disclaimer">※ 단순 약식 계산입니다. 실제 퇴직소득세는 근속연수공제·환산급여 정산으로 차등 부담되며, 평균임금 산정 범위(상여·수당 포함 여부)는 회사 인사팀·세무대리인 확인이 필요합니다.</small>
+      </div>
+      <div class="lede" style="margin-top:18px">
+        <strong>예시</strong> · 월 기본급 500만원, 연간 상여 1,000만원, 근속 10년 → 평균임금 약 583만원 × 10년 = 세전 퇴직금 약 5,833만원. 근속연수공제와 환산급여 분산으로 실효세율은 한 자릿수에 머무는 경우가 많습니다.<br>
+        퇴직급여를 IRP로 이체해 만 55세 이후 연금으로 나눠 받으면 퇴직소득세 30~40% 감면 + 연금소득세 5.5~3.3% 분리과세로 부담을 더 줄일 수 있습니다.
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">퇴직금 계산 4단계</h2>
+      <div class="checklist">
+        <h4>세후 퇴직금 산출 순서</h4>
+        <ul>
+          <li><strong>평균임금 산정</strong> — 직전 3개월 임금 총액(기본급 + 정기수당 + 상여 3개월분)을 일수로 나눠 1일 평균임금을 구합니다.</li>
+          <li><strong>세전 퇴직금</strong> — 1일 평균임금 × 30일 × (근속일수 / 365), 약식으로는 평균임금(월) × 근속연수입니다.</li>
+          <li><strong>퇴직소득세</strong> — 퇴직급여에서 근속연수공제를 빼고 환산급여를 구해 누진세율을 적용한 뒤 연분연승으로 세액을 확정합니다.</li>
+          <li><strong>세후 실수령액</strong> — 세전 퇴직금에서 퇴직소득세를 차감합니다. IRP 이체 시 납부가 이연됩니다.</li>
+        </ul>
+      </div>
+      <div class="pitfalls">
+        <strong>주의</strong> · 본 계산기는 평균임금·근속연수공제·환산급여를 단순화한 약식입니다. 비정기 상여·성과급의 평균임금 포함 여부, 1년 미만 잔여 개월 환산, 사내 규정상 누진 가산 등에 따라 실제 금액이 달라집니다. 정확한 수치는 회사 인사팀과 세무대리인의 정산을 따르세요.
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">자주 묻는 질문</h2>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>법정 퇴직금은 어떻게 산정하나요?</summary>
+          <p>법정 퇴직금은 <strong>1일 평균임금 × 30일 × (총 근속일수 / 365)</strong>로 계산합니다. 약식으로는 1개월분 평균임금에 근속연수를 곱한 금액과 거의 같습니다. 계속근로기간 1년 이상, 4주 평균 주 15시간 이상 근무한 근로자가 대상입니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>평균임금이란 무엇인가요?</summary>
+          <p>평균임금은 퇴직일 직전 <strong>3개월간 지급된 임금 총액을 그 기간의 총 일수로 나눈 1일 단가</strong>입니다. 기본급뿐 아니라 정기적·일률적으로 지급된 수당과 상여금의 3개월분이 포함되므로 통상임금보다 높게 산정되는 것이 일반적입니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>상여금도 퇴직금에 포함되나요?</summary>
+          <p>정기적·계속적으로 지급되는 상여금은 평균임금에 포함됩니다. 연간 상여금 총액의 3개월분(<strong>연간 상여 × 3/12</strong>)을 직전 3개월 임금에 더해 평균임금을 산정하므로 상여가 많을수록 퇴직금도 늘어납니다. 본 계산기는 연간 상여를 12로 나눠 월 평균임금에 가산하는 약식으로 반영합니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>퇴직소득세는 어떻게 매겨지나요?</summary>
+          <p>퇴직급여에서 <strong>근속연수공제</strong>를 차감하고, 이를 근속연수로 나눠 12를 곱한 <strong>환산급여</strong>에 종합소득세율표를 적용한 뒤 다시 근속연수를 곱해 12로 나누는 연분연승 방식입니다. 근속연수가 길수록 공제가 커지고 세율 구간이 낮아져 실효세율이 떨어집니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>퇴직금을 IRP로 이체하면 절세가 되나요?</summary>
+          <p>퇴직급여를 IRP(개인형 퇴직연금) 계좌로 이체하면 퇴직소득세 납부가 이연됩니다. 이후 만 55세 이후 연금으로 수령하면 퇴직소득세의 30~40%를 감면받아 <strong>연금소득세 5.5~3.3% 분리과세</strong>로 부담이 줄어듭니다. 일시금 수령보다 세 부담을 크게 낮출 수 있습니다.</p>
+        </details>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">함께 보기</h2>
+      <div class="related">
+        <a href="/severance-irp-rollover"><span class="tag">퇴직 절세</span><h4>퇴직금 IRP 이체 절세</h4><p>과세이연·연금수령 30~40% 감면</p></a>
+        <a href="/tax/pension-irp-comparison"><span class="tag">노후 절세</span><h4>연금·IRP 비교</h4><p>세액공제 13.2~16.5%·과세이연</p></a>
+        <a href="/tax/global-income-tax-2026"><span class="tag">세제 시즌</span><h4>종합소득세 5월 신고</h4><p>연금소득 1,500만 기준</p></a>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      본 페이지는 일반 정보 제공 목적이며 특정 금융상품 또는 세무 처리에 대한 권유·자문이 아닙니다. 퇴직금·퇴직소득세 계산은 단순 약식이며, 실제 퇴직소득세는 근속연수공제·환산급여 정산으로 달라집니다. 평균임금 산정 범위와 정확한 세액은 본인 근속연수·임금 내역에 따라 달라지므로 회사 인사팀과 세무대리인의 검토를 거치세요. 2026년 기준이며 향후 세법 개정 시 내용이 달라질 수 있습니다.
+    </div>
+  </div>
+  <script>
+    (function () {
+      var btn = document.getElementById('sv-run');
+      var out = document.getElementById('sv-result');
+      var modeEl = document.getElementById('sv-mode');
+      var wageEl = document.getElementById('sv-wage');
+      var annualEl = document.getElementById('sv-annual');
+      var bonusEl = document.getElementById('sv-bonus');
+      var yearsEl = document.getElementById('sv-years');
+      var wageRow = document.getElementById('sv-wage-row');
+      var annualRow = document.getElementById('sv-annual-row');
+      if (!btn || !out || !modeEl || !wageEl || !annualEl || !yearsEl) return;
+
+      function num(el) { var v = parseFloat(el.value); return isNaN(v) ? 0 : v; }
+      function fmt(v) { return Math.round(v).toLocaleString('ko-KR') + ' 만원'; }
+      function tenureBand(y) { if (y < 5) return '<5'; if (y < 10) return '5-10'; if (y < 20) return '10-20'; return '20+'; }
+      function severanceBand(s) { if (s < 1000) return '<1000'; if (s < 5000) return '1000-5000'; if (s < 10000) return '5000-10000'; return '10000+'; }
+      function segmentByRate(rate) { if (rate < 3) return 'low'; if (rate < 8) return 'mid'; return 'high'; }
+
+      function syncMode() {
+        var annual = modeEl.value === 'annual';
+        annualRow.style.display = annual ? '' : 'none';
+        wageRow.style.display = annual ? 'none' : '';
+      }
+      modeEl.addEventListener('change', syncMode);
+      syncMode();
+
+      function taxRate(base) {
+        if (base <= 1400) return base * 0.06;
+        if (base <= 5000) return 84 + (base - 1400) * 0.15;
+        if (base <= 8800) return 624 + (base - 5000) * 0.24;
+        if (base <= 15000) return 1536 + (base - 8800) * 0.35;
+        return 3706 + (base - 15000) * 0.38;
+      }
+
+      function calc() {
+        var years = num(yearsEl);
+        var monthly = (modeEl.value === 'annual') ? (num(annualEl) / 12) : num(wageEl);
+        var bonus = num(bonusEl);
+        if (!monthly || !years) return null;
+        // 평균임금: 월급 + 연간 상여 / 12 (상여 월환산 가산, 약식)
+        var avgWage = monthly + (bonus / 12);
+        var grossSeverance = avgWage * years; // 평균임금 × 근속연수 약식
+
+        var serviceDeduction;
+        if (years <= 5) serviceDeduction = 100 * years;
+        else if (years <= 10) serviceDeduction = 500 + 200 * (years - 5);
+        else if (years <= 20) serviceDeduction = 1500 + 250 * (years - 10);
+        else serviceDeduction = 4000 + 300 * (years - 20);
+
+        var taxableBase = Math.max(0, grossSeverance - serviceDeduction);
+        var annualEquiv = taxableBase * 12 / Math.max(1, years); // 환산급여
+        var annualTax = taxRate(annualEquiv);
+        var finalTax = annualTax * years / 12; // 연분연승
+        var netSeverance = grossSeverance - finalTax;
+        var effectiveRate = grossSeverance > 0 ? (finalTax / grossSeverance) * 100 : 0;
+        return {
+          avgWage: avgWage,
+          grossSeverance: Math.round(grossSeverance),
+          finalTax: Math.round(finalTax),
+          netSeverance: Math.round(netSeverance),
+          effectiveRate: Math.round(effectiveRate * 10) / 10,
+          years: years
+        };
+      }
+
+      var prevSig = '';
+      function render(source) {
+        var r = calc();
+        if (!r) {
+          out.classList.add('has-result');
+          out.innerHTML = '<div class="calc-headline">월급(또는 연봉)과 근속 연수를 입력해 주세요</div>';
+          return;
+        }
+        var segment = segmentByRate(r.effectiveRate);
+        var sBand = severanceBand(r.grossSeverance);
+        var tBand = tenureBand(r.years);
+
+        out.classList.add('has-result');
+        out.innerHTML =
+          '<div class="calc-headline">세후 퇴직금 추정 ' + fmt(r.netSeverance) + '</div>' +
+          '<strong>세전 퇴직금</strong> ' + fmt(r.grossSeverance) + ' − <strong>퇴직소득세</strong> ' + fmt(r.finalTax) +
+          ' = <strong>세후 ' + fmt(r.netSeverance) + '</strong> (실효세율 ' + r.effectiveRate + '%)<br>' +
+          '<span style="font-size:12.5px;color:var(--medium-roast);">근속이 길수록 근속연수공제 + 환산급여 분산으로 실효세율이 낮아집니다. IRP로 이체 후 연금 분할 수령 시 5.5~3.3% 분리과세로 세 부담을 더 줄일 수 있습니다.</span>';
+
+        var sig = segment + '|' + sBand;
+        if (sig !== prevSig) {
+          prevSig = sig;
+          if (window.fccCalc) {
+            window.fccCalc.trackResultImmediate({
+              calcId: 'severance', resultSig: sig, segment: segment,
+              band: sBand, trigger: source || 'auto',
+              extra: { tenure_band: tBand, effective_rate_band: segment }
+            });
+          }
+        }
+
+        if (typeof gtag === 'function') {
+          try {
+            gtag('event', 'click_severance_calc_run', {
+              click_text: segment,
+              click_location: 'severance_calc_page',
+              result_segment: segment,
+              tenure_band: tBand,
+              severance_band: sBand,
+              trigger_source: source || 'button'
+            });
+          } catch (e) { /* swallow */ }
+        }
+      }
+
+      btn.addEventListener('click', function () { render('button'); });
+      [wageEl, annualEl, bonusEl, yearsEl].forEach(function (el) {
+        el.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') { e.preventDefault(); render('enter'); }
+        });
+      });
+
+      // calc-tracker funnel 연동 (calc_input_filled)
+      ['sv-wage', 'sv-annual', 'sv-bonus', 'sv-years'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('input', function () {
+          if (window.fccCalc) window.fccCalc.trackInput({ calcId: 'severance', field: id, location: 'severance_calc_page' });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -249,6 +249,7 @@
     <div class="section" id="section-severance-calc">
       <h2 class="section-title">퇴직금 일반 계산기</h2>
       <p class="section-desc" style="font-size:13px;color:#6B3A2A;margin-bottom:14px;">평균 임금과 근속 연수를 입력하면 법정 퇴직금과 퇴직소득세를 자동 산출합니다.</p>
+      <a href="/tax/severance-calculator" data-ga="click_related" data-ga-text="severance-calc-full" data-ga-loc="severance_general" style="display:block;background:var(--cream);border:1px solid var(--caramel);border-radius:10px;padding:12px 16px;margin-bottom:14px;text-decoration:none;color:var(--espresso);font-size:13.5px;font-weight:600;">🧮 연봉 환산·상여 포함 정밀 퇴직금 계산기 →</a>
       <div class="calc-widget" data-calc-id="severance" data-calc-loc="severance_general" style="background:#FFFDF9;border-radius:12px;padding:22px;border:1px solid rgba(44,24,16,0.08);box-shadow:0 2px 12px rgba(44,24,16,0.04);">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
           <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">퇴직 직전 3개월 평균 월급 (만원)
@@ -256,6 +257,9 @@
           </label>
           <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">근속 연수
             <input id="sv-years" type="number" inputmode="decimal" min="0" max="50" step="0.5" placeholder="예: 10" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
+          </label>
+          <label style="display:flex;flex-direction:column;font-size:13px;color:#6B3A2A;">연간 상여금 (만원, 선택)
+            <input id="sv-bonus" type="number" inputmode="numeric" min="0" step="10" placeholder="예: 600" style="margin-top:4px;padding:8px 10px;border:1px solid rgba(44,24,16,0.15);border-radius:6px;font-size:14px;font-family:inherit;">
           </label>
         </div>
         <button id="sv-run" type="button" style="margin-top:16px;background:#C4853C;color:#FFFDF9;border:none;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">퇴직금 계산</button>
@@ -287,8 +291,10 @@
   function calcSeverance() {
     var wage = num('sv-wage');
     var years = num('sv-years');
+    var bonus = num('sv-bonus');
     if (!wage || !years) return null;
-    var grossSeverance = wage * years; // 평균임금 × 근속연수 약식
+    var avgWage = wage + (bonus / 12);
+    var grossSeverance = avgWage * years; // 평균임금(상여 월할 포함) × 근속연수 약식
     // 근속연수공제 (단순 가정)
     var serviceDeduction;
     if (years <= 5) serviceDeduction = 100 * years;
@@ -333,7 +339,7 @@
       });
     }
   }
-  ['sv-wage','sv-years'].forEach(function (id) {
+  ['sv-wage','sv-years','sv-bonus'].forEach(function (id) {
     var el = document.getElementById(id);
     if (!el) return;
     el.addEventListener('input', function () {
