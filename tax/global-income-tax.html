@@ -438,7 +438,8 @@
               taxbase_band: tbBand,
               tax_band: tBand,
               bracket: bracket,
-              trigger_source: source || 'button'
+              trigger_source: source || 'button',
+              tax_amount: Math.round(total * 10000)
             });
           } catch (e) { /* swallow */ }
         }

@@ -52,6 +52,23 @@ CUSTOM_DIMENSIONS = [
     ("field", "Field Name", "calc_input_filled 이벤트 입력 필드명"),
     ("current_income_band", "Current Income Band", "금융소득 현재 합산 구간 (<1000, 1000-1800, 1800-2000, 2000+)"),
     ("gap_to_2000_band", "Gap to 2000 Band", "2,000만 임계까지 격차 구간"),
+    # --- 사이클 6-20 ROI TOP5 계산기 6건 추가 (2026-06-03) ---
+    ("trigger_source", "Trigger Source", "이벤트 트리거 방식 (button, enter, auto)"),
+    ("asset_type", "Asset Type", "양도세 자산유형 (domestic_stock, real_estate, overseas_stock)"),
+    ("business_type", "Business Type", "부가세 과세유형 (general, simplified)"),
+    ("credit_rate", "Credit Rate", "연금 세액공제율 (16.5, 13.2)"),
+    ("bracket", "Income Tax Bracket", "종합소득 한계세율 라벨 (6%~45%)"),
+    ("tenure_band", "Tenure Band", "퇴직 근속연수 구간 (<5, 5-10, 10-20, 20+)"),
+    ("contribution_band", "Contribution Band", "연금저축+IRP 납입 구간 (<300, 300-600, 600-900, 900+)"),
+    ("credit_band", "Credit Band", "세액공제액 구간 (<30, 30-60, 60-100, 100-148, 148+ 만원)"),
+    ("taxbase_band", "Tax Base Band", "종합소득 과세표준 구간 (<1400, 1400-5000, 5000-8800, 8800-15000, 15000+)"),
+    ("tax_band", "Tax Amount Band", "산출 세액 구간 (양도세·종합소득세 등)"),
+    ("severance_band", "Severance Band", "세전 퇴직금 구간 (<1000, 1000-5000, 5000-10000, 10000+ 만원)"),
+    ("gain_band", "Capital Gain Band", "양도차익 구간 (loss, under_250, lt_3000, lt_10000, ge_10000)"),
+    ("supply_band", "Supply Band", "부가세 매출(공급가액) 구간 (<2000, 2000-8000, 8000-20000, 20000+)"),
+    ("vat_band", "VAT Band", "부가세 납부세액 구간 (<50, 50-200, 200-500, 500-2000, 2000+)"),
+    ("dividend_band", "Dividend Band", "배당소득 구간 (<500, 500-2000, 2000-5000, 5000+ 만원)"),
+    ("threshold_gap_band", "Threshold Gap Band", "금융소득종합과세 2,000만 임계 격차 구간"),
 ]
 
 # Custom Metrics — 6개
@@ -63,6 +80,10 @@ CUSTOM_METRICS = [
     ("required_spend_amount", "Required Spend Amount", "카드 공제 역산 필요 사용액 (원)", "STANDARD"),
     ("gap_to_2000_amount", "Gap to 2000 Amount", "2,000만 임계 격차 절대값 (원)", "STANDARD"),
     ("time_to_first_input_ms", "Time to First Input", "최초 입력 도달 시간 (ms)", "MILLISECONDS"),
+    # --- 사이클 6-20 ROI TOP5 계산기 6건 추가 (2026-06-03) ---
+    ("credit_amount", "Credit Amount", "연금저축·IRP 세액공제액 (원)", "STANDARD"),
+    ("tax_amount", "Tax Amount", "산출 세액 — 종합소득세·양도세·배당세·퇴직소득세 (원)", "STANDARD"),
+    ("vat_amount", "VAT Amount", "부가세 납부세액 (원)", "STANDARD"),
 ]
 
 

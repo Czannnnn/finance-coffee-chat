@@ -435,7 +435,8 @@
               result_segment: segment,
               tenure_band: tBand,
               severance_band: sBand,
-              trigger_source: source || 'button'
+              trigger_source: source || 'button',
+              tax_amount: Math.round(r.finalTax * 10000)
             });
           } catch (e) { /* swallow */ }
         }

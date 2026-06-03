@@ -428,7 +428,8 @@
               result_segment: segment,
               dividend_band: dividend_band,
               threshold_gap_band: threshold_gap_band,
-              trigger_source: source || 'button'
+              trigger_source: source || 'button',
+              tax_amount: Math.round(Math.min(r.total, THRESHOLD) * RATE * 10000)
             });
           } catch (e) { /* swallow */ }
         }
