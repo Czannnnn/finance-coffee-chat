@@ -481,7 +481,8 @@
               result_segment: segment,
               gain_band: gb,
               tax_band: tb,
-              trigger_source: source || 'button'
+              trigger_source: source || 'button',
+              tax_amount: Math.round(tax * 10000)
             });
           } catch (e) { /* swallow */ }
         }

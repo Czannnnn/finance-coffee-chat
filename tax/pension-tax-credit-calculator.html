@@ -418,7 +418,8 @@
               credit_rate: rateLabel,
               contribution_band: contribBand,
               credit_band: band,
-              trigger_source: source || 'button'
+              trigger_source: source || 'button',
+              credit_amount: Math.round(creditMan * 10000)
             });
           } catch (e) { /* swallow */ }
         }

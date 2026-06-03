@@ -434,7 +434,8 @@
               result_segment: segment,
               supply_band: supBand,
               vat_band: band,
-              trigger_source: source || 'button'
+              trigger_source: source || 'button',
+              vat_amount: Math.round(Math.abs(payable) * 10000)
             });
           } catch (e) { /* swallow */ }
         }
