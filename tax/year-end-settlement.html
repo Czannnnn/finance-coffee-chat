@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="naver-site-verification" content="03955cc9cc70b0b97522b98f0c4724b0f23ac71a" />
   <title>연말정산 간이 계산기 + 신용카드 공제 역산 — 직장인 가이드 2026 | 투자 커피챗</title>
-  <meta name="description" content="연봉·부양가족·신용카드·의료비·교육비를 입력하면 결정세액과 환급/추납 segment를 즉시 산출. 목표 환급액에서 필요 카드 사용액을 역산하는 보조 위젯 포함. 단순 참고용·홈택스 기준.">
-  <meta name="keywords" content="연말정산 간이 계산기, 연말정산 시뮬, 신용카드 소득공제, 카드 공제 역산, 환급액 계산, 결정세액, 부양가족 공제, 의료비 세액공제, 교육비 세액공제, 직장인 연말정산">
+  <meta name="description" content="연봉·부양가족·신용카드·의료비·교육비를 입력하면 결정세액과 환급/추납 segment를 즉시 산출. 목표 환급액에서 필요 카드 사용액을 역산하는 보조 위젯 포함. 단순 참고용·홈택스 기준. 월세 세액공제(공제율 15~17%·한도 1,000만원)까지.">
+  <meta name="keywords" content="연말정산 간이 계산기, 연말정산 시뮬, 신용카드 소득공제, 카드 공제 역산, 환급액 계산, 결정세액, 부양가족 공제, 의료비 세액공제, 교육비 세액공제, 직장인 연말정산, 월세 세액공제, 월세 환급, 월세 소득공제, 무주택 월세공제">
   <link rel="canonical" href="https://www.financecoffeechat.com/tax/year-end-settlement">
   <link rel="alternate" hreflang="ko-KR" href="https://www.financecoffeechat.com/tax/year-end-settlement">
   <link rel="alternate" hreflang="x-default" href="https://www.financecoffeechat.com/tax/year-end-settlement">
@@ -90,7 +90,38 @@
     .pitfalls { background: rgba(184,71,61,0.06); border-left: 3px solid var(--red-soft); padding: 18px 22px; border-radius: 8px; font-size: 14px; color: var(--dark-roast); line-height: 1.85; }
     .pitfalls strong { color: var(--red-soft); }
     @media (max-width: 600px) { .container { padding: 32px 16px 48px; } .header h1 { font-size: 24px; } .section-title { font-size: 19px; } .calc-widget { padding: 18px 16px; } }
+    .faq-list { margin-top: 12px; }
+    .faq-item { background: var(--white); border-radius: 10px; border: 1px solid rgba(44,24,16,0.08); margin-bottom: 10px; padding: 14px 20px; box-shadow: 0 2px 10px rgba(44,24,16,0.03); }
+    .faq-item summary { cursor: pointer; font-weight: 600; color: var(--espresso); font-size: 14.5px; list-style: none; padding-right: 24px; position: relative; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; position: absolute; right: 0; top: 0; color: var(--caramel); font-weight: 700; font-size: 18px; line-height: 1; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-item p { margin-top: 12px; color: var(--dark-roast); font-size: 13.5px; line-height: 1.8; }
+    .faq-item p strong { color: var(--espresso); }
   </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "월세 세액공제 조건과 한도는 어떻게 되나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "무주택 세대주이면서 총급여 8,000만원 이하(종합소득 7,000만원 이하)인 근로자가, 국민주택규모 또는 기준시가 4억원 이하 주택을 임차해 월세를 낸 경우 적용됩니다. 공제대상 월세액 한도는 연 1,000만원입니다. 단순 참고용이며 정확한 요건은 국세청 홈택스 기준으로 확인하세요." }
+      },
+      {
+        "@type": "Question",
+        "name": "월세 세액공제 공제율은 몇 %인가요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "총급여 5,500만원 이하(종합소득 4,500만원 이하)는 17%, 총급여 5,500만원 초과 8,000만원 이하는 15%가 적용됩니다. 공제대상 한도 연 1,000만원에 공제율을 곱한 금액이 산출세액에서 차감됩니다." }
+      },
+      {
+        "@type": "Question",
+        "name": "월세 세액공제와 신용카드 공제를 중복으로 받을 수 있나요?",
+        "acceptedAnswer": { "@type": "Answer", "text": "같은 월세 지출에 대해 월세 세액공제와 신용카드 소득공제를 동시에 받을 수는 없습니다. 카드로 결제한 월세를 신용카드 소득공제로 신고하면 월세 세액공제는 적용되지 않으므로, 일반적으로 공제율이 높은 월세 세액공제를 선택하는 편이 유리합니다." }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <nav>
@@ -177,12 +208,62 @@
     </div>
 
     <div class="section">
+      <h2 class="section-title">월세 세액공제 (한도·공제율)</h2>
+      <p class="section-desc">무주택 직장인이라면 연말정산에서 놓치기 쉬운 환급 레버입니다. 자격·한도·공제율을 표로 정리했습니다.</p>
+      <div class="lede">
+        <strong>무주택 세대주</strong>이면서 <strong>총급여 8,000만원 이하(종합소득 7,000만원 이하)</strong>인 근로자가, <strong>국민주택규모 또는 기준시가 4억원 이하</strong> 주택을 임차해 월세를 낸 경우 적용됩니다. 공제대상 월세액 한도는 <strong>연 1,000만원</strong>이며, 한도 내 금액에 공제율을 곱한 만큼 산출세액에서 직접 차감됩니다.
+      </div>
+      <table class="compare-table" style="width:100%;border-collapse:collapse;margin-top:14px;font-size:14px;background:var(--white);border-radius:12px;overflow:hidden;border:1px solid rgba(44,24,16,0.08);box-shadow:0 2px 12px rgba(44,24,16,0.04);">
+        <thead>
+          <tr>
+            <th style="padding:12px 14px;text-align:left;background:var(--cream);color:var(--espresso);font-weight:700;border-bottom:1px solid rgba(44,24,16,0.08);">총급여 구간</th>
+            <th style="padding:12px 14px;text-align:left;background:var(--cream);color:var(--espresso);font-weight:700;border-bottom:1px solid rgba(44,24,16,0.08);">공제율</th>
+            <th style="padding:12px 14px;text-align:left;background:var(--cream);color:var(--espresso);font-weight:700;border-bottom:1px solid rgba(44,24,16,0.08);">공제대상 한도</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.08);">5,500만원 이하(종합소득 4,500만원 이하)</td>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.08);color:var(--green);font-weight:600;">17%</td>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.08);">연 1,000만원</td>
+          </tr>
+          <tr>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.08);">5,500만 초과 ~ 8,000만원 이하</td>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.08);color:var(--green);font-weight:600;">15%</td>
+            <td style="padding:12px 14px;border-bottom:1px solid rgba(44,24,16,0.08);">연 1,000만원</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px;font-size:13.5px;color:var(--dark-roast);line-height:1.8;"><strong>예시.</strong> 총급여 5,000만원 근로자가 연 600만원(월 50만원) 월세를 냈다면 600만원 × 17% = <strong>102만원</strong>을 산출세액에서 공제받습니다. 한도(1,000만원)를 넘는 월세는 초과분이 공제 대상에서 제외됩니다.</p>
+      <small class="calc-disclaimer">※ 단순 참고용이며, 정확한 요건과 적용 여부는 국세청 홈택스 기준으로 확인하세요.</small>
+    </div>
+
+    <div class="section">
       <h2 class="section-title">자주 하는 실수</h2>
       <div class="pitfalls">
         <p><strong>실수 1.</strong> 신용카드만 많이 쓰면 환급 많이 받는다는 오해 — 카드 공제 한도(300만원)와 한계세율(16.5%)을 고려하면 최대 효과는 약 49.5만원에 그칩니다. 의료비·교육비·기부금이 추가 환급 레버.</p>
         <p style="margin-top:10px;"><strong>실수 2.</strong> 부양가족 등록을 빠뜨림 — 소득 100만원 이하 부모·자녀 등록 시 기본공제 150만원 × 인원수가 즉시 적용됩니다.</p>
         <p style="margin-top:10px;"><strong>실수 3.</strong> 의료비를 카드로 결제하고 공제는 카드 공제로만 잡음 — 의료비 세액공제(15%)와 카드 공제(15%) 중 유리한 쪽으로 자동 비교됩니다. 홈택스 간소화 자료에 의료비 별도 분리 등록 필수.</p>
         <p style="margin-top:10px;"><strong>실수 4.</strong> IRP·연금저축 세액공제를 12월에 급히 입금 — 한도(연 900만 합산) 안에서 미리 분산 입금이 운용수익 측면에서 유리합니다.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">자주 묻는 질문</h2>
+      <p class="section-desc">월세 세액공제에서 가장 많이 받는 질문 3가지를 정리했습니다.</p>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>월세 세액공제 조건과 한도는 어떻게 되나요?</summary>
+          <p><strong>무주택 세대주</strong>이면서 총급여 8,000만원 이하(종합소득 7,000만원 이하)인 근로자가, 국민주택규모 또는 기준시가 4억원 이하 주택을 임차해 월세를 낸 경우 적용됩니다. 공제대상 월세액 한도는 <strong>연 1,000만원</strong>입니다. 단순 참고용이며 정확한 요건은 국세청 홈택스 기준으로 확인하세요.</p>
+        </details>
+        <details class="faq-item">
+          <summary>월세 세액공제 공제율은 몇 %인가요?</summary>
+          <p>총급여 5,500만원 이하(종합소득 4,500만원 이하)는 <strong>17%</strong>, 총급여 5,500만원 초과 8,000만원 이하는 <strong>15%</strong>가 적용됩니다. 공제대상 한도 연 1,000만원에 공제율을 곱한 금액이 산출세액에서 차감됩니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>월세 세액공제와 신용카드 공제를 중복으로 받을 수 있나요?</summary>
+          <p>같은 월세 지출에 대해 월세 세액공제와 신용카드 소득공제를 <strong>동시에 받을 수는 없습니다</strong>. 카드로 결제한 월세를 신용카드 소득공제로 신고하면 월세 세액공제는 적용되지 않으므로, 일반적으로 공제율이 높은 월세 세액공제를 선택하는 편이 유리합니다.</p>
+        </details>
       </div>
     </div>
 

@@ -457,6 +457,29 @@
     "dateModified": "2026-05-03"
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "이번 달 공모주 일정은 어디서 확인하나요?",
+        "acceptedAnswer": {"@type": "Answer", "text": "이 페이지의 캘린더에서 이번 달·다음 달 공모주의 청약일·환불일·상장일을 월별로 확인할 수 있습니다. DART OpenDart 공시 기준으로 매일 오전 8시 자동 갱신되며, 가입 없이 무료로 열람할 수 있습니다."}
+      },
+      {
+        "@type": "Question",
+        "name": "공모주 청약 일정은 보통 며칠간 진행되나요?",
+        "acceptedAnswer": {"@type": "Answer", "text": "공모주 청약은 일반적으로 이틀간 진행됩니다. 청약 마감 약 2영업일 뒤에 환불일이 오고, 그 뒤 1~2주 안에 상장일이 이어집니다. 종목별 정확한 날짜는 캘린더에서 확인하세요."}
+      },
+      {
+        "@type": "Question",
+        "name": "다음 달 공모주 일정도 미리 볼 수 있나요?",
+        "acceptedAnswer": {"@type": "Answer", "text": "캘린더 상단의 좌우 화살표로 달을 이동하면 이번 달뿐 아니라 다음 달 등 원하는 달의 공모주 청약·환불·상장 일정을 미리 볼 수 있습니다."}
+      }
+    ]
+  }
+  </script>
   <!-- Event JSON-LD is injected dynamically after live data loads (see injectEventSchema in the script below). -->
 </head>
 <body>
@@ -485,7 +508,7 @@
   <div class="container">
     <div class="header">
       <div class="badge">IPO Calendar</div>
-      <h1>공모주 일정 <em>캘린더</em></h1>
+      <h1 id="ipoH1"><span id="ipoMonthPrefix"></span>공모주 일정 <em>캘린더</em></h1>
       <p class="sub">2026 공모주 청약·환불·상장일 한눈에</p>
       <div class="data-source" style="display:inline-block;font-size:9px;font-weight:700;letter-spacing:1.5px;color:var(--caramel);background:var(--caramel-light);padding:3px 10px;border-radius:10px;margin-top:12px;border:1px solid rgba(196,133,60,0.2);">SAMPLE DATA</div>
       <div class="byline" style="font-size:11.5px;color:var(--medium-roast);margin-top:10px;letter-spacing:0.2px;">
@@ -496,7 +519,7 @@
     <div class="answer-box" role="region" aria-label="공모주 일정 핵심 답변" style="position:relative;max-width:760px;margin:8px auto 28px;background:linear-gradient(180deg,var(--white) 0%,var(--cream) 100%);border:1px solid var(--caramel);border-radius:12px;padding:20px 22px 18px;box-shadow:0 4px 16px rgba(196,133,60,0.10);">
       <div aria-hidden="true" style="position:absolute;left:-12px;top:-12px;background:var(--caramel);color:var(--white);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:14px;box-shadow:0 2px 8px rgba(196,133,60,0.3);">A.</div>
       <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--caramel);margin-bottom:8px;">한 줄 답변</div>
-      <p style="font-size:16px;font-weight:600;color:var(--espresso);line-height:1.65;letter-spacing:-0.2px;margin:0;">2026 <strong style="color:var(--medium-roast);">공모주 일정·청약·환불·상장일</strong>을 가입 없이 캘린더 한 화면에. 매일 오전 8시 자동 갱신.</p>
+      <p style="font-size:16px;font-weight:600;color:var(--espresso);line-height:1.65;letter-spacing:-0.2px;margin:0;"><span id="ipoAnswerMonth">2026 </span><strong style="color:var(--medium-roast);">공모주 일정·청약·환불·상장일</strong>을 가입 없이 캘린더 한 화면에. 매일 오전 8시 자동 갱신.</p>
       <p style="font-size:13.5px;color:var(--medium-roast);line-height:1.6;margin:10px 0 0;"><strong>균등 50%·비례 50%</strong> 배정 비율과 주관사·확정공모가 위치까지 즉시 비교.</p>
     </div>
 
@@ -1218,5 +1241,16 @@
   </script>
 
 <footer class="site-contact" style="text-align:center;padding:24px 16px;font-size:12px;color:#6B3A2A;border-top:1px solid rgba(107,58,42,0.15);margin-top:32px;font-family:inherit;">Contact · <a href="mailto:hello@financecoffeechat.com" style="color:inherit;text-decoration:underline;" data-ga="click_contact_email" data-ga-text="hello@financecoffeechat.com" data-ga-loc="footer">hello@financecoffeechat.com</a></footer>
+  <script>
+    /* 사이클 6-21: 현재월을 H1·answer-box에 주입해 "N월 공모주 일정" long-tail 자동 생성 */
+    (function () {
+      var now = new Date();
+      var m = now.getMonth() + 1, y = now.getFullYear();
+      var pre = document.getElementById('ipoMonthPrefix');
+      if (pre) pre.textContent = m + '월 ';
+      var am = document.getElementById('ipoAnswerMonth');
+      if (am) am.textContent = y + '년 ' + m + '월 ';
+    })();
+  </script>
 </body>
 </html>
