@@ -109,6 +109,12 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://www.financecoffeechat.com/tax/gift-tax-calculator</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://www.financecoffeechat.com/tax/dividend-tax-calculator</loc>
     <lastmod>2026-06-03</lastmod>
     <changefreq>monthly</changefreq>
@@ -128,7 +134,7 @@
   </url>
   <url>
     <loc>https://www.financecoffeechat.com/ipo</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -230,43 +236,43 @@
   </url>
   <url>
     <loc>https://www.financecoffeechat.com/cost/s1-youth-single</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
     <loc>https://www.financecoffeechat.com/cost/s2-newlywed-dual</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.financecoffeechat.com/cost/s3-newlywed-single-income</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.financecoffeechat.com/cost/s4-parent-1child</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.financecoffeechat.com/cost/s5-parent-multichild</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.financecoffeechat.com/cost/s6-mid-single</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.financecoffeechat.com/cost/area-01-year-end-tax</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -290,13 +296,13 @@
   </url>
   <url>
     <loc>https://www.financecoffeechat.com/cost/area-05-financial-fees</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.financecoffeechat.com/cost/area-06-utilities-subscriptions</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -308,7 +314,7 @@
   </url>
   <url>
     <loc>https://www.financecoffeechat.com/cost/area-08-transport</loc>
-    <lastmod>2026-05-25</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
