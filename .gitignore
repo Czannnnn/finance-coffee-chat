@@ -2,6 +2,9 @@
 .superpowers/
 docs/superpowers/
 
+# 정적 IPO 프리렌더 생성기 캐시 (scripts/gen-static-ipo.mjs)
+_gviz_raw.txt
+
 # clasp (Apps Script CLI) — scriptId·OAuth 토큰 (향후 도입 시 활성)
 .clasp.json
 .clasprc.json
