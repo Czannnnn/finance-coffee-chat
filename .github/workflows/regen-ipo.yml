@@ -1,0 +1,46 @@
+name: regen-ipo-static
+
+# ipo.html #ipoList 정적 SEO 프리렌더 스냅샷을 매일 1회 자동 갱신한다.
+# 데이터 흐름: 구글시트(Apps Script가 하루 4회 갱신) → gen-static-ipo.mjs → ipo.html → git push → Vercel 자동배포.
+# 사용자/구글봇은 페이지 로드 시 JS가 라이브 데이터로 하이드레이션하므로, 이 스냅샷은 네이버 Yeti 등 JS 미실행 크롤러 색인용.
+
+on:
+  schedule:
+    # 09:30 UTC = 18:30 KST (시트 18:00 갱신 직후). cron은 수 분 지연될 수 있음.
+    - cron: "30 9 * * *"
+  workflow_dispatch: {}   # 수동 실행 버튼
+
+# 동시 실행 방지(겹치면 뒤엣것 취소)
+concurrency:
+  group: regen-ipo-static
+  cancel-in-progress: false
+
+permissions:
+  contents: write   # 봇이 ipo.html 커밋·push
+
+jobs:
+  regen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 실데이터 받아 ipo.html #ipoList 정적 카드 재생성(실패 시 job 실패 → 잘못된 데이터 커밋 방지)
+      - name: Regenerate static IPO cards
+        run: node scripts/gen-static-ipo.mjs
+
+      # 변경이 있을 때만 커밋·push (없으면 skip)
+      - name: Commit & push if changed
+        run: |
+          git config user.name "ipo-regen-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ipo.html
+          if git diff --cached --quiet; then
+            echo "변경 없음 — 커밋 생략"
+          else
+            git commit -m "chore(ipo): 정적 SEO 스냅샷 자동 갱신 [skip ci]"
+            git push
+          fi
