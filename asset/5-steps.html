@@ -78,6 +78,16 @@
     .next-card.prev { text-align: left; }
     .next-card.next { text-align: right; }
     .disclaimer { margin-top: 40px; padding: 14px 18px; background: var(--white); border: 1px dashed rgba(44,24,16,0.15); border-radius: 10px; font-size: 11.5px; color: var(--medium-roast); line-height: 1.7; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--espresso); margin-bottom: 6px; letter-spacing: -0.3px; }
+    .faq-list { margin-top: 12px; }
+    .faq-item { background: var(--white); border-radius: 10px; border: 1px solid rgba(44,24,16,0.08); margin-bottom: 10px; padding: 14px 20px; box-shadow: 0 2px 10px rgba(44,24,16,0.03); }
+    .faq-item summary { cursor: pointer; font-weight: 600; color: var(--espresso); font-size: 14.5px; list-style: none; padding-right: 24px; position: relative; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; position: absolute; right: 0; top: 0; color: var(--caramel); font-weight: 700; font-size: 18px; line-height: 1; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-item p { margin-top: 12px; color: var(--dark-roast); font-size: 13.5px; line-height: 1.8; }
+    .faq-item p strong { color: var(--espresso); }
+    .faq-section { margin-top: 40px; }
     @media (max-width: 600px) {
       .container { padding: 32px 16px 48px; }
       .header h1 { font-size: 22px; }
@@ -91,6 +101,7 @@
       nav a { min-height: 44px; padding: 11px 12px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
       a, button { min-height: 44px; }
       a.tag, span.tag, .badge, .subnav-label { min-height: auto; }
+      .faq-item summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; display: flex; align-items: center; }
     }
   </style>
   <script type="application/ld+json">
@@ -108,6 +119,29 @@
     {"@type": "ListItem", "position": 2, "name": "자산관리 101", "item": "https://www.financecoffeechat.com/asset"},
     {"@type": "ListItem", "position": 3, "name": "5단계 절차", "item": "https://www.financecoffeechat.com/asset/5-steps"}
   ]}
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "자산관리 5단계는 무엇인가요?",
+        "acceptedAnswer": {"@type": "Answer", "text": "자산관리는 다섯 단계로 진행합니다. 1단계 현재 자산 진단(현금·예금·주식·부동산·연금·부채를 시가 기준으로 정리), 2단계 목표·기간 설정(단기 3년·중기 5~10년·장기 20년+로 자금 용도 구분), 3단계 자산배분 설계(목표·기간·위험허용도에 맞춰 5대 자산군 비중 결정), 4단계 정기 리밸런싱(분기·반기 점검 후 조정), 5단계 세제·수수료 점검(ISA·IRP·연금저축 한도 활용) 순서입니다."}
+      },
+      {
+        "@type": "Question",
+        "name": "자산배분 비중은 나이에 따라 어떻게 정하나요?",
+        "acceptedAnswer": {"@type": "Answer", "text": "주식 비중의 출발점은 '100 빼기 나이'입니다. 예시로 30대는 주식 60~70%·채권 10%·연금 15%·현금 10%·대안 5%, 40대는 주식 50%·채권 20%·연금 20%·현금 10%, 50대는 주식 35%·채권 30%·연금 25%·현금 10% 수준입니다. 나이가 들수록 주식 비중을 낮추고 채권·연금 비중을 높입니다."}
+      },
+      {
+        "@type": "Question",
+        "name": "리밸런싱은 얼마나 자주 해야 하나요?",
+        "acceptedAnswer": {"@type": "Answer", "text": "분기 1회 점검하고 반기 1회 조정하는 것이 기본입니다. 목표 비중에서 ±5%p 이상 벗어났을 때만 조정하며, 오른 자산 일부를 줄이고 떨어진 자산을 늘리는 역추세 방식으로 진행합니다. 너무 자주 거래하면 세금·수수료가 효과를 깎아 먹으므로 주의해야 합니다."}
+      }
+    ]
+  }
   </script>
 </head>
 <body>
@@ -225,6 +259,24 @@
         <li><strong>해외주식 양도세</strong>: 250만 공제 + 22% → <a href="/tax/foreign-stock-capital-gains-2026" style="color:var(--caramel);font-weight:700;">해외주식 양도세 가이드</a></li>
         <li><strong>수수료</strong>: 저비용 ETF 선택, 매매 회전율 낮추기</li>
       </ul>
+    </div>
+
+    <div class="faq-section">
+      <h2 class="section-title">자주 묻는 질문</h2>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>자산관리 5단계는 무엇인가요?</summary>
+          <p>자산관리는 다섯 단계로 진행합니다. <strong>1단계 현재 자산 진단</strong>(현금·예금·주식·부동산·연금·부채를 시가 기준으로 정리), <strong>2단계 목표·기간 설정</strong>(단기 3년·중기 5~10년·장기 20년+로 자금 용도 구분), <strong>3단계 자산배분 설계</strong>(목표·기간·위험허용도에 맞춰 5대 자산군 비중 결정), <strong>4단계 정기 리밸런싱</strong>(분기·반기 점검 후 조정), <strong>5단계 세제·수수료 점검</strong>(ISA·IRP·연금저축 한도 활용) 순서입니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>자산배분 비중은 나이에 따라 어떻게 정하나요?</summary>
+          <p>주식 비중의 출발점은 <strong>'100 빼기 나이'</strong>입니다. 예시로 30대는 주식 60~70%·채권 10%·연금 15%·현금 10%·대안 5%, 40대는 주식 50%·채권 20%·연금 20%·현금 10%, 50대는 주식 35%·채권 30%·연금 25%·현금 10% 수준입니다. 나이가 들수록 주식 비중을 낮추고 채권·연금 비중을 높입니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>리밸런싱은 얼마나 자주 해야 하나요?</summary>
+          <p><strong>분기 1회 점검하고 반기 1회 조정</strong>하는 것이 기본입니다. 목표 비중에서 <strong>±5%p 이상</strong> 벗어났을 때만 조정하며, 오른 자산 일부를 줄이고 떨어진 자산을 늘리는 역추세 방식으로 진행합니다. 너무 자주 거래하면 세금·수수료가 효과를 깎아 먹으므로 주의해야 합니다.</p>
+        </details>
+      </div>
     </div>
 
     <div class="disclaimer">
