@@ -18,8 +18,9 @@ index.html          → 홈페이지 (4개 기능 카드 + 네비게이션)
 portfolio.html      → 포트폴리오 자산배분 차트 (Chart.js 도넛)
 asset.html          → 자산관리 101 (교육 콘텐츠)
 ipo.html            → 공모주 청약 캘린더 (월간 그리드 + 카드 리스트). #ipoList에 정적 SEO 프리렌더 카드 시드(크롤러용)가 주입돼 있고, 로드 시 JS renderIPOList()가 라이브 데이터로 교체(하이드레이션)
-scripts/gen-static-ipo.mjs → ipo.html #ipoList 정적 카드 생성·주입기 (사이클 6-18-3, 빌드 파이프라인 아님. 네이버 Yeti 등 JS 미실행 크롤러 색인용). `.github/workflows/regen-ipo.yml`가 매일 18:30 KST 자동 실행→변경 시 master 직접 push→Vercel 자동배포(무인). 수동 실행도 가능: `node scripts/gen-static-ipo.mjs`
-ipo-analysis.html   → 공모주 분석 (4대 조건 등급 S/A/B/C/D)
+scripts/gen-static-ipo.mjs → ipo.html #ipoList 정적 카드 + head ItemList JSON-LD 생성·주입기 (사이클 6-18-3 정적카드 / 6-18-7 ItemList 구조화데이터, 빌드 파이프라인 아님. 네이버 Yeti 등 JS 미실행 크롤러 색인용). `.github/workflows/regen-ipo.yml`가 매일 18:30 KST 자동 실행→변경 시 master 직접 push→Vercel 자동배포(무인). 수동 실행도 가능: `node scripts/gen-static-ipo.mjs`
+ipo-analysis.html   → 공모주 분석 (4대 조건 등급 S/A/B/C/D). #analysisContainer에 정적 SEO 프리렌더 등급 카드 시드(크롤러용)가 주입돼 있고, 로드 시 JS render()가 라이브 데이터로 교체(하이드레이션)
+scripts/gen-static-ipo-analysis.mjs → ipo-analysis.html #analysisContainer 정적 등급 카드 생성·주입기 (사이클 6-18-7, gen-static-ipo.mjs 자매 스크립트). 등급 로직은 ipo-analysis.html evaluate()/calcGrade()와 동일 유지. `regen-ipo.yml`가 매일 18:30 KST 자동 재생성. 수동: `node scripts/gen-static-ipo-analysis.mjs`
 ipo-guide.html      → 공모주 청약 가이드 (단계별 튜토리얼)
 scripts/ipo-scraper-v2.gs → DART OpenDart API document.xml 동기화 + 보조 공시 보강 Google Apps Script (백엔드 전용)
 robots.txt, sitemap.xml, favicon.svg, og-image.png → SEO 자산

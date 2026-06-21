@@ -28,16 +28,20 @@ jobs:
         with:
           node-version: 20
 
-      # 실데이터 받아 ipo.html #ipoList 정적 카드 재생성(실패 시 job 실패 → 잘못된 데이터 커밋 방지)
+      # 실데이터 받아 ipo.html #ipoList 정적 카드 + ItemList JSON-LD 재생성(실패 시 job 실패 → 잘못된 데이터 커밋 방지)
       - name: Regenerate static IPO cards
         run: node scripts/gen-static-ipo.mjs
+
+      # 실데이터 받아 ipo-analysis.html #analysisContainer 정적 등급 카드 재생성
+      - name: Regenerate static IPO analysis cards
+        run: node scripts/gen-static-ipo-analysis.mjs
 
       # 변경이 있을 때만 커밋·push (없으면 skip)
       - name: Commit & push if changed
         run: |
           git config user.name "ipo-regen-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ipo.html
+          git add ipo.html ipo-analysis.html
           if git diff --cached --quiet; then
             echo "변경 없음 — 커밋 생략"
           else
