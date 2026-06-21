@@ -85,6 +85,14 @@
     .next-card.prev { text-align: left; }
     .next-card.next { text-align: right; }
     .disclaimer { margin-top: 40px; padding: 14px 18px; background: var(--white); border: 1px dashed rgba(44,24,16,0.15); border-radius: 10px; font-size: 11.5px; color: var(--medium-roast); line-height: 1.7; }
+    .faq-list { margin-top: 12px; }
+    .faq-item { background: var(--white); border-radius: 10px; border: 1px solid rgba(44,24,16,0.08); margin-bottom: 10px; padding: 14px 20px; box-shadow: 0 2px 10px rgba(44,24,16,0.03); }
+    .faq-item summary { cursor: pointer; font-weight: 600; color: var(--espresso); font-size: 14.5px; list-style: none; padding-right: 24px; position: relative; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; position: absolute; right: 0; top: 0; color: var(--caramel); font-weight: 700; font-size: 18px; line-height: 1; }
+    .faq-item[open] summary::after { content: '−'; }
+    .faq-item p { margin-top: 12px; color: var(--dark-roast); font-size: 13.5px; line-height: 1.8; }
+    .faq-item p strong { color: var(--espresso); }
     @media (max-width: 600px) {
       .container { padding: 32px 16px 48px; }
       .header h1 { font-size: 22px; }
@@ -100,6 +108,7 @@
       nav a { min-height: 44px; padding: 11px 12px !important; display: inline-flex; align-items: center; box-sizing: border-box; }
       a, button { min-height: 44px; }
       a.tag, span.tag, .badge, .subnav-label { min-height: auto; }
+      .faq-item summary { min-height: 44px; padding-top: 6px; padding-bottom: 6px; display: flex; align-items: center; }
     }
   </style>
   <script type="application/ld+json">
@@ -111,6 +120,29 @@
     {"@type": "ListItem", "position": 2, "name": "자산관리 101", "item": "https://www.financecoffeechat.com/asset"},
     {"@type": "ListItem", "position": 3, "name": "5대 자산군", "item": "https://www.financecoffeechat.com/asset/asset-classes"}
   ]}
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "5대 자산군은 무엇인가요?",
+        "acceptedAnswer": {"@type": "Answer", "text": "5대 자산군은 현금·MMF, 채권·예금, 국내·해외 주식, 연금·IRP, 부동산·대안투자입니다. 현금은 비상금·단기 유동성, 채권은 안정 수익·디플레 방어, 주식은 장기 성장·자본 증식, 연금은 세제 혜택·노후 준비, 부동산은 인플레 헤지·다각화 역할을 합니다."}
+      },
+      {
+        "@type": "Question",
+        "name": "각 자산군은 인플레이션과 경기침체에 어떻게 반응하나요?",
+        "acceptedAnswer": {"@type": "Answer", "text": "인플레이션 시에는 주식·연금·부동산이 강하고 현금·채권은 취약합니다. 디플레이션 시에는 현금·채권이 강하고 주식·부동산은 취약합니다. 경기침체 시에는 현금이 강하고 주식·부동산은 취약합니다. 단일 자산은 한 시나리오에서만 강하므로, 5대 자산군으로 분산하면 어떤 시나리오에서도 일부 자산이 방어막 역할을 합니다."}
+      },
+      {
+        "@type": "Question",
+        "name": "현금은 얼마나 보유하는 것이 좋나요?",
+        "acceptedAnswer": {"@type": "Answer", "text": "현금·MMF는 6개월 생활비 정도가 권장 기준이며 CMA·파킹통장을 활용합니다. 현금이 너무 많으면 인플레이션으로 구매력 손실이 발생합니다. 채권은 30대 10%에서 50대 30% 수준으로 나이에 따라 비중을 늘리고, 부동산은 한국 가계가 이미 편중되어 있어 신규 증가에 신중해야 합니다."}
+      }
+    ]
+  }
   </script>
 </head>
 <body>
@@ -219,6 +251,24 @@
           <div class="rc-head"><span class="dot" style="background:#C0564B;"></span><h4>부동산·대안투자</h4></div>
           <p>인플레 헤지·다각화. 단 유동성 낮음·세제 부담 큼. 한국 가계는 이미 편중이라 신규 증가 신중.</p>
         </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">자주 묻는 질문</h2>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>5대 자산군은 무엇인가요?</summary>
+          <p>5대 자산군은 <strong>현금·MMF, 채권·예금, 국내·해외 주식, 연금·IRP, 부동산·대안투자</strong>입니다. 현금은 비상금·단기 유동성, 채권은 안정 수익·디플레 방어, 주식은 장기 성장·자본 증식, 연금은 세제 혜택·노후 준비, 부동산은 인플레 헤지·다각화 역할을 합니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>각 자산군은 인플레이션과 경기침체에 어떻게 반응하나요?</summary>
+          <p><strong>인플레이션 시</strong>에는 주식·연금·부동산이 강하고 현금·채권은 취약합니다. <strong>디플레이션 시</strong>에는 현금·채권이 강하고 주식·부동산은 취약합니다. <strong>경기침체 시</strong>에는 현금이 강하고 주식·부동산은 취약합니다. 단일 자산은 한 시나리오에서만 강하므로, 5대 자산군으로 분산하면 어떤 시나리오에서도 일부 자산이 방어막 역할을 합니다.</p>
+        </details>
+        <details class="faq-item">
+          <summary>현금은 얼마나 보유하는 것이 좋나요?</summary>
+          <p>현금·MMF는 <strong>6개월 생활비</strong> 정도가 권장 기준이며 CMA·파킹통장을 활용합니다. 현금이 너무 많으면 인플레이션으로 구매력 손실이 발생합니다. 채권은 30대 10%에서 50대 30% 수준으로 나이에 따라 비중을 늘리고, 부동산은 한국 가계가 이미 편중되어 있어 신규 증가에 신중해야 합니다.</p>
+        </details>
       </div>
     </div>
 
